@@ -310,3 +310,37 @@ TBD
 **リサーチ終了点**: CSV 出力まで（出品実行は別フェーズ）
 
 ---
+
+
+---
+
+## 📋 Phase 3: CSVデータ連携設計 (完了)
+
+**ステータス**: 設計完了  
+**完了日**: 2026-06-13
+
+### 成果物
+
+✅ docs/PHASE3_CSV_INTEGRATION.md — CSV連携方針・責務分離・変換戦略  
+✅ docs/LISTING_DATA_MODEL.md — Listing層データモデル定義  
+✅ examples/listing_input_sample.csv — サンプル（Research→Listing変換後）  
+✅ examples/research_to_listing_mapping.md — 列マッピング対応表  
+✅ src/csv_integration/ — Pythonスケルトン (validator, mapper, models)  
+
+### 設計要点
+
+**責務分離**:
+- Phase 2 Research: 候補収集→正規化→CSV出力
+- Phase 3 Listing: CSV取込→SKU付与→画像解決→Listing-Ready判定
+- Phase 4 以降: eBay API連携・実出品
+
+**データ層構造**:
+- Layer 1: Validated & Normalized Record (CSV検証・正規化)
+- Layer 2: Listing Preparation Record (SKU付与・画像解決)
+- Layer 3: Listing-Ready Record (最終検証・監査確定)
+
+**SKU戦略**: 自動採番 (MARGIN-YYYYMMDD-NNNN) + 追跡性確保 (candidate_id保持)
+
+**画像戦略**: SKUベースディレクトリ解決 (data/images/{SKU}/)
+
+**バリデーション**: 4段階 (Hard Error / Soft Warning / Pending Review / Skip)
