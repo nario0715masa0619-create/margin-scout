@@ -344,3 +344,29 @@ TBD
 **画像戦略**: SKUベースディレクトリ解決 (data/images/{SKU}/)
 
 **バリデーション**: 4段階 (Hard Error / Soft Warning / Pending Review / Skip)
+
+
+---
+
+## 📋 Phase 4: eBay Payload Builder 設計 (完了)
+
+**ステータス**: 設計完了  
+**完了日**: 2026-06-13
+
+### 成果物
+
+✅ docs/PHASE4_EBAY_PAYLOAD_BUILDER.md — Payload Builder 全体設計  
+✅ docs/EBAY_PAYLOAD_MODEL.md — Payload 内部モデル定義  
+✅ examples/ebay_payload_sample.json — eBay ペイロード サンプル  
+✅ examples/listing_to_payload_mapping.md — Listing→Payload 列マッピング  
+✅ src/payload_builder/ — Pythonスケルトン (title, description, image, builder)  
+
+### 設計要点
+
+**責務**:
+- Payload Builder は API Client ではなく、データ準備に特化
+- Title (80文字制限, テンプレートA/B/C) 
+- Description (User Notes 統合, サニタイズ)
+- Category, Condition 正規化 (内部表現 → eBay表現準備)
+- Readiness 判定 (ready / pending_review / incomplete)
+- 監査追跡情報 (Audit Trail) の確保

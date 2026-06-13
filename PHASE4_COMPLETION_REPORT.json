@@ -1,0 +1,55 @@
+{
+  "timestamp": "2026-06-13 15:15:49",
+  "phase": "Phase 4: eBay Payload Builder Design",
+  "status": "COMPLETED",
+  "documents_created": [
+    "docs/PHASE4_EBAY_PAYLOAD_BUILDER.md",
+    "docs/EBAY_PAYLOAD_MODEL.md",
+    "examples/ebay_payload_sample.json",
+    "examples/listing_to_payload_mapping.md",
+    "src/payload_builder/__init__.py",
+    "src/payload_builder/payload_record.py",
+    "src/payload_builder/title_builder.py",
+    "src/payload_builder/description_builder.py",
+    "src/payload_builder/image_mapper.py",
+    "src/payload_builder/payload_validator.py",
+    "src/payload_builder/ebay_payload_builder.py"
+  ],
+  "key_design_decisions": {
+    "payload_builder_role": "Data preparation & validation - NOT API client",
+    "title_strategy": "Template-based generation (A/B/C templates, 80-char limit)",
+    "description_strategy": "HTML-escaped user notes + standard template",
+    "category_strategy": "Internal normalization first, eBay mapping in Phase 5",
+    "condition_strategy": "new/used/refurbished normalization",
+    "price_strategy": "reference_price is observation only, listing_price decided in Phase 5",
+    "image_strategy": "SKU-based directory → sorted file list",
+    "readiness_levels": "ready / pending_review / incomplete / rejected"
+  },
+  "data_layers": {
+    "layer_1": "Payload Preparation Record (draft title/desc, normalized category/condition)",
+    "layer_2": "Validated Payload Record (finalized title/desc, readiness judgment)",
+    "layer_3": "Final eBay Payload Input Record (eBay API format JSON)",
+    "audit": "Separate audit trail with full traceability"
+  },
+  "validation_levels": {
+    "ready": "All required fields confirmed - payload ready for Phase 5",
+    "pending_review": "Missing optional fields or price not decided - user review needed",
+    "incomplete": "Required fields missing - cannot proceed",
+    "rejected": "Invalid data or explicitly excluded - skip"
+  },
+  "next_phase": "Phase 5: eBay Executor & Dry-Run Implementation",
+  "next_phase_scope": [
+    "eBay API client implementation",
+    "Authentication token management",
+    "Price strategy module",
+    "Category resolver (automated mapping)",
+    "Dry-run executor with validation",
+    "Live execution handler",
+    "Audit logging integration"
+  ],
+  "not_in_scope_phase4": [
+    "eBay API implementation",
+    "Authentication/token management",
+    "Live execution"
+  ]
+}

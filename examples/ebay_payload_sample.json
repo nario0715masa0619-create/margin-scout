@@ -1,0 +1,141 @@
+{
+  "payloads": [
+    {
+      "candidate_id": "ms-res-20260613-0001",
+      "sku": "MARGIN-20260613-0001",
+      "payload": {
+        "sku": "MARGIN-20260613-0001",
+        "title": "Canon EF 50mm f/1.8 STM Lens - New",
+        "description": "Professional quality lens. Excellent condition. Minimal use.\nBrand: Canon\nModel: EF50STM\n\n【注意】本出品は MarginScout により自動生成されました。",
+        "category": "Camera Lenses",
+        "condition": "new",
+        "price": null,
+        "quantity": 1,
+        "images": [
+          "data/images/MARGIN-20260613-0001/01.jpg",
+          "data/images/MARGIN-20260613-0001/02.jpg",
+          "data/images/MARGIN-20260613-0001/03.jpg"
+        ],
+        "item_specifics": {
+          "Brand": "Canon",
+          "Model": "EF50STM"
+        }
+      },
+      "validation_report": {
+        "readiness": "ready",
+        "validation_result": {
+          "passed": true,
+          "errors": [],
+          "warnings": []
+        },
+        "review_items": []
+      },
+      "audit_trail": {
+        "candidate_id": "ms-res-20260613-0001",
+        "sku": "MARGIN-20260613-0001",
+        "source_url": "https://www.ebay.com/itm/324901234567",
+        "source_type": "ebay_listing",
+        "observed_price": 189.99,
+        "observed_date": "2026-06-13T14:30:00Z",
+        "payload_generation_timestamp": "2026-06-13T16:00:00Z",
+        "title_template_used": "A",
+        "condition_mapped_from": "new",
+        "category_mapped_from": "Camera Lenses",
+        "validation_status": "passed",
+        "readiness_level": "ready"
+      }
+    },
+    {
+      "candidate_id": "ms-res-20260613-0002",
+      "sku": "MARGIN-20260613-0002",
+      "payload": {
+        "sku": "MARGIN-20260613-0002",
+        "title": "Nike Air Force 1 US9 - New",
+        "description": "Authentic Nike Air Force 1. Size US9. New condition.\nBrand: Nike\nModel: AF1-US9\n\n【注意】本出品は MarginScout により自動生成されました。",
+        "category": "Footwear",
+        "condition": "new",
+        "price": null,
+        "quantity": 1,
+        "images": [
+          "data/images/MARGIN-20260613-0002/01.jpg",
+          "data/images/MARGIN-20260613-0002/02.jpg"
+        ],
+        "item_specifics": {
+          "Brand": "Nike",
+          "Model": "AF1-US9"
+        }
+      },
+      "validation_report": {
+        "readiness": "ready",
+        "validation_result": {
+          "passed": true,
+          "errors": [],
+          "warnings": []
+        },
+        "review_items": []
+      },
+      "audit_trail": {
+        "candidate_id": "ms-res-20260613-0002",
+        "sku": "MARGIN-20260613-0002",
+        "source_url": "https://www.ebay.com/itm/324901234568",
+        "source_type": "ebay_listing",
+        "observed_price": 110.0,
+        "observed_date": "2026-06-13T14:35:00Z",
+        "payload_generation_timestamp": "2026-06-13T16:05:00Z",
+        "title_template_used": "A",
+        "condition_mapped_from": "new",
+        "category_mapped_from": "Footwear",
+        "validation_status": "passed",
+        "readiness_level": "ready"
+      }
+    },
+    {
+      "candidate_id": "ms-res-20260613-0003",
+      "sku": "MARGIN-20260613-0003",
+      "payload": {
+        "sku": "MARGIN-20260613-0003",
+        "title": "Sony WH-CH510 - New",
+        "description": "Sony WH-CH510 headphones. New condition.\nBrand: Sony\nModel: WHCH510\n\n【注意】本出品は MarginScout により自動生成されました。",
+        "category": "Audio Equipment",
+        "condition": "new",
+        "price": null,
+        "quantity": 1,
+        "images": [
+          "data/images/MARGIN-20260613-0003/01.jpg"
+        ],
+        "item_specifics": {
+          "Brand": "Sony",
+          "Model": "WHCH510"
+        }
+      },
+      "validation_report": {
+        "readiness": "pending_review",
+        "validation_result": {
+          "passed": false,
+          "errors": [],
+          "warnings": [
+            "Only 1 image. Recommend 3+ images for better sales."
+          ]
+        },
+        "review_items": [
+          "price未決定",
+          "image数が少ない"
+        ]
+      },
+      "audit_trail": {
+        "candidate_id": "ms-res-20260613-0003",
+        "sku": "MARGIN-20260613-0003",
+        "source_url": "https://www.amazon.com/dp/B08GFZV8H3",
+        "source_type": "amazon_listing",
+        "observed_price": 49.99,
+        "observed_date": "2026-06-13T14:40:00Z",
+        "payload_generation_timestamp": "2026-06-13T16:10:00Z",
+        "title_template_used": "C",
+        "condition_mapped_from": "new",
+        "category_mapped_from": "Audio Equipment",
+        "validation_status": "passed_with_warnings",
+        "readiness_level": "pending_review"
+      }
+    }
+  ]
+}
