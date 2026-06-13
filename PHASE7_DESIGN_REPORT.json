@@ -1,0 +1,66 @@
+{
+  "project_name": "MarginScout",
+  "phase": "Phase 7: Inventory Sync & Order Management Design",
+  "status": "DESIGN_COMPLETE",
+  "timestamp": "2026-06-13T16:00:50.010251",
+  "documents_created": [
+    "docs/PHASE7_INVENTORY_SYNC_AND_ORDER_MANAGEMENT.md",
+    "docs/ORDER_MANAGEMENT_SPECIFICATION.md"
+  ],
+  "design_scope": {
+    "order_polling": "eBay Orders API polling (4-hour frequency)",
+    "inventory_tracking": "Update candidate status from 'listed' to 'sold'",
+    "returns_management": "Handle return requests and update inventory",
+    "sales_reporting": "Daily/weekly/monthly sales and profit metrics",
+    "database_schema": "New orders and sales_report tables, candidates updates"
+  },
+  "key_components": [
+    "OrderPoller (scheduled task)",
+    "OrderParser (parse API responses)",
+    "InventoryUpdater (update candidate status)",
+    "ReturnsManager (handle return requests)",
+    "SalesReporter (generate reports)"
+  ],
+  "data_models": {
+    "OrderRecord": [
+      "order_id",
+      "listing_id",
+      "sku",
+      "buyer_username",
+      "order_status",
+      "purchase_price",
+      "quantity",
+      "purchase_date",
+      "shipping_address",
+      "tracking_number"
+    ],
+    "InventoryStatus": [
+      "sku",
+      "candidate_id",
+      "status",
+      "listing_id",
+      "order_id",
+      "sold_price",
+      "sold_date",
+      "profit_margin",
+      "net_income"
+    ]
+  },
+  "integration_dependencies": [
+    "Phase 6 output (listing_id, sku, candidate_id)",
+    "eBay Orders API credentials (from Phase 6 OAuth)",
+    "Internal database (for inventory updates)"
+  ],
+  "future_phases": {
+    "Phase 8": "Seller Analytics & Metrics (dashboard, trends, insights)",
+    "Phase 9": "Automated Repricing & Monitoring (dynamic pricing, alerts)",
+    "Phase 10": "Multi-Channel Integration (Amazon, other marketplaces)"
+  },
+  "next_steps": [
+    "1. Review Phase 7 design with stakeholders",
+    "2. Finalize database schema",
+    "3. Begin Phase 7 implementation (order poller module)",
+    "4. Implement Phase 6 tests (OAuth, API, integration)",
+    "5. Plan Phase 8 (analytics)"
+  ]
+}
