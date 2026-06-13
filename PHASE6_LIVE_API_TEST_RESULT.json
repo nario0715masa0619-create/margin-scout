@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-06-13T22:13:30.035187",
+  "phase": "Phase 6 - Live API Integration (Direct User Token)",
+  "environment": "sandbox",
+  "test_count": 1,
+  "successful": 0,
+  "failed": 1,
+  "results": [
+    {
+      "sku": "MARGIN-SANDBOX-20260613221329-001",
+      "status": "FAILED",
+      "inventory_item_id": null,
+      "offer_id": null,
+      "listing_id": null,
+      "item_url": null,
+      "errors": [
+        "Inventory creation failed: {\"errors\":[{\"errorId\":25604,\"domain\":\"API_INVENTORY\",\"subdomain\":\"Selling\",\"category\":\"Request\",\"message\":\"Input error. Availability Quantity is required.\",\"parameters\":[{\"name\":\"availability\",\"value\":\"\"}]}]}"
+      ],
+      "timestamp": "2026-06-13T22:13:29.091077"
+    }
+  ]
+}
