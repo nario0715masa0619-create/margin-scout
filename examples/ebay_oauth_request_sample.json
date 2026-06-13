@@ -1,0 +1,43 @@
+{
+  "oauth_flow_steps": [
+    {
+      "step": 1,
+      "name": "Request Authorization",
+      "method": "GET",
+      "url": "https://auth.ebay.com/oauth2/authorize",
+      "parameters": {
+        "client_id": "YOUR_APP_ID",
+        "response_type": "code",
+        "redirect_uri": "http://localhost:8080/callback",
+        "scope": "https://api.ebay.com/oauth/api_scope/sell.inventory https://api.ebay.com/oauth/api_scope/sell.account"
+      },
+      "result": "User is redirected to eBay login page"
+    },
+    {
+      "step": 2,
+      "name": "User Grants Permission",
+      "result": "eBay redirects to redirect_uri with authorization code in query string"
+    },
+    {
+      "step": 3,
+      "name": "Exchange Code for Token",
+      "method": "POST",
+      "url": "https://api.ebay.com/identity/v1/oauth2/token",
+      "headers": {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Authorization": "Basic BASE64(CLIENT_ID:CLIENT_SECRET)"
+      },
+      "body": {
+        "grant_type": "authorization_code",
+        "code": "AUTHORIZATION_CODE_FROM_STEP_2",
+        "redirect_uri": "http://localhost:8080/callback"
+      },
+      "response": {
+        "access_token": "v1.1#i1#p3#f0#...",
+        "token_type": "Bearer",
+        "expires_in": 7200,
+        "refresh_token": "v1.1#i1#f0#p3#..."
+      }
+    }
+  ]
+}

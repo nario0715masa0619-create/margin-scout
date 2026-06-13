@@ -401,3 +401,45 @@ TBD
 - Readiness level (ready / pending_review / incomplete / rejected)
 
 Phase 6 Responsibility: Authenticate with live eBay API, submit payload, handle responses, update status.
+
+---
+
+## 📋 Phase 6: eBay OAuth & Live API Integration Design
+**Status**: ✅ Completed
+**Date**: 2026-06-13
+
+### Deliverables
+- docs/PHASE6_EBAY_API_INTEGRATION.md – Overall design, OAuth flow, API endpoints, error handling
+- docs/EBAY_OAUTH_FLOW.md – OAuth 2.0 authentication flow specification
+- docs/EBAY_LIVE_API_SPEC.md – Live eBay API endpoints and response formats
+- examples/ebay_oauth_request_sample.json – OAuth request examples
+- examples/ebay_live_api_response_sample.json – API response examples (success & errors)
+- src/api_integration/ – Skeleton code (OAuthHandler, API client, response processor)
+
+### Key Design Decisions
+- OAuth Flow: 3-step (authorization → exchange code → use token)
+- Token Lifetime: Access token 2 hours, refresh token ~18 months
+- API Endpoints: Inventory item (PUT), Offer creation (POST), Offer publish (POST)
+- Error Handling: Categorized retry logic (3 retries with exponential backoff)
+- Rate Limiting: 60 calls/min, implement backoff on 429 response
+- Final Output: LiveListingResult with real eBay listing ID and activation link
+
+### Integration Flow
+```
+Phase 5 ExecutionReadyPayload
+  ↓
+[OAuth Token Validation]
+  ↓
+[Create Inventory Item (API)]
+  ↓
+[Create Offer (API)]
+  ↓
+[Publish Offer → Live Listing (API)]
+  ↓
+LiveListingResult with ebay_listing_id + activation_link
+  ↓
+[Update Candidate Status: research → listed]
+```
+
+### Next Phase
+Phase 7: Inventory Sync & Order Management (track sold items, handle returns, update inventory)

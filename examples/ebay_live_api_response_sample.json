@@ -1,0 +1,68 @@
+{
+  "successful_flow": {
+    "step_1_create_inventory_item": {
+      "status": 201,
+      "response": {
+        "sku": "MARGIN-20260613-0001"
+      }
+    },
+    "step_2_create_offer": {
+      "status": 201,
+      "response": {
+        "offerId": "9876543210",
+        "sku": "MARGIN-20260613-0001"
+      }
+    },
+    "step_3_publish_offer": {
+      "status": 200,
+      "response": {
+        "listingId": "386547829380",
+        "statusMessage": "Offer published successfully",
+        "link": "https://www.ebay.com/itm/386547829380"
+      }
+    },
+    "final_result": {
+      "ebay_listing_id": "386547829380",
+      "activation_link": "https://www.ebay.com/itm/386547829380",
+      "sku": "MARGIN-20260613-0001",
+      "initial_price": 263.51,
+      "initial_fees": {
+        "insertion_fee": 0.0,
+        "final_value_fee": 33.99
+      },
+      "status": "success"
+    }
+  },
+  "error_examples": {
+    "invalid_sku": {
+      "status": 400,
+      "errors": [
+        {
+          "errorId": 25001,
+          "domain": "API_INVENTORY",
+          "category": "REQUEST",
+          "message": "Invalid SKU",
+          "longMessage": "The SKU is invalid or already in use"
+        }
+      ]
+    },
+    "rate_limited": {
+      "status": 429,
+      "headers": {
+        "Retry-After": "60",
+        "X-RateLimit-Remaining": "0"
+      }
+    },
+    "unauthorized": {
+      "status": 401,
+      "errors": [
+        {
+          "errorId": 1001,
+          "domain": "API_AUTH",
+          "category": "REQUEST",
+          "message": "Invalid access token"
+        }
+      ]
+    }
+  }
+}

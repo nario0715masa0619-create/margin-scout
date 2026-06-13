@@ -1,0 +1,53 @@
+{
+  "project_name": "MarginScout",
+  "phase": "Phase 6: eBay OAuth & Live API Integration Design",
+  "status": "COMPLETED",
+  "timestamp": "2026-06-13T15:43:43.110004",
+  "documents_created": [
+    "docs/PHASE6_EBAY_API_INTEGRATION.md",
+    "docs/EBAY_OAUTH_FLOW.md",
+    "docs/EBAY_LIVE_API_SPEC.md"
+  ],
+  "examples_created": [
+    "examples/ebay_oauth_request_sample.json",
+    "examples/ebay_live_api_response_sample.json"
+  ],
+  "skeleton_code_created": [
+    "src/api_integration/__init__.py",
+    "src/api_integration/oauth_handler.py",
+    "src/api_integration/ebay_api_client_live.py",
+    "src/api_integration/response_processor.py",
+    "src/api_integration/api_integration_executor.py"
+  ],
+  "key_findings": {
+    "oauth_flow": "3-step flow: authorization → exchange code for token → use access_token for API calls",
+    "oauth_token_lifetime": "Access token: 7200s (2h), Refresh token: 47304000s (~18mo)",
+    "api_endpoints": [
+      "/sell/inventory/v1/inventory_item/{sku} (PUT)",
+      "/sell/inventory/v1/offer (POST)",
+      "/sell/inventory/v1/offer/{offerId}/publish (POST)"
+    ],
+    "error_handling": "Retry on 429/5xx, no retry on 400/401/403/404",
+    "rate_limiting": "60 calls/minute typical, check X-RateLimit-Remaining header",
+    "final_output": "LiveListingResult with ebay_listing_id, activation_link, initial_fees"
+  },
+  "design_principles": [
+    "OAuth tokens stored securely in .env or config",
+    "Token refresh automated on expiration",
+    "All API errors categorized and logged",
+    "Rate limiting respected with backoff strategy",
+    "Candidate status updated to 'listed' on success",
+    "Activation link returned to user"
+  ],
+  "next_phase": "Phase 7: Inventory Sync & Order Management (track sold items, update inventory, handle returns)",
+  "implementation_notes": [
+    "OAuth handler: implement token exchange and refresh logic",
+    "API client: implement HTTP requests with error handling",
+    "Response processor: extract listing_id and activation_link from API response",
+    "Executor: orchestrate full flow with proper error handling",
+    "Test with eBay Sandbox first, then Production"
+  ],
+  "files_modified": [
+    "README.md (Phase 6 status section to be added)"
+  ]
+}
