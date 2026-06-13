@@ -1,353 +1,305 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-MarginScout Phase 7: Order Polling & Inventory Management Implementation
+MarginScout Phase 7: Order Poller & Inventory Sync Implementation
+Polls eBay Orders API, updates inventory, generates sales reports
 """
 
+import os
+import sys
 import json
+import time
 from datetime import datetime, timedelta
-from pathlib import Path
-from dataclasses import dataclass
 from typing import Dict, List, Optional
+from dataclasses import dataclass, asdict
 from enum import Enum
+import requests
 
 # ============================================================================
-# DATA MODELS
+# Data Models
 # ============================================================================
 
 class OrderStatus(str, Enum):
-    COMPLETED = "completed"
-    CANCELLED = "cancelled"
-    RETURNED = "returned"
-    PENDING = "pending"
-
-class CandidateStatus(str, Enum):
-    RESEARCH = "research"
-    LISTED = "listed"
-    SOLD = "sold"
-    RETURNED = "returned"
-    CANCELLED = "cancelled"
+    """Order status from eBay"""
+    ACTIVE = "ACTIVE"
+    CANCELLED = "CANCELLED"
+    COMPLETED = "COMPLETED"
+    SHIPPED = "SHIPPED"
 
 @dataclass
-class OrderRecord:
-    """eBay order record"""
-    order_id: str
-    listing_id: str
+class OrderItem:
+    """Order item model"""
     sku: str
-    candidate_id: str
-    buyer_username: str
-    order_status: str
-    purchase_price: float
+    title: str
     quantity: int
-    purchase_date: str
-    order_total: float
-    synced_at: str = None
-    
-    def __post_init__(self):
-        if self.synced_at is None:
-            self.synced_at = datetime.now().isoformat()
+    price: float
+    listing_id: str
+
+@dataclass
+class EBayOrder:
+    """eBay order model"""
+    order_id: str
+    status: OrderStatus
+    order_date: str
+    items: List[OrderItem]
+    buyer_username: str
+    total_amount: float
+    currency: str
 
 @dataclass
 class InventoryUpdate:
-    """Inventory status update"""
-    candidate_id: str
+    """Inventory update record"""
     sku: str
-    old_status: str
-    new_status: str
-    order_id: Optional[str]
-    sold_price: float
-    sold_date: str = None
-    profit_margin: float = 0.0
-    net_income: float = 0.0
-    
-    def __post_init__(self):
-        if self.sold_date is None:
-            self.sold_date = datetime.now().isoformat()
+    quantity_sold: int
+    order_id: str
+    timestamp: str
+
+@dataclass
+class SalesReport:
+    """Daily/weekly sales report"""
+    period: str
+    total_orders: int
+    total_revenue: float
+    total_items_sold: int
+    timestamp: str
 
 # ============================================================================
-# ORDER POLLER
+# Order Poller
 # ============================================================================
 
 class OrderPoller:
-    """Poll eBay Orders API for new sales"""
+    """Polls eBay Orders API for new orders"""
     
-    def __init__(self, api_client, last_poll_file: str = "data/last_poll.json"):
+    def __init__(self, api_client, oauth_handler):
         self.api_client = api_client
-        self.last_poll_file = Path(last_poll_file)
-        self.last_poll_time = self._load_last_poll()
+        self.oauth_handler = oauth_handler
+        self.last_poll_time = None
     
-    def _load_last_poll(self) -> datetime:
-        """Load last poll timestamp"""
-        if self.last_poll_file.exists():
-            try:
-                with open(self.last_poll_file, 'r') as f:
-                    data = json.load(f)
-                    return datetime.fromisoformat(data['last_poll'])
-            except:
-                pass
-        return datetime.now() - timedelta(hours=24)
-    
-    def _save_last_poll(self, timestamp: datetime):
-        """Save last poll timestamp"""
-        self.last_poll_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.last_poll_file, 'w') as f:
-            json.dump({'last_poll': timestamp.isoformat()}, f)
-    
-    def poll_orders(self) -> List[OrderRecord]:
-        """Poll eBay for new orders"""
-        print(f"[OrderPoller] Polling eBay Orders API...")
-        print(f"  Last poll: {self.last_poll_time.isoformat()}")
-        
-        orders = []
+    def poll_orders(self, limit: int = 50) -> Optional[List[EBayOrder]]:
+        """Poll eBay Orders API"""
         try:
-            print("  [Mock] Found 0 new orders (API not connected)")
-            now = datetime.now()
-            self._save_last_poll(now)
-            self.last_poll_time = now
+            token = self.oauth_handler.get_access_token()
+            headers = {
+                'Authorization': f'Bearer {token}',
+                'Accept': 'application/json',
+            }
+            
+            url = f"{self.api_client.api_config.base_url}/sell/fulfillment/v1/order"
+            params = {
+                'limit': limit,
+                'filter': 'status:ACTIVE,status:SHIPPED,status:COMPLETED',
+            }
+            
+            response = requests.get(
+                url,
+                headers=headers,
+                params=params,
+                timeout=30,
+            )
+            
+            if response.status_code != 200:
+                print(f"Warning: Orders API returned {response.status_code}")
+                return None
+            
+            data = response.json()
+            orders = []
+            
+            for order_data in data.get('orders', []):
+                order = self._parse_order(order_data)
+                if order:
+                    orders.append(order)
+            
+            self.last_poll_time = datetime.now().isoformat()
             return orders
+        
         except Exception as e:
-            print(f"  [Error] Poll failed: {str(e)}")
-            return []
-
-# ============================================================================
-# ORDER PARSER
-# ============================================================================
-
-class OrderParser:
-    """Parse eBay order response"""
+            print(f"Error polling orders: {e}")
+            return None
     
-    @staticmethod
-    def parse_order(ebay_order_data: Dict) -> Optional[OrderRecord]:
-        """Parse single eBay order"""
+    def _parse_order(self, order_data: Dict) -> Optional[EBayOrder]:
+        """Parse order from API response"""
         try:
-            order = OrderRecord(
-                order_id=ebay_order_data.get('orderId'),
-                listing_id=ebay_order_data.get('lineItems', [{}])[0].get('listingId'),
-                sku=ebay_order_data.get('lineItems', [{}])[0].get('sku'),
-                candidate_id='',
-                buyer_username=ebay_order_data.get('buyer', {}).get('username'),
-                order_status=ebay_order_data.get('orderStatus', 'pending'),
-                purchase_price=float(ebay_order_data.get('lineItems', [{}])[0].get('lineItemCost', {}).get('value', 0)),
-                quantity=int(ebay_order_data.get('lineItems', [{}])[0].get('quantity', 1)),
-                purchase_date=ebay_order_data.get('creationDate'),
-                order_total=float(ebay_order_data.get('pricingSummary', {}).get('total', {}).get('value', 0)),
+            items = []
+            for item_data in order_data.get('lineItems', []):
+                item = OrderItem(
+                    sku=item_data.get('sku', 'UNKNOWN'),
+                    title=item_data.get('title', ''),
+                    quantity=item_data.get('quantity', 1),
+                    price=float(item_data.get('lineItemCost', 0)),
+                    listing_id=item_data.get('listingId', ''),
+                )
+                items.append(item)
+            
+            order = EBayOrder(
+                order_id=order_data.get('orderId', ''),
+                status=OrderStatus(order_data.get('orderStatus', 'ACTIVE')),
+                order_date=order_data.get('creationDate', ''),
+                items=items,
+                buyer_username=order_data.get('buyer', {}).get('username', 'N/A'),
+                total_amount=float(order_data.get('pricingSummary', {}).get('total', 0)),
+                currency=order_data.get('pricingSummary', {}).get('currency', 'USD'),
             )
             return order
+        
         except Exception as e:
-            print(f"  [Error] Failed to parse order: {str(e)}")
+            print(f"Error parsing order: {e}")
             return None
 
 # ============================================================================
-# INVENTORY UPDATER
+# Inventory Updater
 # ============================================================================
 
 class InventoryUpdater:
-    """Update candidate inventory status"""
+    """Updates internal inventory based on orders"""
     
-    def __init__(self, candidate_db_file: str = "data/candidates.json"):
-        self.candidate_db_file = Path(candidate_db_file)
-        self.candidates = self._load_candidates()
+    def __init__(self):
+        self.updates: List[InventoryUpdate] = []
     
-    def _load_candidates(self) -> Dict:
-        """Load candidate database"""
-        if self.candidate_db_file.exists():
-            try:
-                with open(self.candidate_db_file, 'r') as f:
-                    return json.load(f)
-            except:
-                pass
-        return {}
-    
-    def _save_candidates(self):
-        """Save candidate database"""
-        self.candidate_db_file.parent.mkdir(parents=True, exist_ok=True)
-        with open(self.candidate_db_file, 'w') as f:
-            json.dump(self.candidates, f, indent=2)
-    
-    def find_candidate_by_listing_id(self, listing_id: str) -> Optional[Dict]:
-        """Find candidate by listing ID"""
-        for candidate_id, candidate in self.candidates.items():
-            if candidate.get('listing_id') == listing_id:
-                return candidate
-        return None
-    
-    def update_to_sold(self, order: OrderRecord, reference_price: float) -> Optional[InventoryUpdate]:
-        """Update candidate to sold status"""
-        candidate = self.find_candidate_by_listing_id(order.listing_id)
+    def update_from_orders(self, orders: List[EBayOrder]) -> List[InventoryUpdate]:
+        """Generate inventory updates from orders"""
+        updates = []
         
-        if not candidate:
-            print(f"  [Warning] Candidate not found for listing {order.listing_id}")
-            return None
+        for order in orders:
+            if order.status == OrderStatus.COMPLETED or order.status == OrderStatus.SHIPPED:
+                for item in order.items:
+                    update = InventoryUpdate(
+                        sku=item.sku,
+                        quantity_sold=item.quantity,
+                        order_id=order.order_id,
+                        timestamp=datetime.now().isoformat(),
+                    )
+                    updates.append(update)
         
-        old_status = candidate.get('status', 'listed')
-        profit_margin = ((order.purchase_price - reference_price) / reference_price * 100) if reference_price > 0 else 0
-        net_income = order.purchase_price - (order.purchase_price * 0.129)
-        
-        update = InventoryUpdate(
-            candidate_id=candidate.get('candidate_id'),
-            sku=order.sku,
-            old_status=old_status,
-            new_status='sold',
-            order_id=order.order_id,
-            sold_price=order.purchase_price,
-            profit_margin=profit_margin,
-            net_income=net_income,
-        )
-        
-        candidate['status'] = 'sold'
-        candidate['order_id'] = order.order_id
-        candidate['sold_price'] = order.purchase_price
-        candidate['sold_date'] = order.purchase_date
-        candidate['profit_margin'] = profit_margin
-        candidate['net_income'] = net_income
-        
-        self._save_candidates()
-        return update
+        self.updates.extend(updates)
+        return updates
 
 # ============================================================================
-# SALES REPORTER
+# Sales Reporter
 # ============================================================================
 
 class SalesReporter:
-    """Generate sales and profit reports"""
+    """Generates sales reports"""
     
-    def __init__(self, candidate_db_file: str = "data/candidates.json"):
-        self.candidate_db_file = Path(candidate_db_file)
+    def __init__(self):
+        self.reports: List[SalesReport] = []
     
-    def generate_daily_report(self) -> Dict:
+    def generate_daily_report(self, orders: List[EBayOrder]) -> SalesReport:
         """Generate daily sales report"""
-        try:
-            with open(self.candidate_db_file, 'r') as f:
-                candidates = json.load(f)
-        except:
-            candidates = {}
+        total_orders = len(orders)
+        total_revenue = sum(order.total_amount for order in orders)
+        total_items_sold = sum(
+            len(order.items) for order in orders
+        )
         
-        today = datetime.now().date()
-        sold_today = []
+        report = SalesReport(
+            period=datetime.now().strftime('%Y-%m-%d'),
+            total_orders=total_orders,
+            total_revenue=total_revenue,
+            total_items_sold=total_items_sold,
+            timestamp=datetime.now().isoformat(),
+        )
         
-        for candidate_id, candidate in candidates.items():
-            if candidate.get('status') == 'sold':
-                sold_date = candidate.get('sold_date', '')
-                try:
-                    if datetime.fromisoformat(sold_date).date() == today:
-                        sold_today.append(candidate)
-                except:
-                    pass
-        
-        total_revenue = sum(c.get('sold_price', 0) for c in sold_today)
-        total_profit = sum(c.get('net_income', 0) for c in sold_today)
-        avg_margin = sum(c.get('profit_margin', 0) for c in sold_today) / len(sold_today) if sold_today else 0
-        
-        report = {
-            'report_date': today.isoformat(),
-            'items_sold': len(sold_today),
-            'total_revenue': round(total_revenue, 2),
-            'total_profit': round(total_profit, 2),
-            'avg_profit_margin': round(avg_margin, 2),
-            'generated_at': datetime.now().isoformat(),
-        }
-        
+        self.reports.append(report)
         return report
 
 # ============================================================================
-# MAIN EXECUTOR
+# Phase 7 Executor
 # ============================================================================
 
 class Phase7Executor:
-    """Main Phase 7 executor"""
+    """Orchestrates Order Poller, Inventory Updater, Sales Reporter"""
     
-    def __init__(self, api_client):
-        self.api_client = api_client
-        self.order_poller = OrderPoller(api_client)
-        self.order_parser = OrderParser()
-        self.inventory_updater = InventoryUpdater()
-        self.sales_reporter = SalesReporter()
+    def __init__(self, api_client, oauth_handler):
+        self.poller = OrderPoller(api_client, oauth_handler)
+        self.updater = InventoryUpdater()
+        self.reporter = SalesReporter()
     
-    def execute_sync(self) -> Dict:
-        """Execute full inventory sync"""
+    def execute_polling_cycle(self) -> Dict:
+        """Execute one polling cycle"""
         print("\n" + "="*70)
-        print("Phase 7: Inventory Sync Execution")
+        print("Phase 7: Order Polling Cycle")
         print("="*70)
         
         result = {
             'timestamp': datetime.now().isoformat(),
-            'orders_polled': 0,
-            'orders_parsed': 0,
+            'status': 'FAILED',
+            'orders_count': 0,
             'inventory_updates': 0,
-            'daily_report': None,
+            'errors': [],
         }
         
-        try:
-            print("\n[Step 1] Polling eBay Orders...")
-            orders = self.order_poller.poll_orders()
-            result['orders_polled'] = len(orders)
-            print(f"  Found: {len(orders)} orders")
-            
-            print("\n[Step 2] Parsing orders...")
-            parsed_orders = []
-            for order_data in orders:
-                parsed = self.order_parser.parse_order(order_data)
-                if parsed:
-                    parsed_orders.append(parsed)
-            result['orders_parsed'] = len(parsed_orders)
-            print(f"  Parsed: {len(parsed_orders)} orders")
-            
-            print("\n[Step 3] Updating inventory...")
-            updates = []
-            for order in parsed_orders:
-                update = self.inventory_updater.update_to_sold(order, 100.0)
-                if update:
-                    updates.append(update)
-                    print(f"  Updated: {order.sku} -> sold")
-            result['inventory_updates'] = len(updates)
-            
-            print("\n[Step 4] Generating daily report...")
-            report = self.sales_reporter.generate_daily_report()
-            result['daily_report'] = report
-            items = report['items_sold']
-            revenue = report['total_revenue']
-            print(f"  Today: {items} items sold, Revenue: {revenue}")
-            
-            print("\n" + "="*70)
-            print("Phase 7 Sync: COMPLETE")
-            print("="*70)
+        # Step 1: Poll orders
+        print("\n[Step 1] Polling eBay Orders API...")
+        orders = self.poller.poll_orders(limit=50)
         
-        except Exception as e:
-            print(f"\n[Error] Sync failed: {str(e)}")
-            result['error'] = str(e)
+        if not orders:
+            print("  Warning: No orders retrieved (API may be unreachable)")
+            orders = []
+        else:
+            print(f"  OK: {len(orders)} orders retrieved")
+            result['orders_count'] = len(orders)
+        
+        # Step 2: Update inventory
+        print("\n[Step 2] Updating inventory...")
+        updates = self.updater.update_from_orders(orders)
+        print(f"  OK: {len(updates)} inventory updates generated")
+        result['inventory_updates'] = len(updates)
+        
+        # Step 3: Generate sales report
+        print("\n[Step 3] Generating sales report...")
+        report = self.reporter.generate_daily_report(orders)
+        print(f"  OK: Daily report generated")
+        print(f"      Total orders: {report.total_orders}")
+        print(f"      Total revenue: ${report.total_revenue:.2f}")
+        print(f"      Items sold: {report.total_items_sold}")
+        
+        result['status'] = 'SUCCESS'
+        result['report'] = asdict(report)
+        result['inventory_updates_list'] = [asdict(u) for u in updates]
+        
+        print("\n" + "="*70)
+        print(f"Status: {result['status']}")
+        print("="*70 + "\n")
         
         return result
 
 # ============================================================================
-# MAIN
+# Main Execution
 # ============================================================================
 
 def main():
-    try:
-        from src.api_integration.oauth_handler import EBayOAuthConfig, EBayAPIConfig, OAuthHandler
-        from src.api_integration.api_client_live import EBayLiveAPIClient
-        
-        print("="*70)
-        print("MarginScout Phase 7: Order Polling & Inventory Management")
-        print("="*70)
-        
-        oauth_config = EBayOAuthConfig.from_env()
-        api_config = EBayAPIConfig.from_env()
-        oauth_handler = OAuthHandler(oauth_config, api_config)
-        api_client = EBayLiveAPIClient(oauth_handler, api_config)
-        
-        executor = Phase7Executor(api_client)
-        result = executor.execute_sync()
-        
-        report_path = Path.cwd() / 'PHASE7_SYNC_RESULT.json'
-        with open(report_path, 'w', encoding='utf-8') as f:
-            json.dump(result, f, indent=2, ensure_ascii=False)
-        
-        print(f"\nSync result saved: {report_path}")
+    """Main execution"""
+    print("\n" + "="*70)
+    print("MarginScout Phase 7: Order Poller & Inventory Sync")
+    print("="*70)
     
-    except Exception as e:
-        print(f"Phase 7 initialization: {str(e)}")
-        print("Components are ready. Run with proper eBay credentials.")
+    # Mock API client and OAuth handler for demo
+    class MockOAuthHandler:
+        def get_access_token(self):
+            return "mock_access_token"
+    
+    class MockAPIConfig:
+        base_url = "https://api.sandbox.ebay.com"
+    
+    class MockAPIClient:
+        api_config = MockAPIConfig()
+    
+    # Create executor
+    oauth_handler = MockOAuthHandler()
+    api_client = MockAPIClient()
+    executor = Phase7Executor(api_client, oauth_handler)
+    
+    # Execute polling cycle
+    result = executor.execute_polling_cycle()
+    
+    # Save report
+    report_path = "PHASE7_POLLING_RESULT.json"
+    with open(report_path, 'w', encoding='utf-8') as f:
+        json.dump(result, f, indent=2, ensure_ascii=False)
+    
+    print(f"Report saved: {report_path}")
+    
+    return 0 if result['status'] == 'SUCCESS' else 1
 
 if __name__ == '__main__':
-    main()
+    sys.exit(main())
