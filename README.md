@@ -276,3 +276,37 @@ TBD
 **最終更新**: 2026-06-13  
 **プロジェクトステータス**: Bootstrap Phase (Active Development)  
 **リポジトリ**: https://github.com/nario0715masa0619-create/margin-scout
+
+
+---
+
+## 📋 Phase 2: リサーチワークフロー設計 (完了)
+
+**ステータス**: 設計完了  
+**完了日**: 2026-06-13
+
+### 成果物
+
+✅ docs/PHASE2_RESEARCH_WORKFLOW.md — リサーチワークフロー詳細設計  
+✅ docs/RESEARCH_DATA_MODEL.md — リサーチデータモデル仕様  
+✅ examples/research_sample.csv — サンプル CSV（リサーチ候補）  
+✅ src/research_workflow/ — Python skeleton (research_data.py, research_processor.py)  
+
+### 設計要点
+
+**リサーチ責務**: データ収集 → 正規化 → ユーザー確認 → CSV 出力
+
+**中間データ層 (Layer 構造)**:
+- Layer 0: 生データ (Raw Data)
+- Layer 1: 正規化データ (Normalized Data)
+- Layer 2: リサーチ候補 (Research Candidate Data)
+- Layer 3: 確認済みデータ (Confirmed Research Data)
+- Layer 4: CSV 出力候補 (CSV-Ready Data)
+
+**表モード / 裏モード分離**:
+- 表: 手入力 CSV、eBay リスティング観測（公式ドキュメント記載）
+- 裏: Amazon 観測、実店舗メモ（実装時のみ言及）
+
+**リサーチ終了点**: CSV 出力まで（出品実行は別フェーズ）
+
+---

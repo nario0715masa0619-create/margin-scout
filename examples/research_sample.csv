@@ -1,0 +1,4 @@
+candidate_id,product_name,reference_price,currency,brand,model_number,category,product_url,source_type,observed_date,condition,user_notes,user_tags,judgement_flag,research_status
+ms-res-20260613-0001,Canon EF 50mm f/1.8 STM,189.99,USD,Canon,EF50STM,Camera Lenses,https://www.ebay.com/itm/324901234567,ebay_listing,2026-06-13T14:30:00Z,new,状態良好・レンズクリア,high-demand;checked,promising,confirmed
+ms-res-20260613-0002,Nike Air Force 1 US9,110.00,USD,Nike,AF1-US9,Footwear,https://www.ebay.com/itm/324901234568,ebay_listing,2026-06-13T14:35:00Z,new,サイズ確認済み,checked,promising,confirmed
+ms-res-20260613-0003,Sony WH-CH510,49.99,USD,Sony,WHCH510,Audio Equipment,https://www.amazon.com/dp/B08GFZV8H3,amazon_listing,2026-06-13T14:40:00Z,new,参考価格として記録,参考,needs_review,under_review
