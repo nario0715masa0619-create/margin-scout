@@ -1,0 +1,110 @@
+{
+  "timestamp": "2026-06-13T15:39:51.462280",
+  "total_items": 3,
+  "successful": 3,
+  "failed": 0,
+  "items": [
+    {
+      "candidate_id": "ms-res-20260613-0001",
+      "sku": "MARGIN-20260613-0001",
+      "validation": {
+        "hard_errors": [],
+        "soft_warnings": [
+          "no_images"
+        ],
+        "validation_status": "soft_warning",
+        "overall_score": 0.9
+      },
+      "dry_run": {
+        "mock_listing_id": "mock_20260613_153951_990eeb55",
+        "sku": "MARGIN-20260613-0001",
+        "status": "draft",
+        "final_price": 263.51,
+        "insertion_fee": 0.0,
+        "final_value_fee": 33.99279,
+        "total_fee": 33.99279,
+        "price_log": {
+          "formula": "(reference_price) / (1 - margin% - fee%)",
+          "reference_price": 189.99,
+          "divisor": 0.721,
+          "calculated_price": 263.51,
+          "margin_percent": 15.0,
+          "platform_fee_percent": 12.9
+        },
+        "validation_errors": [],
+        "execution_valid": true,
+        "next_action": "ready_for_phase_6",
+        "timestamp": "2026-06-13T15:39:51.463026"
+      },
+      "status": "success"
+    },
+    {
+      "candidate_id": "ms-res-20260613-0002",
+      "sku": "MARGIN-20260613-0002",
+      "validation": {
+        "hard_errors": [],
+        "soft_warnings": [
+          "no_images"
+        ],
+        "validation_status": "soft_warning",
+        "overall_score": 0.9
+      },
+      "dry_run": {
+        "mock_listing_id": "mock_20260613_153951_836859d7",
+        "sku": "MARGIN-20260613-0002",
+        "status": "draft",
+        "final_price": 152.57,
+        "insertion_fee": 0.0,
+        "final_value_fee": 19.68153,
+        "total_fee": 19.68153,
+        "price_log": {
+          "formula": "(reference_price) / (1 - margin% - fee%)",
+          "reference_price": 110.0,
+          "divisor": 0.721,
+          "calculated_price": 152.57,
+          "margin_percent": 15.0,
+          "platform_fee_percent": 12.9
+        },
+        "validation_errors": [],
+        "execution_valid": true,
+        "next_action": "ready_for_phase_6",
+        "timestamp": "2026-06-13T15:39:51.463359"
+      },
+      "status": "success"
+    },
+    {
+      "candidate_id": "ms-res-20260613-0003",
+      "sku": "MARGIN-20260613-0003",
+      "validation": {
+        "hard_errors": [],
+        "soft_warnings": [
+          "no_images"
+        ],
+        "validation_status": "soft_warning",
+        "overall_score": 0.9
+      },
+      "dry_run": {
+        "mock_listing_id": "mock_20260613_153951_8f4e8eeb",
+        "sku": "MARGIN-20260613-0003",
+        "status": "draft",
+        "final_price": 69.34,
+        "insertion_fee": 0.0,
+        "final_value_fee": 8.94486,
+        "total_fee": 8.94486,
+        "price_log": {
+          "formula": "(reference_price) / (1 - margin% - fee%)",
+          "reference_price": 49.99,
+          "divisor": 0.721,
+          "calculated_price": 69.34,
+          "margin_percent": 15.0,
+          "platform_fee_percent": 12.9
+        },
+        "validation_errors": [],
+        "execution_valid": true,
+        "next_action": "ready_for_phase_6",
+        "timestamp": "2026-06-13T15:39:51.463639"
+      },
+      "status": "success"
+    }
+  ]
+}
