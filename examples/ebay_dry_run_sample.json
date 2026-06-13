@@ -1,0 +1,68 @@
+{
+  "dry_run_executions": [
+    {
+      "execution_id": "exec_20260613_001",
+      "timestamp": "2026-06-13T14:35:22Z",
+      "sku": "MARGIN-20260613-0001",
+      "candidate_id": "cand_20260613_001",
+      "payload_version": "1.0",
+      "item_title": "Canon EF 70-200mm f/2.8 IS II USM Lens",
+      "mock_response": {
+        "status": "success",
+        "mock_listing_id": "mock_20260613_abc123def456",
+        "mock_item_id": "386547829380",
+        "status_code": "draft",
+        "activation_link": "https://ebay.com/itm/mock_386547829380",
+        "fee_estimate": {
+          "insertion_fee": 0.0,
+          "final_value_fee": 17.89,
+          "total_fee": 17.89
+        }
+      },
+      "validation_results": {
+        "title_valid": true,
+        "description_valid": true,
+        "price_valid": true,
+        "category_valid": true,
+        "condition_valid": true,
+        "images_valid": true,
+        "overall_score": 0.98
+      },
+      "warnings": [],
+      "next_action": "ready_for_phase_6"
+    },
+    {
+      "execution_id": "exec_20260613_002",
+      "timestamp": "2026-06-13T14:36:15Z",
+      "sku": "MARGIN-20260613-0002",
+      "candidate_id": "cand_20260613_002",
+      "payload_version": "1.0",
+      "item_title": "Nike Air Max 270 Sneakers",
+      "mock_response": {
+        "status": "success",
+        "mock_listing_id": "mock_20260613_def789ghi012",
+        "mock_item_id": "386547829381",
+        "status_code": "draft",
+        "activation_link": "https://ebay.com/itm/mock_386547829381",
+        "fee_estimate": {
+          "insertion_fee": 0.0,
+          "final_value_fee": 15.38,
+          "total_fee": 15.38
+        }
+      },
+      "validation_results": {
+        "title_valid": true,
+        "description_valid": true,
+        "price_valid": true,
+        "category_valid": true,
+        "condition_valid": true,
+        "images_valid": false,
+        "overall_score": 0.85
+      },
+      "warnings": [
+        "Only 1 image provided; recommend 2+ for better visibility"
+      ],
+      "next_action": "pending_review"
+    }
+  ]
+}

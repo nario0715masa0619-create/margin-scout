@@ -1,0 +1,87 @@
+{
+  "pricing_scenarios": [
+    {
+      "scenario_id": "ps_001",
+      "item_name": "Canon EF 70-200mm f/2.8 IS II USM Lens",
+      "reference_price": 100.0,
+      "margin_policy_percent": 15.0,
+      "platform_fee_percent": 12.9,
+      "calculation": {
+        "formula": "(reference_price) / (1 - margin% - fee%)",
+        "step1_divisor_calc": "1 - 0.15 - 0.129",
+        "step1_divisor": 0.721,
+        "step2_calculated": 138.6853,
+        "step3_rounded_ceiling": 138.69,
+        "final_price": 138.69
+      },
+      "validation": {
+        "in_min_bound": true,
+        "in_max_bound": true,
+        "price_valid": true
+      },
+      "notes": "Standard pricing scenario"
+    },
+    {
+      "scenario_id": "ps_002",
+      "item_name": "Nike Air Max 270 Sneakers",
+      "reference_price": 80.0,
+      "margin_policy_percent": 20.0,
+      "platform_fee_percent": 12.9,
+      "calculation": {
+        "formula": "(reference_price) / (1 - margin% - fee%)",
+        "step1_divisor_calc": "1 - 0.20 - 0.129",
+        "step1_divisor": 0.671,
+        "step2_calculated": 119.2252,
+        "step3_rounded_ceiling": 119.23,
+        "final_price": 119.23
+      },
+      "validation": {
+        "in_min_bound": true,
+        "in_max_bound": true,
+        "price_valid": true
+      },
+      "notes": "Higher margin for popular consumer item"
+    },
+    {
+      "scenario_id": "ps_003",
+      "item_name": "Sony WH-1000XM5 Headphones",
+      "reference_price": 350.0,
+      "margin_policy_percent": 12.0,
+      "platform_fee_percent": 12.9,
+      "calculation": {
+        "formula": "(reference_price) / (1 - margin% - fee%)",
+        "step1_divisor_calc": "1 - 0.12 - 0.129",
+        "step1_divisor": 0.751,
+        "step2_calculated": 465.912,
+        "step3_rounded_ceiling": 465.92,
+        "final_price": 465.92
+      },
+      "validation": {
+        "in_min_bound": true,
+        "in_max_bound": true,
+        "price_valid": true
+      },
+      "notes": "Lower margin for high-volume items"
+    }
+  ],
+  "fee_estimates": [
+    {
+      "sku": "MARGIN-20260613-0001",
+      "item_price": 138.69,
+      "insertion_fee": 0.0,
+      "final_value_fee_percent": 12.9,
+      "final_value_fee": 17.89,
+      "total_fee": 17.89,
+      "net_income": 120.8
+    },
+    {
+      "sku": "MARGIN-20260613-0002",
+      "item_price": 119.23,
+      "insertion_fee": 0.0,
+      "final_value_fee_percent": 12.9,
+      "final_value_fee": 15.38,
+      "total_fee": 15.38,
+      "net_income": 103.85
+    }
+  ]
+}

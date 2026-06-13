@@ -370,3 +370,34 @@ TBD
 - Category, Condition 正規化 (内部表現 → eBay表現準備)
 - Readiness 判定 (ready / pending_review / incomplete)
 - 監査追跡情報 (Audit Trail) の確保
+
+---
+
+## 📋 Phase 5: eBay Executor & Dry-Run Implementation Design
+**Status**: ✅ Completed
+**Date**: 2026-06-13
+
+### Deliverables
+- docs/PHASE5_EBAY_EXECUTOR.md – Overall executor design, workflow, readiness judgment, dry-run, audit
+- docs/EBAY_PRICE_STRATEGY.md – Price calculation model (margin + fees)
+- docs/EBAY_CATEGORY_MAPPING.md – Category resolution specification
+- examples/price_strategy_sample.json – Sample price calculations
+- examples/ebay_dry_run_sample.json – Sample dry-run outputs
+- examples/execution_audit_log_sample.json – Sample audit trails
+- examples/listing_to_payload_mapping.md – Field mapping reference
+- src/executor/ – Skeleton code (price_calculator, category_resolver, executor, dry_run_executor)
+
+### Key Design Decisions
+- Price Formula: price = reference_price / (1 - margin% - fee%)
+- Category Policy: Single category, leaf-node required, fallback to "Miscellaneous" if unresolved
+- Readiness Levels: ready, pending_review, incomplete, rejected
+- Dry-Run Design: Deterministic simulation without live API call
+- Audit Trail: Full traceability with candidate_id, SKU, pricing, category, validation results
+
+### Handoff to Phase 6
+- Execution-ready payload (Layer 4)
+- Audit trail (timestamp, pricing decision, category resolution, validation results)
+- Mock response (for reference)
+- Readiness level (ready / pending_review / incomplete / rejected)
+
+Phase 6 Responsibility: Authenticate with live eBay API, submit payload, handle responses, update status.

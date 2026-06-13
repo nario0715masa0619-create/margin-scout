@@ -1,0 +1,67 @@
+{
+  "audit_logs": [
+    {
+      "log_id": "audit_20260613_001",
+      "timestamp": "2026-06-13T14:35:22Z",
+      "candidate_id": "cand_20260613_001",
+      "sku": "MARGIN-20260613-0001",
+      "payload_version": "1.0",
+      "reference_price": 100.0,
+      "calculated_price": 138.69,
+      "margin_policy_percent": 15.0,
+      "platform_fees_percent": 12.9,
+      "ebay_category_id": 625,
+      "ebay_category_path": "Electronics > Cameras & Photo > Lenses & Filters > Lenses",
+      "validation_status": "ready",
+      "dry_run_result": "success",
+      "mock_listing_id": "mock_20260613_abc123def456",
+      "warnings": [],
+      "user_notes": "Canon lens in excellent condition. Verified price calculation.",
+      "next_action": "proceed_to_phase_6"
+    },
+    {
+      "log_id": "audit_20260613_002",
+      "timestamp": "2026-06-13T14:36:15Z",
+      "candidate_id": "cand_20260613_002",
+      "sku": "MARGIN-20260613-0002",
+      "payload_version": "1.0",
+      "reference_price": 80.0,
+      "calculated_price": 119.23,
+      "margin_policy_percent": 20.0,
+      "platform_fees_percent": 12.9,
+      "ebay_category_id": 15687,
+      "ebay_category_path": "Miscellaneous",
+      "validation_status": "pending_review",
+      "dry_run_result": "partial",
+      "mock_listing_id": "mock_20260613_def789ghi012",
+      "warnings": [
+        "Category confidence < 0.80; using fallback (Miscellaneous)",
+        "Only 1 image provided"
+      ],
+      "user_notes": "Nike sneakers. Category resolution needs user confirmation.",
+      "next_action": "manual_review"
+    },
+    {
+      "log_id": "audit_20260613_003",
+      "timestamp": "2026-06-13T14:37:00Z",
+      "candidate_id": "cand_20260613_003",
+      "sku": "MARGIN-20260613-0003",
+      "payload_version": "1.0",
+      "reference_price": 350.0,
+      "calculated_price": 465.92,
+      "margin_policy_percent": 12.0,
+      "platform_fees_percent": 12.9,
+      "ebay_category_id": null,
+      "ebay_category_path": null,
+      "validation_status": "incomplete",
+      "dry_run_result": "failed",
+      "mock_listing_id": null,
+      "warnings": [
+        "Hard error: Category unresolved",
+        "Hard error: No images found in data/images/MARGIN-20260613-0003/"
+      ],
+      "user_notes": "Sony headphones. Missing images and category mapping failure.",
+      "next_action": "reject"
+    }
+  ]
+}
