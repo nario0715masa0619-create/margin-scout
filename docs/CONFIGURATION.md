@@ -1,195 +1,143 @@
-# MarginScout Environment Configuration Guide
+# MarginScout Configuration Guide
 
 ## Overview
 
-MarginScout stores environment configuration (API keys, secrets, etc.) outside the project repository for security reasons.
+MarginScout uses environment variables for all configuration. See `.env.example` for defaults.
 
-Configuration files are stored in the user's home directory:
-- **Location**: `C:\Users\{ユーザ名}\.marginscount\.env`
-- **Access**: Local user only
-- **Version Control**: NOT tracked in Git (security)
+## Phase 1-5: Internal Configuration
 
----
-
-## Setup Instructions
-
-### 1. Configuration Directory
-
-The configuration directory is automatically created at:
-```
-C:\Users\nario\.marginscount\
-```
-
-### 2. Environment File
-
-Create or edit the `.env` file:
-```
-C:\Users\nario\.marginscount\.env
-```
-
-### 3. Required Configuration
-
-**eBay API Keys (Minimum):**
-```
-EBAY_SANDBOX_CLIENT_ID=<your_sandbox_client_id>
-EBAY_SANDBOX_CLIENT_SECRET=<your_sandbox_client_secret>
-EBAY_APP_ID=<your_app_id>
-```
-
-### 4. Loading Configuration
-
-The application loads configuration in this order:
-
-1. **User home directory** (highest priority)
-   ```
-   C:\Users\{ユーザ名}\.marginscount\.env
-   ```
-
-2. **Project directory** (optional, if exists)
-   ```
-   .env (NOT recommended - for development only)
-   ```
-
-3. **Environment variables** (system level)
-
-4. **Default values** (application defaults)
-
----
-
-## Security Best Practices
-
-### ✅ DO
-
-- ✓ Store `.env` in user home directory
-- ✓ Restrict file permissions: `icacls C:\Users\{ユーザ名}\.marginscount /grant:r %USERNAME%:F /inheritance:r`
-- ✓ Use strong, unique API keys
-- ✓ Rotate keys periodically
-- ✓ Use sandbox credentials for development
-- ✓ Use production credentials only for live operations
-- ✓ Keep `.env` out of version control
-
-### ❌ DON'T
-
-- ✗ Commit `.env` to Git
-- ✗ Share `.env` files via email or chat
-- ✗ Store passwords in plain text elsewhere
-- ✗ Use same keys across multiple environments
-- ✗ Leave `.env` readable by other users
-- ✗ Push production keys to development branches
-
----
-
-## Configuration File Structure
+Standard settings for CSV processing, listing generation, and dry-run:
 
 ```
-C:\Users\{ユーザ名}\
-├── .marginscount/                  ← Configuration directory
-│   ├── .env                        ← Main configuration (do not commit)
-│   ├── .env.example                ← Template (can commit)
-│   └── config.local.json           ← Local overrides (optional, do not commit)
-├── AppData/
-├── Desktop/
-└── Documents/
+RESEARCH_MODE=research_and_csv_export
+CSV_INPUT_DIR=examples
+CSV_OUTPUT_DIR=data/csv_output
+LISTING_STATUS_LOG=data/listing_status.log
 ```
 
----
+## Phase 6: eBay OAuth & Live API Setup
 
-## Environment Variables Reference
+### Step 1: Create eBay Developer Account
 
-### eBay API
+Visit https://developer.ebay.com and:
+1. Sign in / Create account
+2. Create Application (Keyset)
+3. Generate Client ID and Cert ID
+4. Set Redirect URI (default: http://localhost:8080/callback)
 
-| Variable | Type | Required | Example |
-|----------|------|----------|---------|
-| EBAY_SANDBOX_CLIENT_ID | string | Yes (dev) | abc123xyz |
-| EBAY_SANDBOX_CLIENT_SECRET | string | Yes (dev) | secret456 |
-| EBAY_APP_ID | string | Yes | myapp |
-| EBAY_CERT_ID | string | Optional | cert789 |
-| EBAY_DEV_ID | string | Optional | devid000 |
+### Step 2: Environment Variables
 
-### Application
+Copy `.env.example` to `.env` and fill in OAuth credentials:
 
-| Variable | Type | Default | Purpose |
-|----------|------|---------|---------|
-| APP_ENV | string | development | Environment (development, staging, production) |
-| LOG_LEVEL | string | INFO | Logging level (DEBUG, INFO, WARNING, ERROR) |
-| DEBUG_MODE | boolean | false | Enable debug output |
+```bash
+# OAuth Credentials
+EBAY_CLIENT_ID=<your_app_id>
+EBAY_CLIENT_SECRET=<your_cert_id>
+EBAY_REDIRECT_URI=http://localhost:8080/callback
 
-### Data Paths
+# Token Management
+EBAY_REFRESH_TOKEN=<obtained_from_oauth_flow>
 
-| Variable | Type | Default | Purpose |
-|----------|------|---------|---------|
-| CSV_EXPORT_DIR | string | ./exports | CSV export directory |
-| CSV_IMPORT_DIR | string | ./imports | CSV import directory |
-| IMAGE_BASE_DIR | string | ./data/images | Base directory for product images |
-| LOG_DIR | string | ./logs | Application log directory |
+# Environment
+EBAY_ENV=sandbox  # Use 'sandbox' for testing, 'production' for live
 
----
+# API Settings
+EBAY_REQUEST_TIMEOUT=30
+EBAY_MAX_RETRIES=3
+EBAY_RETRY_BACKOFF_FACTOR=2.0
+
+# Logging
+LOG_LEVEL=INFO
+LOG_FILE=data/margin_scout.log
+AUDIT_LOG_FILE=data/audit_trail.log
+```
+
+### Step 3: Get OAuth Refresh Token
+
+Run OAuth flow to obtain tokens:
+
+```python
+from src.api_integration.oauth_handler import OAuthHandler, EBayOAuthConfig, EBayAPIConfig
+
+config = EBayOAuthConfig.from_env()
+api_config = EBayAPIConfig.from_env()
+handler = OAuthHandler(config, api_config)
+
+# Get authorization URL
+auth_url = handler.get_authorization_url([
+    'https://api.ebay.com/oauth/api_scope/sell.inventory',
+    'https://api.ebay.com/oauth/api_scope/sell.account',
+])
+
+print(f"Visit: {auth_url}")
+# User grants permission, gets authorization code in redirect_uri
+
+# Exchange code for token
+token = handler.exchange_code_for_token(auth_code)
+print(f"Refresh token: {token.refresh_token}")
+# Save to .env as EBAY_REFRESH_TOKEN
+```
+
+### Step 4: Sandbox vs Production
+
+MarginScout uses **Sandbox-first** approach:
+
+- **Sandbox:** Testing, development, safe experimentation
+- **Production:** Live listings (only after Sandbox validation)
+
+Set via `.env`:
+
+```
+EBAY_ENV=sandbox    # For testing
+EBAY_ENV=production # For live (use with caution!)
+```
+
+### Step 5: Security Best Practices
+
+1. ✅ Never commit `.env` to Git (configured in `.gitignore`)
+2. ✅ Use environment variables for all secrets
+3. ✅ Log level set to INFO (not DEBUG) in production
+4. ✅ Check `.env` permissions (chmod 600 on Unix)
+5. ✅ Rotate refresh tokens periodically
 
 ## Troubleshooting
 
-### Configuration Not Loading
+### Issue: EBAY_REFRESH_TOKEN not found
+**Solution:** Run OAuth flow to get token, save to `.env`
 
-**Problem**: Application says "API key not found"
+### Issue: 401 Unauthorized
+**Solution:** Token may be expired. Token refresh is automatic, but check `.env` EBAY_REFRESH_TOKEN value
 
-**Solution**:
-1. Verify `.env` exists: `Test-Path C:\Users\nario\.marginscount\.env`
-2. Verify format: `type C:\Users\nario\.marginscount\.env`
-3. Check for syntax errors (quotes, special characters)
-4. Restart application after editing `.env`
+### Issue: 429 Rate Limit
+**Solution:** Wait and retry. Backoff implemented automatically in API client.
 
-### Permission Denied
+### Issue: 400 Validation Error
+**Solution:** Check payload format (title length ≤ 80, price range, valid category ID)
 
-**Problem**: Cannot read `.env` file
+## Verification
 
-**Solution**:
-```powershell
-# Fix permissions (user only)
-icacls C:\Users\nario\.marginscount /grant:r %USERNAME%:F /inheritance:r
-```
-
-### Multiple Users on Same Machine
-
-**Problem**: Different users need different credentials
-
-**Solution**:
-Each user creates their own `.env`:
-- User A: `C:\Users\UserA\.marginscount\.env`
-- User B: `C:\Users\UserB\.marginscount\.env`
-
----
-
-## .env Example
+To verify configuration:
 
 ```bash
-# Development Environment
-APP_ENV=development
-LOG_LEVEL=DEBUG
-DEBUG_MODE=true
+# Test OAuth config loads
+python -c "from src.api_integration.oauth_handler import EBayOAuthConfig; print('✓ Config loads')"
 
-# eBay Sandbox (Development)
-EBAY_SANDBOX_CLIENT_ID=your_sandbox_id_here
-EBAY_SANDBOX_CLIENT_SECRET=your_sandbox_secret_here
-EBAY_APP_ID=your_app_id_here
+# Test API client initializes
+python -c "from src.api_integration.api_client_live import EBayLiveAPIClient; print('✓ API client loads')"
 
-# Paths
-CSV_EXPORT_DIR=./exports
-CSV_IMPORT_DIR=./imports
-IMAGE_BASE_DIR=./data/images
-LOG_DIR=./logs
-
-# Logging
-AUDIT_LOG_FILE=./logs/execution_audit.jsonl
+# Run Phase 3-5 dry-run (should be unchanged)
+python implement_phases_3_5_fixed.py
 ```
 
----
+## Environment Variables Reference
 
-## Related Files
-
-- **Project README**: See root `README.md` for project overview
-- **Project Origin**: See `docs/PROJECT_ORIGIN.md` for project heritage
-- **Development Guide**: See `docs/DEVELOPMENT.md` (future)
-
----
-
-**Last Updated**: 2026-06-13  
-**Version**: 1.0  
+| Variable | Type | Example | Required |
+|----------|------|---------|----------|
+| EBAY_ENV | string | sandbox \| production | Yes |
+| EBAY_CLIENT_ID | string | AppId_123456 | Yes |
+| EBAY_CLIENT_SECRET | string | CertId_abcdef | Yes |
+| EBAY_REDIRECT_URI | string | http://localhost:8080/callback | Yes |
+| EBAY_REFRESH_TOKEN | string | v^1.1#i^1#... | For live only |
+| EBAY_REQUEST_TIMEOUT | int | 30 | No (default: 30) |
+| EBAY_MAX_RETRIES | int | 3 | No (default: 3) |
+| LOG_LEVEL | string | INFO \| DEBUG | No (default: INFO) |
