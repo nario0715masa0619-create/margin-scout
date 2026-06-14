@@ -7,6 +7,23 @@
 
 ---
 
+## 📌 役割分担
+
+**MarginScout** は商品リサーチ専門の Research App です。eBay 出品・在庫・注文管理は別リポジトリ「eBay Listing App」で実装されています。
+
+| 項目 | MarginScout | eBay Listing App |
+|---|---|---|
+| 商品リサーチ | ✅ | ❌ |
+| 価格分析 | ✅ | ❌ |
+| CSV 出力 | ✅ | ❌ |
+| eBay 出品 | ❌ | ✅ |
+| 在庫同期 | ❌ | ✅ |
+| 注文管理 | ❌ | ✅ |
+
+📦 **eBay Listing App**: https://github.com/nario0715masa0619-create/ebay-listing-app
+
+---
+
 ## 概要
 
 **MarginScout** は、小売店の商品リストを自動分析し、eBay での高利益販売候補を発掘するリサーチエンジンです。
@@ -23,7 +40,7 @@
 
 ### 1. インストール
 \\\ash
-git clone https://github.com/user/margin-scout.git
+git clone https://github.com/nario0715masa0619-create/margin-scout.git
 cd margin-scout
 pip install -r requirements.txt
 \\\
@@ -67,13 +84,14 @@ Output CSV (research_results.csv)
      + Listing Seed CSV
      + Audit Log
          ↓
-[eBay Listing App] ← 別リポジトリ
+[eBay Listing App] ← 別リポジトリで実装
 \\\
 
 ## ドキュメント
+- MARGINSCOUT_SCOPE.md – スコープ定義
 - RESEARCH_DATA_MODEL.md – データモデル
 - PHASE2_RESEARCH_WORKFLOW.md – Phase 2 実装仕様
-- MARGINSCOUT_SCOPE.md – スコープ定義
+- SEPARATION_REPORT.md – 分離完了報告書
 
 ## スコープ
 ### ✅ MarginScout が責務を取る
@@ -85,11 +103,6 @@ Output CSV (research_results.csv)
 - eBay 出品・OAuth・Live API
 - 在庫管理・注文処理
 - → これらは eBay Listing App で実装
-
-## eBay Listing App（別リポジトリ）
-MarginScout の出力 CSV を受け取り、eBay への出品・在庫同期・注文管理を行います。
-リポジトリ: ebay-listing-app
-スコープ: LISTING_APP_SCOPE.md 参照
 
 ## テスト
 \\\ash
