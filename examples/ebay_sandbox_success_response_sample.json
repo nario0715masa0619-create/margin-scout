@@ -1,0 +1,32 @@
+{
+  "status": "success",
+  "sku": "MARGIN-SANDBOX-20260613123456",
+  "candidate_id": "cand_test_999",
+  "ebay_listing_id": "110000000001",
+  "offer_id": "123456789",
+  "activation_link": "https://www.sandbox.ebay.com/itm/110000000001",
+  "initial_price": 10.99,
+  "initial_fees": {},
+  "timestamp": "2026-06-13T12:00:00.000Z",
+  "error_message": null,
+  "api_response": {
+    "oauth_status": "success",
+    "inventory_status": "success",
+    "offer_status": "success",
+    "publish_status": "success",
+    "responses": {
+      "inventory": {
+        "status": 204,
+        "errors": []
+      },
+      "offer": {
+        "status": 201,
+        "errors": []
+      },
+      "publish": {
+        "status": 200,
+        "errors": []
+      }
+    }
+  }
+}

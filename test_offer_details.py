@@ -1,0 +1,22 @@
+import requests
+import json
+
+# 設定
+user_token = "v^1.1#i^1#p^3#f^0#r^0#I^3#t^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"
+base_url = "https://api.sandbox.ebay.com"
+
+headers = {
+    "Authorization": f"Bearer {user_token}",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Content-Language": "en-US"
+}
+
+# 既に作成された offer を取得して検査
+offer_id = "11165312010"  # 前回のテストから
+url = f"{base_url}/sell/inventory/v1/offer/{offer_id}"
+
+print(f"Fetching offer details: {offer_id}")
+response = requests.get(url, headers=headers, timeout=30)
+print(f"Status: {response.status_code}")
+print(f"Response:\n{json.dumps(response.json(), indent=2)}")

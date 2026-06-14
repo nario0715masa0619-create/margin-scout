@@ -1,0 +1,17 @@
+{
+  "environment": "sandbox",
+  "oauth_config": {
+    "client_id": "***masked***",
+    "oauth_url": "https://auth.sandbox.ebay.com",
+    "redirect_uri": "http://localhost:8080/callback"
+  },
+  "api_config": {
+    "base_url": "https://api.sandbox.ebay.com",
+    "timeout": 30,
+    "max_retries": 3
+  },
+  "scopes": [
+    "https://api.ebay.com/oauth/api_scope/sell.inventory",
+    "https://api.ebay.com/oauth/api_scope/sell.account"
+  ]
+}

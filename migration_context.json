@@ -1,0 +1,23 @@
+{
+  "migration_goal": "Separate into MarginScout (Research) and eBay Listing App",
+  "phases_completed": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "listing_modules": [
+    "src/csv_integration/",
+    "src/payload_builder/",
+    "src/executor/",
+    "src/api_integration/",
+    "src/order_management/"
+  ],
+  "current_issue": "Responsibility mixing: Research and Listing features in same repository",
+  "research_modules": [
+    "src/research_workflow/"
+  ]
+}

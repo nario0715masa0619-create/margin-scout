@@ -1,79 +1,145 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+MarginScout Configuration Loader (Unified)
+環境変数を統一キーで読み込む（後方互換性あり）
+"""
+
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+from typing import Optional
 
 class ConfigLoader:
-    """
-    Load MarginScout configuration from multiple sources.
+    """統一設定ローダー"""
     
-    Priority (highest to lowest):
-    1. User home directory: C:\Users\{ユーザ名}\.marginscount\.env
-    2. Project directory: .env (if exists, for development only)
-    3. Environment variables
-    4. Default values
-    """
+    # 公式環境変数キー（Phase 6 仕様）
+    OFFICIAL_KEYS = {
+        'ebay_env': 'EBAY_ENV',
+        'ebay_client_id': 'EBAY_CLIENT_ID',
+        'ebay_client_secret': 'EBAY_CLIENT_SECRET',
+        'ebay_redirect_uri': 'EBAY_REDIRECT_URI',
+        'ebay_refresh_token': 'EBAY_REFRESH_TOKEN',
+        'ebay_request_timeout': 'EBAY_REQUEST_TIMEOUT',
+        'ebay_max_retries': 'EBAY_MAX_RETRIES',
+    }
     
-    def __init__(self):
-        self.username = os.getenv('USERNAME', 'unknown')
-        self.config_dir = Path.home() / '.marginscount'
-        self.project_env_file = Path('.env')
-        self.user_env_file = self.config_dir / '.env'
+    # 後方互換キー（旧キー名）
+    LEGACY_KEYS = {
+        'ebay_client_id': ['EBAY_SANDBOX_CLIENT_ID', 'EBAY_APP_ID'],
+        'ebay_client_secret': ['EBAY_SANDBOX_CLIENT_SECRET'],
+        'ebay_env': ['EBAY_ENVIRONMENT'],
+    }
+    
+    # 正式 .env 配置場所
+    ENV_PATHS = [
+        Path.home() / '.marginscount' / '.env',  # 推奨：ホームディレクトリ
+        Path.cwd() / '.env',                       # フォールバック：プロジェクトディレクトリ
+    ]
+    
+    @classmethod
+    def get_env_file_path(cls) -> Optional[Path]:
+        """正式な .env ファイルパスを取得"""
+        for env_path in cls.ENV_PATHS:
+            if env_path.exists():
+                return env_path
+        return cls.ENV_PATHS[0]  # デフォルト：ホームディレクトリ
+    
+    @classmethod
+    def load_from_file(cls) -> dict:
+        """ファイルから設定を読み込む"""
+        env_file = cls.get_env_file_path()
+        config = {}
         
-        self._load_config()
-    
-    def _load_config(self):
-        """Load configuration from all sources."""
+        if env_file.exists():
+            with open(env_file, 'r', encoding='utf-8') as f:
+                for line in f:
+                    line = line.strip()
+                    if line and not line.startswith('#'):
+                        if '=' in line:
+                            key, value = line.split('=', 1)
+                            config[key.strip()] = value.strip()
         
-        # 1. User home directory configuration
-        if self.user_env_file.exists():
-            load_dotenv(self.user_env_file, override=True)
-            print(f'✓ Loaded user config: {self.user_env_file}')
-        else:
-            print(f'⚠ User config not found: {self.user_env_file}')
-            print(f'  Create it at: C:\\Users\\{self.username}\\.marginscount\\.env')
+        return config
+    
+    @classmethod
+    def get_value(cls, key: str, default: Optional[str] = None) -> Optional[str]:
+        """
+        統一キーで環境変数を取得
+        優先順: 環境変数 → ファイル設定 → 後方互換キー → デフォルト
+        """
+        # 1. 公式キーで環境変数を確認
+        if key in cls.OFFICIAL_KEYS:
+            official_key = cls.OFFICIAL_KEYS[key]
+            if official_key in os.environ:
+                return os.environ[official_key]
         
-        # 2. Project .env (development only, optional)
-        if self.project_env_file.exists():
-            load_dotenv(self.project_env_file, override=False)
-            print(f'✓ Loaded project config: {self.project_env_file}')
+        # 2. ファイルから読込
+        file_config = cls.load_from_file()
+        if key in cls.OFFICIAL_KEYS:
+            official_key = cls.OFFICIAL_KEYS[key]
+            if official_key in file_config:
+                return file_config[official_key]
+        
+        # 3. 後方互換キーを確認
+        if key in cls.LEGACY_KEYS:
+            for legacy_key in cls.LEGACY_KEYS[key]:
+                if legacy_key in os.environ:
+                    print(f"[Config] Using legacy key {legacy_key} (deprecated, use {cls.OFFICIAL_KEYS.get(key, key)} instead)")
+                    return os.environ[legacy_key]
+                if legacy_key in file_config:
+                    print(f"[Config] Using legacy key {legacy_key} (deprecated, use {cls.OFFICIAL_KEYS.get(key, key)} instead)")
+                    return file_config[legacy_key]
+        
+        # 4. デフォルト値
+        return default
     
-    def get(self, key, default=None):
-        """Get configuration value."""
-        return os.getenv(key, default)
+    @classmethod
+    def get_ebay_env(cls) -> str:
+        """eBay環境（sandbox/production）を取得"""
+        return cls.get_value('ebay_env', 'sandbox')
     
-    def get_ebay_sandbox_credentials(self):
-        """Get eBay Sandbox credentials."""
+    @classmethod
+    def get_ebay_client_id(cls) -> str:
+        """eBay Client ID を取得"""
+        value = cls.get_value('ebay_client_id')
+        if not value:
+            raise ValueError("EBAY_CLIENT_ID not found in environment or .env")
+        return value
+    
+    @classmethod
+    def get_ebay_client_secret(cls) -> str:
+        """eBay Client Secret を取得"""
+        value = cls.get_value('ebay_client_secret')
+        if not value:
+            raise ValueError("EBAY_CLIENT_SECRET not found in environment or .env")
+        return value
+    
+    @classmethod
+    def get_ebay_redirect_uri(cls) -> str:
+        """eBay Redirect URI を取得"""
+        return cls.get_value('ebay_redirect_uri', 'http://localhost:8080/callback')
+    
+    @classmethod
+    def get_ebay_refresh_token(cls) -> Optional[str]:
+        """eBay Refresh Token を取得（オプション）"""
+        return cls.get_value('ebay_refresh_token')
+    
+    @classmethod
+    def get_config_summary(cls) -> dict:
+        """設定サマリーを取得（マスク済み）"""
         return {
-            'client_id': self.get('EBAY_SANDBOX_CLIENT_ID'),
-            'client_secret': self.get('EBAY_SANDBOX_CLIENT_SECRET'),
-            'app_id': self.get('EBAY_APP_ID'),
+            'env_file_path': str(cls.get_env_file_path()),
+            'ebay_env': cls.get_ebay_env(),
+            'ebay_client_id': cls.get_ebay_client_id()[:10] + '...' if cls.get_value('ebay_client_id') else 'NOT SET',
+            'ebay_client_secret': '***masked***' if cls.get_value('ebay_client_secret') else 'NOT SET',
+            'ebay_redirect_uri': cls.get_ebay_redirect_uri(),
+            'ebay_refresh_token': '***masked***' if cls.get_ebay_refresh_token() else 'NOT SET',
         }
-    
-    def validate_ebay_credentials(self):
-        """Validate that required eBay credentials are set."""
-        required_keys = [
-            'EBAY_SANDBOX_CLIENT_ID',
-            'EBAY_SANDBOX_CLIENT_SECRET',
-            'EBAY_APP_ID',
-        ]
-        
-        missing = [key for key in required_keys if not self.get(key)]
-        
-        if missing:
-            raise ValueError(
-                f'Missing required eBay credentials: {missing}\n'
-                f'Please set them in: {self.user_env_file}'
-            )
-        
-        return True
 
+# グローバルローダーインスタンス
+config = ConfigLoader()
 
-# Example usage:
 if __name__ == '__main__':
-    config = ConfigLoader()
-    
-    try:
-        config.validate_ebay_credentials()
-        print('✓ eBay credentials validated')
-    except ValueError as e:
-        print(f'✗ Configuration error: {e}')
+    print("MarginScout Configuration Loader")
+    print("="*70)
+    print(json.dumps(config.get_config_summary(), indent=2))

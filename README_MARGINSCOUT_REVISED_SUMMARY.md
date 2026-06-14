@@ -1,4 +1,4 @@
-﻿# MarginScout
+# MarginScout
 
 **自動爆益商品リサーチエンジン** – eBay で高利益商品を自動発掘
 
@@ -22,27 +22,29 @@
 ## クイックスタート
 
 ### 1. インストール
-\\\ash
+```bash
 git clone https://github.com/user/margin-scout.git
 cd margin-scout
 pip install -r requirements.txt
-\\\
+```
 
 ### 2. 設定
-\\\ash
+```bash
 cp .env.example .env
 # .env を編集して必要な設定を行う
-\\\
+```
 
 ### 3. 実行
-\\\ash
+```bash
 python -m src.research_workflow.research_processor input.csv
-\\\
+```
 
 ### 4. 出力
-- research_results.csv – リサーチ結果
-- listing_seed.csv – eBay Listing App への入力
-- research_audit_YYYYMMDD_HHMMSS.log – 監査ログ
+- `research_results.csv` – リサーチ結果
+- `listing_seed.csv` – eBay Listing App への入力
+- `research_audit_YYYYMMDD_HHMMSS.log` – 監査ログ
+
+---
 
 ## 主な機能
 | 機能 | 説明 |
@@ -53,8 +55,10 @@ python -m src.research_workflow.research_processor input.csv
 | Profit Evaluation | 利益率・リスク評価 |
 | CSV I/O | 入出力 CSV 管理 |
 
+---
+
 ## アーキテクチャ
-\\\	ext
+```text
 Input CSV (小売店商品)
          ↓
   [Research Workflow]
@@ -67,13 +71,18 @@ Output CSV (research_results.csv)
      + Listing Seed CSV
      + Audit Log
          ↓
-[eBay Listing App] ← 別リポジトリ
-\\\
+[eBay Listing App] ← 別アプリで管理
+```
+
+---
 
 ## ドキュメント
-- RESEARCH_DATA_MODEL.md – データモデル
-- PHASE2_RESEARCH_WORKFLOW.md – Phase 2 実装仕様
-- MARGINSCOUT_SCOPE.md – スコープ定義
+- `RESEARCH_DATA_MODEL.md` – データモデル
+- `PHASE2_RESEARCH_WORKFLOW.md` – Phase 2 実装仕様
+- `EBAY_CATEGORY_MAPPING.md` – カテゴリマッピング
+- `MARGINSCOUT_SCOPE.md` – スコープ定義
+
+---
 
 ## スコープ
 ### ✅ MarginScout が責務を取る
@@ -84,30 +93,39 @@ Output CSV (research_results.csv)
 ### ❌ MarginScout は責務を取らない
 - eBay 出品・OAuth・Live API
 - 在庫管理・注文処理
-- → これらは eBay Listing App で実装
+- **→ これらは eBay Listing App で実装**
+
+---
 
 ## eBay Listing App（別リポジトリ）
 MarginScout の出力 CSV を受け取り、eBay への出品・在庫同期・注文管理を行います。
-リポジトリ: ebay-listing-app
-スコープ: LISTING_APP_SCOPE.md 参照
+
+- リポジトリ: `ebay-listing-app` (作成予定)
+- スコープ: `LISTING_APP_SCOPE.md` 参照
+
+---
 
 ## テスト
-\\\ash
+```bash
 # Unit テスト
 pytest tests/ -v
 
 # カバレッジ
 pytest tests/ --cov=src
-\\\
+```
+
+---
 
 ## 構成ファイル
-- .env – 設定（API キー等）
-- requirements.txt – Python 依存ライブラリ
-- setup.py – パッケージ設定
+- `.env` – API キー等の設定
+- `requirements.txt` – Python 依存ライブラリ
+- `setup.py` – パッケージ設定
+
+---
 
 ## ライセンス
 MIT License
 
 ## 関連リポジトリ
-- eBay Listing App – 出品・在庫・注文管理
-- MarginScout v1.0 – Research Phase 1-2 (Production-Ready)
+- eBay Listing App (計画中)
+- MarginScout v1.0 – Research Phase 1-2 (計画中)

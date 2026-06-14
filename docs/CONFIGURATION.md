@@ -1,143 +1,95 @@
 # MarginScout Configuration Guide
 
-## Overview
+## 正式な .env 配置場所
 
-MarginScout uses environment variables for all configuration. See `.env.example` for defaults.
-
-## Phase 1-5: Internal Configuration
-
-Standard settings for CSV processing, listing generation, and dry-run:
-
+**推奨（デフォルト）:**
 ```
-RESEARCH_MODE=research_and_csv_export
-CSV_INPUT_DIR=examples
-CSV_OUTPUT_DIR=data/csv_output
-LISTING_STATUS_LOG=data/listing_status.log
+C:\Users\{username}\.marginscount\.env
 ```
 
-## Phase 6: eBay OAuth & Live API Setup
+**フォールバック:**
+```
+{project_root}\.env
+```
 
-### Step 1: Create eBay Developer Account
+## Phase 6: eBay OAuth & Live API 設定
 
-Visit https://developer.ebay.com and:
-1. Sign in / Create account
-2. Create Application (Keyset)
-3. Generate Client ID and Cert ID
-4. Set Redirect URI (default: http://localhost:8080/callback)
+### 統一された環境変数キー
 
-### Step 2: Environment Variables
+MarginScout は以下の **公式環境変数キー** を使用します：
 
-Copy `.env.example` to `.env` and fill in OAuth credentials:
+| 変数名 | 説明 | 必須 | 例 |
+|--------|------|------|-----|
+| EBAY_ENV | 環境（sandbox/production） | No | sandbox |
+| EBAY_CLIENT_ID | eBay App ID | Yes | AppId_123456 |
+| EBAY_CLIENT_SECRET | eBay Cert ID | Yes | CertId_abcdef |
+| EBAY_REDIRECT_URI | OAuth redirect URI | No | http://localhost:8080/callback |
+| EBAY_REFRESH_TOKEN | eBay refresh token | No* | v^1.1#i^1#... |
+| EBAY_REQUEST_TIMEOUT | API request timeout秒 | No | 30 |
+| EBAY_MAX_RETRIES | API retry回数 | No | 3 |
 
+*EBAY_REFRESH_TOKEN は Phase 6 live API 呼び出し時に必須です。
+
+### .env ファイル作成手順
+
+1. **ホームディレクトリに .marginscount フォルダを作成:**
 ```bash
-# OAuth Credentials
-EBAY_CLIENT_ID=<your_app_id>
-EBAY_CLIENT_SECRET=<your_cert_id>
+mkdir -p ~/.marginscount
+```
+
+2. **.env ファイルを作成:**
+```bash
+cat > ~/.marginscount/.env << EOF
+EBAY_ENV=sandbox
+EBAY_CLIENT_ID=your_app_id_here
+EBAY_CLIENT_SECRET=your_cert_id_here
 EBAY_REDIRECT_URI=http://localhost:8080/callback
-
-# Token Management
-EBAY_REFRESH_TOKEN=<obtained_from_oauth_flow>
-
-# Environment
-EBAY_ENV=sandbox  # Use 'sandbox' for testing, 'production' for live
-
-# API Settings
+EBAY_REFRESH_TOKEN=
 EBAY_REQUEST_TIMEOUT=30
 EBAY_MAX_RETRIES=3
-EBAY_RETRY_BACKOFF_FACTOR=2.0
-
-# Logging
-LOG_LEVEL=INFO
-LOG_FILE=data/margin_scout.log
-AUDIT_LOG_FILE=data/audit_trail.log
+EOF
 ```
 
-### Step 3: Get OAuth Refresh Token
-
-Run OAuth flow to obtain tokens:
-
-```python
-from src.api_integration.oauth_handler import OAuthHandler, EBayOAuthConfig, EBayAPIConfig
-
-config = EBayOAuthConfig.from_env()
-api_config = EBayAPIConfig.from_env()
-handler = OAuthHandler(config, api_config)
-
-# Get authorization URL
-auth_url = handler.get_authorization_url([
-    'https://api.ebay.com/oauth/api_scope/sell.inventory',
-    'https://api.ebay.com/oauth/api_scope/sell.account',
-])
-
-print(f"Visit: {auth_url}")
-# User grants permission, gets authorization code in redirect_uri
-
-# Exchange code for token
-token = handler.exchange_code_for_token(auth_code)
-print(f"Refresh token: {token.refresh_token}")
-# Save to .env as EBAY_REFRESH_TOKEN
+3. **パーミッション設定（Unix/Linux/Mac）:**
+```bash
+chmod 600 ~/.marginscount/.env
 ```
 
-### Step 4: Sandbox vs Production
+### 後方互換性
 
-MarginScout uses **Sandbox-first** approach:
+以下の旧キー名も読込可能です（非推奨）：
+- EBAY_SANDBOX_CLIENT_ID → EBAY_CLIENT_ID に統合
+- EBAY_SANDBOX_CLIENT_SECRET → EBAY_CLIENT_SECRET に統合
+- EBAY_APP_ID → EBAY_CLIENT_ID に統合
 
-- **Sandbox:** Testing, development, safe experimentation
-- **Production:** Live listings (only after Sandbox validation)
+新規プロジェクトは公式キー名を使用してください。
 
-Set via `.env`:
-
-```
-EBAY_ENV=sandbox    # For testing
-EBAY_ENV=production # For live (use with caution!)
-```
-
-### Step 5: Security Best Practices
-
-1. ✅ Never commit `.env` to Git (configured in `.gitignore`)
-2. ✅ Use environment variables for all secrets
-3. ✅ Log level set to INFO (not DEBUG) in production
-4. ✅ Check `.env` permissions (chmod 600 on Unix)
-5. ✅ Rotate refresh tokens periodically
-
-## Troubleshooting
-
-### Issue: EBAY_REFRESH_TOKEN not found
-**Solution:** Run OAuth flow to get token, save to `.env`
-
-### Issue: 401 Unauthorized
-**Solution:** Token may be expired. Token refresh is automatic, but check `.env` EBAY_REFRESH_TOKEN value
-
-### Issue: 429 Rate Limit
-**Solution:** Wait and retry. Backoff implemented automatically in API client.
-
-### Issue: 400 Validation Error
-**Solution:** Check payload format (title length ≤ 80, price range, valid category ID)
-
-## Verification
-
-To verify configuration:
+### 設定確認
 
 ```bash
-# Test OAuth config loads
-python -c "from src.api_integration.oauth_handler import EBayOAuthConfig; print('✓ Config loads')"
-
-# Test API client initializes
-python -c "from src.api_integration.api_client_live import EBayLiveAPIClient; print('✓ API client loads')"
-
-# Run Phase 3-5 dry-run (should be unchanged)
-python implement_phases_3_5_fixed.py
+python -m src.config_loader
 ```
 
-## Environment Variables Reference
+出力例:
+```json
+{
+  "env_file_path": "C:\\Users\\username\\.marginscount\\.env",
+  "ebay_env": "sandbox",
+  "ebay_client_id": "AppId_123...",
+  "ebay_client_secret": "***masked***",
+  "ebay_redirect_uri": "http://localhost:8080/callback",
+  "ebay_refresh_token": "***masked***"
+}
+```
 
-| Variable | Type | Example | Required |
-|----------|------|---------|----------|
-| EBAY_ENV | string | sandbox \| production | Yes |
-| EBAY_CLIENT_ID | string | AppId_123456 | Yes |
-| EBAY_CLIENT_SECRET | string | CertId_abcdef | Yes |
-| EBAY_REDIRECT_URI | string | http://localhost:8080/callback | Yes |
-| EBAY_REFRESH_TOKEN | string | v^1.1#i^1#... | For live only |
-| EBAY_REQUEST_TIMEOUT | int | 30 | No (default: 30) |
-| EBAY_MAX_RETRIES | int | 3 | No (default: 3) |
-| LOG_LEVEL | string | INFO \| DEBUG | No (default: INFO) |
+## Sandbox Connection Test
+
+```bash
+python sandbox_connection_test.py
+```
+
+テスト項目:
+1. Configuration Loading
+2. OAuth Handler Initialization
+3. API Client Initialization
+4. Token Configuration Check

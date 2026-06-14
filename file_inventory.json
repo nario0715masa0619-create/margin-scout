@@ -1,0 +1,597 @@
+[
+  {
+    "type": ".example",
+    "path": ".env.example",
+    "size": 1028
+  },
+  {
+    "type": ".json",
+    "path": "BOOTSTRAP_FINAL_REPORT.json",
+    "size": 1592
+  },
+  {
+    "type": ".py",
+    "path": "debug_publish.py",
+    "size": 979
+  },
+  {
+    "type": ".json",
+    "path": "FINAL_GITHUB_REPORT.json",
+    "size": 284
+  },
+  {
+    "type": ".json",
+    "path": "FINAL_PROJECT_COMPLETION_REPORT.json",
+    "size": 4165
+  },
+  {
+    "type": ".py",
+    "path": "generate_files.py",
+    "size": 16138
+  },
+  {
+    "type": ".py",
+    "path": "generate_final_report.py",
+    "size": 7457
+  },
+  {
+    "type": ".py",
+    "path": "generate_phase2.py",
+    "size": 24881
+  },
+  {
+    "type": ".py",
+    "path": "generate_phase3.py",
+    "size": 47270
+  },
+  {
+    "type": ".py",
+    "path": "generate_phase4.py",
+    "size": 55291
+  },
+  {
+    "type": ".py",
+    "path": "generate_phase5.py",
+    "size": 46223
+  },
+  {
+    "type": ".py",
+    "path": "generate_phase6.py",
+    "size": 29604
+  },
+  {
+    "type": ".py",
+    "path": "generate_phase7.py",
+    "size": 13401
+  },
+  {
+    "type": ".py",
+    "path": "get_locations.py",
+    "size": 523
+  },
+  {
+    "type": ".py",
+    "path": "get_policies.py",
+    "size": 1863
+  },
+  {
+    "type": ".py",
+    "path": "implement_phase6_complete_fixed.py",
+    "size": 10031
+  },
+  {
+    "type": ".py",
+    "path": "implement_phase6_live_final.py",
+    "size": 10662
+  },
+  {
+    "type": ".py",
+    "path": "implement_phase6_live_fixed.py",
+    "size": 10708
+  },
+  {
+    "type": ".py",
+    "path": "implement_phase6_live.py",
+    "size": 15776
+  },
+  {
+    "type": ".py",
+    "path": "implement_phase6.py",
+    "size": 28755
+  },
+  {
+    "type": ".py",
+    "path": "implement_phase7.py",
+    "size": 9940
+  },
+  {
+    "type": ".py",
+    "path": "implement_phases_3_5_fixed.py",
+    "size": 17990
+  },
+  {
+    "type": ".py",
+    "path": "implement_phases_3_5.py",
+    "size": 17968
+  },
+  {
+    "type": ".json",
+    "path": "IMPLEMENTATION_E2E_REPORT.json",
+    "size": 3317
+  },
+  {
+    "type": ".py",
+    "path": "oauth_flow_sandbox.py",
+    "size": 6310
+  },
+  {
+    "type": ".json",
+    "path": "PHASE2_COMPLETION_REPORT.json",
+    "size": 2161
+  },
+  {
+    "type": ".json",
+    "path": "PHASE3_COMPLETION_REPORT.json",
+    "size": 1764
+  },
+  {
+    "type": ".json",
+    "path": "PHASE4_COMPLETION_REPORT.json",
+    "size": 2460
+  },
+  {
+    "type": ".json",
+    "path": "PHASE5_COMPLETION_REPORT.json",
+    "size": 2762
+  },
+  {
+    "type": ".json",
+    "path": "PHASE6_COMPLETION_REPORT.json",
+    "size": 2291
+  },
+  {
+    "type": ".md",
+    "path": "PHASE6_COMPLETION_REPORT.md",
+    "size": 8174
+  },
+  {
+    "type": ".json",
+    "path": "PHASE6_CONFIG_EXAMPLE.json",
+    "size": 452
+  },
+  {
+    "type": ".json",
+    "path": "PHASE6_IMPLEMENTATION_REPORT.json",
+    "size": 1562
+  },
+  {
+    "type": ".json",
+    "path": "PHASE6_LIVE_API_TEST_RESULT.json",
+    "size": 675
+  },
+  {
+    "type": ".json",
+    "path": "PHASE6_SANDBOX_TEST_RESULT.json",
+    "size": 1333
+  },
+  {
+    "type": ".json",
+    "path": "PHASE6_TEST_REPORT.json",
+    "size": 1365
+  },
+  {
+    "type": ".json",
+    "path": "PHASE7_DESIGN_REPORT.json",
+    "size": 2181
+  },
+  {
+    "type": ".json",
+    "path": "PHASE7_POLLING_RESULT.json",
+    "size": 346
+  },
+  {
+    "type": ".ps1",
+    "path": "push-to-github.ps1",
+    "size": 5854
+  },
+  {
+    "type": ".json",
+    "path": "readme_update_summary.json",
+    "size": 840
+  },
+  {
+    "type": ".md",
+    "path": "README.md",
+    "size": 15939
+  },
+  {
+    "type": ".backup",
+    "path": "README.md.backup",
+    "size": 1186
+  },
+  {
+    "type": ".txt",
+    "path": "repo_structure.txt",
+    "size": 25
+  },
+  {
+    "type": ".md",
+    "path": "SANDBOX_CONNECTION_TEST_REPORT.md",
+    "size": 1639
+  },
+  {
+    "type": ".py",
+    "path": "sandbox_connection_test.py",
+    "size": 6161
+  },
+  {
+    "type": ".py",
+    "path": "setup_config_unification.py",
+    "size": 15895
+  },
+  {
+    "type": ".py",
+    "path": "test_correct_flow.py",
+    "size": 2406
+  },
+  {
+    "type": ".py",
+    "path": "test_correct_solution.py",
+    "size": 2813
+  },
+  {
+    "type": ".py",
+    "path": "test_country_in_offer.py",
+    "size": 1432
+  },
+  {
+    "type": ".py",
+    "path": "test_final_solution.py",
+    "size": 2537
+  },
+  {
+    "type": ".py",
+    "path": "test_minimal_offer.py",
+    "size": 2270
+  },
+  {
+    "type": ".py",
+    "path": "test_no_policies.py",
+    "size": 2338
+  },
+  {
+    "type": ".py",
+    "path": "test_offer_details.py",
+    "size": 3298
+  },
+  {
+    "type": ".py",
+    "path": "test_offer_list.py",
+    "size": 620
+  },
+  {
+    "type": ".py",
+    "path": "test_phase6.py",
+    "size": 11493
+  },
+  {
+    "type": ".py",
+    "path": "test_sandbox_api.py",
+    "size": 3066
+  },
+  {
+    "type": ".py",
+    "path": "verify_config.py",
+    "size": 1490
+  },
+  {
+    "type": ".jpg",
+    "path": "data\\images\\MARGIN-20260613-0001\\image_1.jpg",
+    "size": 102
+  },
+  {
+    "type": ".jpg",
+    "path": "data\\images\\MARGIN-20260613-0001\\image_2.jpg",
+    "size": 102
+  },
+  {
+    "type": ".jpg",
+    "path": "data\\images\\MARGIN-20260613-0002\\image_1.jpg",
+    "size": 102
+  },
+  {
+    "type": ".jpg",
+    "path": "data\\images\\MARGIN-20260613-0002\\image_2.jpg",
+    "size": 102
+  },
+  {
+    "type": ".jpg",
+    "path": "data\\images\\MARGIN-20260613-0003\\image_1.jpg",
+    "size": 102
+  },
+  {
+    "type": ".jpg",
+    "path": "data\\images\\MARGIN-20260613-0003\\image_2.jpg",
+    "size": 102
+  },
+  {
+    "type": ".md",
+    "path": "docs\\CONFIGURATION.md",
+    "size": 2435
+  },
+  {
+    "type": ".md",
+    "path": "docs\\EBAY_CATEGORY_MAPPING.md",
+    "size": 2064
+  },
+  {
+    "type": ".md",
+    "path": "docs\\EBAY_LIVE_API_SPEC.md",
+    "size": 992
+  },
+  {
+    "type": ".md",
+    "path": "docs\\EBAY_OAUTH_FLOW.md",
+    "size": 1256
+  },
+  {
+    "type": ".md",
+    "path": "docs\\EBAY_PAYLOAD_MODEL.md",
+    "size": 3921
+  },
+  {
+    "type": ".md",
+    "path": "docs\\EBAY_PRICE_STRATEGY.md",
+    "size": 1714
+  },
+  {
+    "type": ".md",
+    "path": "docs\\LISTING_DATA_MODEL.md",
+    "size": 2812
+  },
+  {
+    "type": ".md",
+    "path": "docs\\ORDER_MANAGEMENT_SPECIFICATION.md",
+    "size": 1444
+  },
+  {
+    "type": ".md",
+    "path": "docs\\PHASE2_RESEARCH_WORKFLOW.md",
+    "size": 11466
+  },
+  {
+    "type": ".md",
+    "path": "docs\\PHASE3_CSV_INTEGRATION.md",
+    "size": 27197
+  },
+  {
+    "type": ".md",
+    "path": "docs\\PHASE4_EBAY_PAYLOAD_BUILDER.md",
+    "size": 22697
+  },
+  {
+    "type": ".md",
+    "path": "docs\\PHASE5_EBAY_EXECUTOR.md",
+    "size": 12535
+  },
+  {
+    "type": ".md",
+    "path": "docs\\PHASE6_EBAY_API_INTEGRATION.md",
+    "size": 7187
+  },
+  {
+    "type": ".md",
+    "path": "docs\\PHASE7_INVENTORY_SYNC_AND_ORDER_MANAGEMENT.md",
+    "size": 5768
+  },
+  {
+    "type": ".md",
+    "path": "docs\\PROJECT_ORIGIN.md",
+    "size": 382
+  },
+  {
+    "type": ".md",
+    "path": "docs\\RESEARCH_DATA_MODEL.md",
+    "size": 2288
+  },
+  {
+    "type": ".md",
+    "path": "docs\\SANDBOX_TEST_EXECUTION_GUIDE.md",
+    "size": 2831
+  },
+  {
+    "type": ".json",
+    "path": "examples\\ebay_dry_run_sample.json",
+    "size": 2133
+  },
+  {
+    "type": ".json",
+    "path": "examples\\ebay_live_api_response_sample.json",
+    "size": 1640
+  },
+  {
+    "type": ".json",
+    "path": "examples\\ebay_oauth_request_sample.json",
+    "size": 1378
+  },
+  {
+    "type": ".json",
+    "path": "examples\\ebay_payload_sample.json",
+    "size": 4885
+  },
+  {
+    "type": ".json",
+    "path": "examples\\ebay_sandbox_error_response_sample.json",
+    "size": 901
+  },
+  {
+    "type": ".json",
+    "path": "examples\\ebay_sandbox_success_response_sample.json",
+    "size": 748
+  },
+  {
+    "type": ".json",
+    "path": "examples\\execution_audit_log_sample.json",
+    "size": 2421
+  },
+  {
+    "type": ".csv",
+    "path": "examples\\listing_input_sample.csv",
+    "size": 1059
+  },
+  {
+    "type": ".md",
+    "path": "examples\\listing_to_payload_mapping.md",
+    "size": 2447
+  },
+  {
+    "type": ".json",
+    "path": "examples\\price_strategy_sample.json",
+    "size": 2571
+  },
+  {
+    "type": ".csv",
+    "path": "examples\\research_sample.csv",
+    "size": 830
+  },
+  {
+    "type": ".md",
+    "path": "examples\\research_to_listing_mapping.md",
+    "size": 2272
+  },
+  {
+    "type": ".py",
+    "path": "src\\config_loader.py",
+    "size": 5667
+  },
+  {
+    "type": ".py",
+    "path": "src\\api_integration\\__init__.py",
+    "size": 441
+  },
+  {
+    "type": ".py",
+    "path": "src\\api_integration\\api_client_live.py",
+    "size": 5356
+  },
+  {
+    "type": ".py",
+    "path": "src\\api_integration\\api_integration_executor.py",
+    "size": 5968
+  },
+  {
+    "type": ".py",
+    "path": "src\\api_integration\\ebay_api_client_live.py",
+    "size": 5469
+  },
+  {
+    "type": ".py",
+    "path": "src\\api_integration\\oauth_handler.py",
+    "size": 6424
+  },
+  {
+    "type": ".py",
+    "path": "src\\api_integration\\response_processor.py",
+    "size": 2852
+  },
+  {
+    "type": ".py",
+    "path": "src\\csv_integration\\__init__.py",
+    "size": 486
+  },
+  {
+    "type": ".py",
+    "path": "src\\csv_integration\\csv_mapper.py",
+    "size": 1830
+  },
+  {
+    "type": ".py",
+    "path": "src\\csv_integration\\csv_validator.py",
+    "size": 1465
+  },
+  {
+    "type": ".py",
+    "path": "src\\csv_integration\\listing_record.py",
+    "size": 2652
+  },
+  {
+    "type": ".py",
+    "path": "src\\executor\\__init__.py",
+    "size": 545
+  },
+  {
+    "type": ".py",
+    "path": "src\\executor\\category_resolver.py",
+    "size": 1455
+  },
+  {
+    "type": ".py",
+    "path": "src\\executor\\dry_run_executor.py",
+    "size": 1116
+  },
+  {
+    "type": ".py",
+    "path": "src\\executor\\ebay_api_client.py",
+    "size": 1188
+  },
+  {
+    "type": ".py",
+    "path": "src\\executor\\executor.py",
+    "size": 1568
+  },
+  {
+    "type": ".py",
+    "path": "src\\executor\\price_calculator.py",
+    "size": 1539
+  },
+  {
+    "type": ".py",
+    "path": "src\\payload_builder\\__init__.py",
+    "size": 651
+  },
+  {
+    "type": ".py",
+    "path": "src\\payload_builder\\description_builder.py",
+    "size": 1390
+  },
+  {
+    "type": ".py",
+    "path": "src\\payload_builder\\ebay_payload_builder.py",
+    "size": 2571
+  },
+  {
+    "type": ".py",
+    "path": "src\\payload_builder\\image_mapper.py",
+    "size": 1495
+  },
+  {
+    "type": ".py",
+    "path": "src\\payload_builder\\payload_record.py",
+    "size": 3158
+  },
+  {
+    "type": ".py",
+    "path": "src\\payload_builder\\payload_validator.py",
+    "size": 1972
+  },
+  {
+    "type": ".py",
+    "path": "src\\payload_builder\\title_builder.py",
+    "size": 1072
+  },
+  {
+    "type": ".py",
+    "path": "src\\research_workflow\\__init__.py",
+    "size": 525
+  },
+  {
+    "type": ".py",
+    "path": "src\\research_workflow\\research_data.py",
+    "size": 3637
+  },
+  {
+    "type": ".py",
+    "path": "src\\research_workflow\\research_processor.py",
+    "size": 1877
+  }
+]
