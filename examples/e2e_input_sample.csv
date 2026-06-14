@@ -1,0 +1,4 @@
+product_name,brand,model_number,category,source_price,source_url,condition
+Sony WH-1000XM4 Wireless Headphones,Sony,WH-1000XM4,audio,35000,https://example.com/sony-wh,good
+Nike Air Force 1 Low,Nike,AF1,footwear,12000,https://example.com/nike-af1,new
+Canon EF 50mm f/1.8 STM Lens,Canon,EF50STM,camera,25000,https://example.com/canon-lens,like_new
