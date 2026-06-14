@@ -1,277 +1,153 @@
-# MarginScout 最終スコープ定義書
+# MarginScout スコープ v2.0
 
-**作成日**: 2026-06-14
-**ステータス**: スコープ確定フェーズ
-**バージョン**: 1.1
-**責務**: 自動爆益商品リサーチ・評価専門
-
----
-
-## 1. 概要
-
-MarginScout は**商品候補の自動リサーチと評価に特化した Research App** です。
-
-- ✅ **責務**: リサーチ・分析・評価・CSV 出力まで
-- ❌ **責務外**: 最終カテゴリ確定・最終価格決定・eBay 出品実行
-
-**最終カテゴリ確定・最終価格決定・出品実行は別アプリ（eBay Listing App）で実施されます。**
-
-**スローガン**: 「高利益候補を自動発掘し、参考価格・参考カテゴリを CSV で提供する」
+**作成日**: 2026-06-15
+**ステータス**: 思想・責務 全面再定義
+**優先度**: 最高
 
 ---
 
-## 2. 入力仕様
+## 一文定義
 
-### 2.1 データソース
-- **小売店 CSV**（仕入元商品リスト）
-  - 必須カラム: SKU, 商品名, 仕入価格, カテゴリ, URL
-  - 例: `retail_products.csv`
-- **eBay カテゴリマッピング** (static/参考用)
-  - `docs/EBAY_CATEGORY_MAPPING.md` 参照
-  - **用途**: リサーチ中の参考・候補評価のみ。最終カテゴリ確定は eBay Listing App で実施
-- **参考価格戦略設定** (static/config)
-  - `docs/EBAY_PRICE_STRATEGY.md` 参照
-  - **用途**: 相場分析・利益計算の参考のみ。最終価格決定は eBay Listing App で実施
+**MarginScout は、日本ならではの商品を中心に、仕入れ元の価格情報と eBay 上の参考価格・商品情報などの事実をもとに、爆益が狙える商品候補を見つけて出力するリサーチツールである。出品・在庫・注文・販売運用は扱わない。**
 
 ---
 
-## 3. 処理フロー (Phase 1-2)
+## 責務範囲（DO）
 
-```text
-Input CSV
-       ↓
-[Research Workflow]
-  ├─ Product Normalization
-  ├─ Category Mapping (参考用・候補抽出)
-  ├─ Price Analysis (参考相場取得)
-  ├─ Profit Evaluation (利益率計算)
-  └─ Risk Assessment
-       ↓
-Output CSV (research_results.csv + listing_seed.csv)
-       + Audit Log
-       ↓
-[eBay Listing App] ← 別アプリで最終確定・出品
-  ├─ 最終カテゴリ確定
-  ├─ 最終価格決定
-  ├─ Payload 生成
-  └─ eBay への出品実行
-```
+| # | 責務 | 詳細 | 実装状況 |
+|---|---|---|---|
+| 1 | 爆益候補の発掘 | 日本の仕入れ元から商品を探索 | ⏳ 実装予定 |
+| 2 | 仕入れ価格取得 | 仕入れ元の商品情報・価格を記録 | ⏳ 実装予定 |
+| 3 | eBay 参考価格取得 | Browse API で参考相場を検索 | ⏳ 実装予定 |
+| 4 | 利益計算 | 仕入れ価格と eBay 参考価格から利益を推定 | ✅ 実装完了 |
+| 5 | CSV 出力 | 爆益候補を CSV で出力 | ✅ 実装完了 |
+| 6 | 監査ログ | 処理履歴を JSONL で記録 | ✅ 実装完了 |
 
 ---
 
-## 4. 出力仕様
+## 非責務範囲（DO NOT）
 
-### 4.1 research_results.csv
-最終的なリサーチ結果。参考情報として eBay Listing App が利用可能。
-
-**カラム例**:
-| カラム | 型 | 説明 |
+| # | 非責務 | 理由 |
 |---|---|---|
-| research_id | string | 一意識別子 (MSCOUT-YYYYMMDD-XXXXXX) |
-| sku | string | 仕入元 SKU |
-| product_name | string | 正規化後の商品名 |
-| category | string | **参考** eBay カテゴリ ID（最終確定は eBay Listing App） |
-| retail_price | float | 仕入価格 (JPY) |
-| ebay_market_price | float | **参考** eBay 市場相場 (USD)（最終価格は eBay Listing App） |
-| estimated_profit | float | **参考** 推定利益 (USD)（最終は eBay Listing App） |
-| profit_margin | float | **参考** 利益率 (%)（最終計算は eBay Listing App） |
-| risk_flag | string | リスク評価 (LOW, MEDIUM, HIGH) |
-| recommendation | string | 出品推奨度 (STRONG, WEAK, NOT_RECOMMENDED) |
-| timestamp | datetime | リサーチ実行時刻 |
+| 1 | 出品実行 | MarginScout はリサーチ専用 |
+| 2 | eBay Sell API | 出品権限が必要（スコープ外） |
+| 3 | 在庫同期 | 出品後の運用（スコープ外） |
+| 4 | 注文管理 | 販売運用（スコープ外） |
+| 5 | 仕入れ先評価 | 品質判定はユーザーが行う |
+| 6 | 出品可否判定 | 最終決定はユーザーが行う |
+| 7 | 販路決定 | eBay に限定されない |
 
-**重要**: 本カラムの価格・カテゴリは MarginScout の参考値です。最終的な eBay 出品時の価格・カテゴリは eBay Listing App で確定されます。
+---
 
-### 4.2 listing_seed.csv
-eBay Listing App へのインプット。候補情報を参考として提供。
+## eBay との関係
 
-**カラム例**:
-| カラム | 例 | 備考 |
+### eBay は「参照市場」
+
+eBay は**出品先ではなく、参考市場**として扱う。
+
+- ✅ 商品情報取得
+- ✅ 参考価格取得
+- ✅ 需要参考
+- ❌ 出品実行
+- ❌ 在庫管理
+- ❌ 注文処理
+
+### 使用 API
+
+- **Browse API**: 商品検索・商品詳細取得（✅ 使用）
+- **Sell API**: 出品・在庫・注文（❌ 非使用）
+
+---
+
+## 仕入れ先ポリシー
+
+### 探索対象（フリマ系を含む）
+
+- Mercari（メルカリ）
+- Yahoo Fleamarket
+- Hardoff
+- 2nd Street
+- Rakuten
+- Amazon 中古
+- 地域のリユース店舗
+
+### 探索対象外
+
+- なし（すべて対象）
+
+### 重要
+
+仕入れ先を「公式 / フリマ」で区別しない。
+「商品情報と価格がある場所」は全て探索対象。
+品質判定はユーザーが行う。
+
+---
+
+## 出力仕様
+
+### 出力ファイル
+
+| ファイル | 用途 | 形式 |
 |---|---|---|
-| research_id | MSCOUT-20260614-001 | 参考用 ID |
-| sku | MARGIN-SCOUT-001 | MarginScout 内部 SKU |
-| product_name | Example Product | 正規化済み商品名 |
-| ebay_category_id | 27000 | **参考** カテゴリ ID（最終確定は eBay Listing App） |
-| estimated_price_usd | 99.99 | **参考** 相場価格（最終価格は eBay Listing App） |
-| quantity_available | 10 | 在庫数 |
+| research_results.csv | 爆益候補一覧（詳細） | CSV |
+| research_summary.json | 実行結果サマリー | JSON |
+| research_audit_*.jsonl | 処理監査ログ | JSONL |
 
-**重要**: カテゴリ ID・価格は参考値です。eBay Listing App が最終確定・検証して出品します。
+### research_results.csv の必須列
 
-### 4.3 監査ログ
-- `research_audit_YYYYMMDD_HHMMSS.log`
-- タイムスタンプ
-- 処理内容 (normalization, category_mapping, price_analysis, profit_evaluation)
-- 入力数 / 成功数 / 失敗数
-- エラー詳細
-
----
-
-## 5. 責務一覧（DO）
-
-### Phase 1: Research Framework Design
-- [ ] データ正規化エンジンの設計
-- [ ] カテゴリマッピング候補抽出ロジック（参考用）の実装
-- [ ] 価格分析エンジンの構築（参考相場取得用）
-
-### Phase 2: Automated Product Research Workflow
-- [ ] 商品候補の自動収集・分析
-- [ ] eBay 参考相場データ取得・分析
-- [ ] 利益率・ROI 参考値の計算
-- [ ] 参考カテゴリ候補の提示
-- [ ] CSV 出力フォーマット定義
-- [ ] リサーチ監査ログの記録
-
-### 共通
-- [ ] 商品正規化ロジック
-- [ ] 参考カテゴリマッピング（最終確定は eBay Listing App）
-- [ ] 参考価格戦略の適用（最終価格は eBay Listing App）
-- [ ] 利益率計算（参考値）
-- [ ] CSV I/O (research_results.csv, listing_seed.csv)
-- [ ] error handling & logging
-- [ ] unit tests & integration tests
-
----
-
-## 6. 責務一覧（DO NOT）
-
-### ❌ eBay Listing App が責務を取る
-- [ ] **最終カテゴリ確定** ← MarginScout は参考候補のみ提示
-- [ ] **最終価格決定** ← MarginScout は参考相場のみ提示
-- [ ] eBay OAuth 認証
-- [ ] eBay Live API 連携
-- [ ] Inventory Item 作成
-- [ ] Offer 生成・Publish
-- [ ] 在庫同期 (Inventory Sync)
-- [ ] 注文ポーリング (Order Poller)
-- [ ] 注文履行管理 (Order Management)
-- [ ] Sandbox/Production API テスト
-
-### 除外モジュール（削除対象）
-- `src/payload_builder/*` – eBay Listing App へ MOVE
-- `src/executor/*` – eBay Listing App へ MOVE
-- `src/api_integration/*` – eBay Listing App へ MOVE
-- `src/order_management/*` – eBay Listing App へ MOVE
-- `oauth_handler.py` – eBay Listing App へ MOVE
-- `ebay_client.py` – eBay Listing App へ MOVE
-- PHASE6, PHASE7 ドキュメント – eBay Listing App へ MOVE
-
----
-
-## 7. 技術スタック
-
-| 項目 | 詳細 |
+| 列 | 説明 |
 |---|---|
-| 言語 | Python 3.11+ |
-| フレームワーク | pandas, numpy |
-| データ入力 | CSV (UTF-8) |
-| データ出力 | CSV (UTF-8) + JSON (監査ログ) |
-| 設定管理 | .env (config_loader.py) |
-| テスト | pytest |
-| ログ | logging + 監査ログファイル |
+| candidate_id | 候補識別子 |
+| product_name | 正規化済み商品名 |
+| source_channel | 仕入れ元 |
+| source_url | 仕入れ元 URL |
+| source_price | 仕入れ価格 |
+| source_currency | 通貨 |
+| reference_sale_price | eBay 参考価格 |
+| reference_currency | 通貨 |
+| estimated_profit | 推定利益 |
+| profit_margin_percent | 推定利益率（%） |
 
 ---
 
-## 8. ディレクトリ構成（最終）
+## CLI インターフェース
 
-```text
-margin-scout/
-├── src/
-│   └── research_workflow/
-│       ├── research_data.py
-│       ├── research_processor.py
-│       ├── normalizer.py
-│       ├── category_mapper.py (参考用)
-│       ├── price_analyzer.py (参考用)
-│       └── profit_evaluator.py
-├── tests/
-│   ├── test_normalizer.py
-│   ├── test_category_mapper.py
-│   ├── test_price_analyzer.py
-│   └── test_profit_evaluator.py
-├── docs/
-│   ├── RESEARCH_DATA_MODEL.md
-│   ├── PHASE2_RESEARCH_WORKFLOW.md
-│   ├── EBAY_CATEGORY_MAPPING.md (参考用)
-│   ├── EBAY_PRICE_STRATEGY.md (参考用)
-│   └── MARGINSCOUT_SCOPE.md
-├── examples/
-│   ├── research_sample.csv
-│   └── research_to_listing_mapping.md
-├── config_loader.py (共有)
-├── requirements.txt
-├── README.md (修正版)
-└── .env
+```bash
+python cli.py --category <category> --days <days> --min-sales <min_sales>
 ```
 
----
+### パラメータ
 
-## 9. CSV インターフェース仕様
+| パラメータ | 説明 | デフォルト | 例 |
+|---|---|---|---|
+| `--category` | eBay カテゴリ | electronics | footwear, camera |
+| `--days` | 売上実績の期間（日数） | 90 | 180 |
+| `--min-sales` | 最小売上件数 | 2 | 5, 10 |
+| `--output-dir` | 出力ディレクトリ | output | result |
 
-### 入力フォーマット (小売店提供)
-```csv
-sku,product_name,retail_price_jpy,category,url
-R001,Product A,5000,Electronics,https://...
-R002,Product B,15000,Books,https://...
-```
+## 今後の実装計画
 
-### 出力フォーマット (research_results.csv)
-```csv
-research_id,sku,product_name,category,retail_price,ebay_market_price,estimated_profit,profit_margin,risk_flag,recommendation,timestamp
-MSCOUT-20260614-001,R001,Product A,12345,5000,80.00,250.00,18.5,LOW,STRONG,2026-06-14T10:00:00Z
-```
-**注記**: `category`, `ebay_market_price`, `estimated_profit`, `profit_margin` は参考値です。最終的な eBay 出品時は eBay Listing App で確定されます。
+### Phase 1: 基盤実装
+- [ ] eBay Browse API 認証実装
+- [ ] 仕入れ元の定義と初期実装
+- [ ] 商品マッチング基本ロジック
 
-### Listing Seed CSV (listing_seed.csv)
-```csv
-research_id,sku,product_name,ebay_category_id,estimated_price_usd,quantity_available
-MSCOUT-20260614-001,MARGIN-SCOUT-001,Product A,12345,80.00,10
-```
-**注記**: `ebay_category_id`, `estimated_price_usd` は参考値です。eBay Listing App が最終確定します。
+### Phase 2: 探索機能拡張
+- [ ] Mercari API / スクレイピング
+- [ ] Yahoo Fleamarket 対応
+- [ ] Rakuten 対応
 
----
+### Phase 3: 精度向上
+- [ ] 商品マッチング精度向上
+- [ ] 偽陽性削減
+- [ ] 大規模データセット検証
 
-## 10. テスト計画
-| テスト | 対象モジュール | 成功基準 |
-|---|---|---|
-| Unit | normalizer, category_mapper, price_analyzer, profit_evaluator | 100% pass |
-| Integration | research_workflow end-to-end | input CSV → output CSV 生成成功 |
-| CSV I/O | csv_exporter, csv_validator | フォーマット正合性、エンコーディング確認 |
+## 重要な確認事項
 
----
+**この定義が最優先**
 
-## 11. eBay Listing App との連携
+- 既存ドキュメント・実装との矛盾が見つかった場合、この定義を優先する
+- 出品ツール的な責務は一切持たない
+- eBay は参照市場である
 
-### データフロー
-```text
-MarginScout (参考情報提供)
-  ↓
-listing_seed.csv (参考カテゴリ・参考価格含む)
-  ↓
-eBay Listing App (最終確定・出品実行)
-  - 最終カテゴリ検証・確定
-  - 最終価格計算・確定
-  - Payload 生成
-  - eBay Live API へ送信
-```
-
-### 責務の明確な分離
-- **MarginScout**: 参考情報の提供まで
-- **eBay Listing App**: 最終確定・出品実行
-
----
-
-## 12. 次ステップ
-- ✅ スコープ承認
-- → eBay Listing App スコープ確認 (LISTING_APP_SCOPE.md)
-- → MIGRATION_PLAN.md Phase 2 開始
-
----
-
-## 付録: 設計参考
-- `RESEARCH_DATA_MODEL.md`: データモデル詳細
-- `PHASE2_RESEARCH_WORKFLOW.md`: Phase 2 実装仕様
-- `research_to_listing_mapping.md`: CSV インターフェース詳細
-
-MarginScout スコープ定義書 v1.1
-作成日: 2026-06-14
-修正日: 2026-06-14
-承認待ち
+MarginScout v2.0 – 思想を固定し、実装を開始する。

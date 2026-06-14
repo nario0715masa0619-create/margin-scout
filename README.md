@@ -1,126 +1,139 @@
-﻿# MarginScout
+# MarginScout
 
-**自動爆益商品リサーチエンジン** – eBay で高利益商品を自動発掘
+**自動爆益商品リサーチエンジン** – 日本の商品情報から eBay で高利益な商品候補を発掘
 
-![Status](https://img.shields.io/badge/Status-Research%20Phase%201--2-blue)
-![Python](https://img.shields.io/badge/Python-3.11+-green)
-
----
-
-## 📌 役割分担
-
-**MarginScout** は商品リサーチ専門の Research App です。eBay 出品・在庫・注文管理は別リポジトリ「eBay Listing App」で実装されています。
-
-| 項目 | MarginScout | eBay Listing App |
-|---|---|---|
-| 商品リサーチ | ✅ | ❌ |
-| 価格分析 | ✅ | ❌ |
-| CSV 出力 | ✅ | ❌ |
-| eBay 出品 | ❌ | ✅ |
-| 在庫同期 | ❌ | ✅ |
-| 注文管理 | ❌ | ✅ |
-
-📦 **eBay Listing App**: https://github.com/nario0715masa0619-create/ebay-listing-app
+![Status](https://img.shields.io/badge/status-Research%20App-blue)
+![Python](https://img.shields.io/badge/python-3.11+-green)
 
 ---
 
-## 概要
+## 📌 MarginScout とは？
 
-**MarginScout** は、小売店の商品リストを自動分析し、eBay での高利益販売候補を発掘するリサーチエンジンです。
+MarginScout は、**リサーチ専用ツール**です。
 
-- 🔍 **自動商品リサーチ**: 商品候補の自動収集・分析
-- 📊 **価格分析**: eBay 相場データ自動取得・分析
-- 💰 **利益評価**: 利益率・ROI 自動計算
-- 📁 **CSV 出力**: リサーチ結果を CSV 形式で出力
-- 📋 **Listing Seed CSV**: eBay Listing App への連携
+- ✅ **爆益候補の発掘**: 日本の仕入れ元（フリマ、リユース店舗、ショップなど）から商品を探索
+- ✅ **事実ベースの分析**: 仕入れ価格と eBay 参考価格から利益を計算
+- ✅ **候補の出力**: CSV 形式で比較しやすく提示
+
+- ❌ **出品は実行しません**
+- ❌ **在庫管理は対象外です**
+- ❌ **注文処理は行いません**
+
+**MarginScout は「リサーチ」に特化しています。** 出品・在庫・運用は別途ツールで行ってください。
 
 ---
 
-## クイックスタート
+## 🎯 使い方
 
-### 1. インストール
-\\\ash
+### インストール
+
+```bash
 git clone https://github.com/nario0715masa0619-create/margin-scout.git
 cd margin-scout
 pip install -r requirements.txt
-\\\
+```
 
-### 2. 設定
-\\\ash
-cp .env.example .env
-# .env を編集して必要な設定を行う
-\\\
+### 実行
 
-### 3. 実行
-\\\ash
-python -m src.research_workflow.research_processor input.csv
-\\\
+```bash
+# 基本形
+python cli.py --category electronics --days 90 --min-sales 2
 
-### 4. 出力
-- research_results.csv – リサーチ結果
-- listing_seed.csv – eBay Listing App への入力
-- research_audit_YYYYMMDD_HHMMSS.log – 監査ログ
+# オプション
+python cli.py --category footwear --days 180 --min-sales 5 --output-dir result
+```
 
-## 主な機能
-| 機能 | 説明 |
+### 出力
+
+以下のファイルが生成されます：
+
+```text
+output/
+├── research_results.csv ................. 爆益候補リスト（詳細）
+├── research_summary.json ............... 実行結果サマリー
+└── logs/
+    └── research_audit_YYYYMMDD_HHMMSS.jsonl .... 監査ログ
+```
+
+## 📊 出力の見方
+
+### research_results.csv
+
+| 列 | 意味 |
 |---|---|
-| Product Normalization | 商品情報の正規化・クレンジング |
-| Category Mapping | eBay カテゴリへの自動マッピング |
-| Price Analysis | eBay 市場相場の自動取得・分析 |
-| Profit Evaluation | 利益率・リスク評価 |
-| CSV I/O | 入出力 CSV 管理 |
+| candidate_id | 候補 ID |
+| product_name | 商品名 |
+| source_channel | 仕入れ元（Mercari, Hardoff など） |
+| source_url | 仕入れ元 URL |
+| source_price | 仕入れ価格（日本円） |
+| reference_sale_price | eBay 参考価格（米ドル） |
+| estimated_profit | 推定利益（米ドル） |
+| profit_margin_percent | 推定利益率（%） |
 
-## アーキテクチャ
-\\\	ext
-Input CSV (小売店商品)
-         ↓
-  [Research Workflow]
-  1. Normalizer
-  2. Category Mapper
-  3. Price Analyzer
-  4. Profit Evaluator
-         ↓
-Output CSV (research_results.csv)
-     + Listing Seed CSV
-     + Audit Log
-         ↓
-[eBay Listing App] ← 別リポジトリで実装
-\\\
+例:
 
-## ドキュメント
-- MARGINSCOUT_SCOPE.md – スコープ定義
-- RESEARCH_DATA_MODEL.md – データモデル
-- PHASE2_RESEARCH_WORKFLOW.md – Phase 2 実装仕様
-- SEPARATION_REPORT.md – 分離完了報告書
+```csv
+RESEARCH-20260615-001,Sony Headphones,mercari,https://...,5000,60.00,35.00,37.5
+```
+→ 「日本で5000円で仕入れた商品が、eBay では60ドルで売れそう。利益35ドル、利益率37%」
 
-## スコープ
-### ✅ MarginScout が責務を取る
-- 商品リサーチ・分析
+## 🏗️ アーキテクチャ
+
+```text
+【ユーザー】
+    ↓
+カテゴリ・期間を指定
+    ↓
+【MarginScout】
+    ├─ 仕入れ元を探索
+    ├─ eBay で参考相場を検索
+    └─ 利益計算
+    ↓
+【出力】
+research_results.csv
+    ↓
+【ユーザーが判断】
+「この商品、仕入れようかな」
+```
+
+## ✅ MarginScout の責務
+- 爆益候補の発掘
+- 仕入れ価格の取得
+- eBay 参考価格の取得
+- 利益計算
 - CSV 出力
-- 監査ログ
 
-### ❌ MarginScout は責務を取らない
-- eBay 出品・OAuth・Live API
-- 在庫管理・注文処理
-- → これらは eBay Listing App で実装
+## ❌ MarginScout ではできないこと
+- eBay への出品実行
+- 在庫同期
+- 注文管理
+- 販売運用
 
-## テスト
-\\\ash
-# Unit テスト
-pytest tests/ -v
+これらは別途ツール（eBay Listing App など）で行ってください。
 
-# カバレッジ
-pytest tests/ --cov=src
-\\\
+## 📚 ドキュメント
+- MARGINSCOUT_REDEFINED.md – 思想・責務の最終定義
+- API_SCOPE_DEFINITION.md – eBay API の使用範囲
+- RESEARCH_DATA_MODEL_V2.md – データモデル
+- PHASE2_RESEARCH_WORKFLOW.md – 処理フロー
 
-## 構成ファイル
-- .env – 設定（API キー等）
-- requirements.txt – Python 依存ライブラリ
-- setup.py – パッケージ設定
+## 🔧 技術スタック
 
-## ライセンス
+| 項目 | 詳細 |
+|---|---|
+| 言語 | Python 3.11+ |
+| API | eBay Browse API |
+| 入力 | CLI パラメータ |
+| 出力 | CSV + JSON + JSONL ログ |
+| 認証 | OAuth 2.0 (Application Token) |
+
+## 📝 ライセンス
 MIT License
 
-## 関連リポジトリ
-- eBay Listing App – 出品・在庫・注文管理
-- MarginScout v1.0 – Research Phase 1-2 (Production-Ready)
+## 🚀 次のステップ
+- [ ] eBay Browse API 認証設定
+- [ ] 仕入れ元スクレイピング実装
+- [ ] 商品マッチング精度向上
+- [ ] 大規模データセットでのテスト
+
+MarginScout v2.0 – リサーチ専用、シンプル、強力。
