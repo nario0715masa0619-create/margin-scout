@@ -1,0 +1,141 @@
+2026-06-15 11:17:17,383 - INFO - === Operational Test Initialization ===
+2026-06-15 11:17:17,383 - INFO - ✅ eBay token acquired successfully
+2026-06-15 11:17:18,127 - INFO - ✅ All components initialized
+2026-06-15 11:17:18,127 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 11:17:18,127 - INFO - 
+Category: electronics
+2026-06-15 11:17:18,127 - INFO -   Testing keyword: iPhone
+2026-06-15 11:17:18,127 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 11:17:21,692 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:21,692 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 11:17:22,720 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:22,721 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 11:17:24,910 - INFO -     ✅ Found 1 items
+2026-06-15 11:17:24,910 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 11:17:26,753 - INFO -     ✅ Found 0 items
+2026-06-15 11:17:26,753 - INFO - 
+Category: camera
+2026-06-15 11:17:26,753 - INFO -   Testing keyword: Canon EOS
+2026-06-15 11:17:26,753 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 11:17:30,676 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:30,676 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 11:17:31,546 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:31,546 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 11:17:33,348 - INFO -     ✅ Found 1 items
+2026-06-15 11:17:33,348 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 11:17:34,702 - INFO -     ✅ Found 0 items
+2026-06-15 11:17:34,702 - INFO - 
+Category: games
+2026-06-15 11:17:34,702 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 11:17:34,702 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 11:17:37,781 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:37,781 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 11:17:38,604 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:38,604 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 11:17:40,406 - INFO -     ✅ Found 1 items
+2026-06-15 11:17:40,406 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 11:17:41,627 - INFO -     ✅ Found 0 items
+2026-06-15 11:17:41,627 - INFO - 
+Category: fashion
+2026-06-15 11:17:41,627 - INFO -   Testing keyword: Gucci
+2026-06-15 11:17:41,627 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 11:17:42,785 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:42,785 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 11:17:43,640 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:43,640 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 11:17:45,429 - INFO -     ✅ Found 1 items
+2026-06-15 11:17:45,430 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 11:17:46,838 - INFO -     ✅ Found 0 items
+2026-06-15 11:17:46,838 - INFO - 
+Category: hobby
+2026-06-15 11:17:46,838 - INFO -   Testing keyword: LEGO
+2026-06-15 11:17:46,838 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 11:17:48,125 - INFO -     ✅ Found 2 items
+2026-06-15 11:17:48,125 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 11:17:49,040 - INFO -     ✅ Found 5 items
+2026-06-15 11:17:49,040 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 11:17:50,822 - INFO -     ✅ Found 1 items
+2026-06-15 11:17:50,822 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 11:17:52,027 - INFO -     ✅ Found 0 items
+2026-06-15 11:17:52,027 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 11:17:52,027 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 11:17:52,027 - INFO -   ✅ Found 3 items
+2026-06-15 11:17:52,027 - INFO -     - iPhone 12 - Official Item #1: ${'value': '29.99', 'currency': 'USD'}
+2026-06-15 11:17:52,027 - INFO -     - iPhone 12 - Official Item #2: ${'value': '34.99', 'currency': 'USD'}
+2026-06-15 11:17:52,027 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 11:17:52,027 - INFO -   ✅ Found 3 items
+2026-06-15 11:17:52,027 - INFO -     - Sony Alpha - Official Item #1: ${'value': '29.99', 'currency': 'USD'}
+2026-06-15 11:17:52,027 - INFO -     - Sony Alpha - Official Item #2: ${'value': '34.99', 'currency': 'USD'}
+2026-06-15 11:17:52,027 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 11:17:52,027 - INFO -   ✅ Found 3 items
+2026-06-15 11:17:52,027 - INFO -     - Pokemon Card - Official Item #1: ${'value': '29.99', 'currency': 'USD'}
+2026-06-15 11:17:52,027 - INFO -     - Pokemon Card - Official Item #2: ${'value': '34.99', 'currency': 'USD'}
+2026-06-15 11:17:52,027 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 11:17:52,028 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 11:18:51,449 - INFO -   ✅ Total source items: 53
+2026-06-15 11:18:51,449 - INFO - 
+[Step 2] Processing 53 items...
+2026-06-15 11:18:51,449 - INFO -   [1] ✅ iPhone 16 Pro Max ハードケース クリア... | profit ¥-132 | margin -2.8%
+2026-06-15 11:18:51,449 - DEBUG -   [2] ❌ Match score too low: 0.47
+2026-06-15 11:18:51,449 - INFO -   [3] ✅ 新品未使用　LG XBOOM Go ワイヤレススピーカー XG2TBK... | profit ¥-1,931 | margin -40.9%
+2026-06-15 11:18:51,449 - DEBUG -   [4] ❌ Match score too low: 0.47
+2026-06-15 11:18:51,450 - DEBUG -   [5] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,450 - INFO -   [6] ✅ LG Electronics タブレット LGT02 （JCOMタブレット）... | profit ¥-2,132 | margin -45.1%
+2026-06-15 11:18:51,450 - INFO -   [7] ✅ Electronics Devices PROTECTIVE FILM... | profit ¥68 | margin 1.4%
+2026-06-15 11:18:51,450 - INFO -   [8] ✅ 【箱付き】sE Electronics NEOM USB プロフェッショナルUS... | profit ¥-14,132 | margin -299.2%
+2026-06-15 11:18:51,450 - INFO -   [9] ✅ 電動ドライバー 小型 精密ドライバー トルクス マイナス 三角 六角 プラス 星... | profit ¥-6,472 | margin -137.0%
+2026-06-15 11:18:51,450 - DEBUG -   [10] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,450 - INFO -   [11] ✅ Canon EOS 80D 本体 EF-S 24mm F2.8 STM... | profit ¥-3,332 | margin -70.5%
+2026-06-15 11:18:51,450 - INFO -   [12] ✅ キャノン Canon マウントアダプター EF-EOS R... | profit ¥-13,632 | margin -288.6%
+2026-06-15 11:18:51,450 - INFO -   [13] ✅ Canon EOS 5D Mark IV 5D4 15000ショット... | profit ¥-128,132 | margin -2712.7%
+2026-06-15 11:18:51,450 - INFO -   [14] ✅ ストラップのみ　Canon EOS DIGITAL カメラストラップ ブラック　... | profit ¥328 | margin 6.9%
+2026-06-15 11:18:51,450 - DEBUG -   [15] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,450 - INFO -   [16] ✅ Nikon ZOOM 310 AF コンパクトカメラ... | profit ¥-2,632 | margin -55.7%
+2026-06-15 11:18:51,450 - INFO -   [17] ✅ 動作品Nikon AF-S NIKKOR 35mm 1:1.8G DX... | profit ¥-11,798 | margin -249.8%
+2026-06-15 11:18:51,450 - INFO -   [18] ✅ Nikon D750 フルサイズ ボディ + おまけ... | profit ¥-56,632 | margin -1199.0%
+2026-06-15 11:18:51,450 - INFO -   [19] ✅ Nikon COOLPIX A100 レッド デジタルカメラ バッテリー付き　※... | profit ¥-7,632 | margin -161.6%
+2026-06-15 11:18:51,450 - DEBUG -   [20] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,450 - DEBUG -   [21] ❌ Match score too low: 0.22
+2026-06-15 11:18:51,451 - INFO -   [22] ✅ かがやくジラーチ K S11a 白熱のアルカナ 045/068... | profit ¥-632 | margin -13.4%
+2026-06-15 11:18:51,451 - INFO -   [23] ✅ ミュウex 327/190 SSR シャイニートレジャー 色違い ポケモンカード... | profit ¥-2,932 | margin -62.1%
+2026-06-15 11:18:51,451 - INFO -   [24] ✅ ナインタイル ポケモンドコダ！ Oink Games ボードゲーム ... | profit ¥-1,632 | margin -34.5%
+2026-06-15 11:18:51,451 - DEBUG -   [25] ❌ Match score too low: 0.47
+2026-06-15 11:18:51,451 - DEBUG -   [26] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,451 - DEBUG -   [27] ❌ Match score too low: 0.47
+2026-06-15 11:18:51,451 - INFO -   [28] ✅ カツラのファイヤー ★ ジム拡張第2弾 闇からの挑戦... | profit ¥-1,532 | margin -32.4%
+2026-06-15 11:18:51,451 - INFO -   [29] ✅ 送料無料　遊戯王　デュエルモンスターズ　Yu-Gi-Oh!　ノート　Duel M... | profit ¥68 | margin 1.4%
+2026-06-15 11:18:51,451 - INFO -   [30] ✅ 神姫PROJECT ソル　予約特典スリーブ 3個セット... | profit ¥-532 | margin -11.3%
+2026-06-15 11:18:51,451 - DEBUG -   [31] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,451 - INFO -   [32] ✅ GUCCI GGキャンバス バケットハット ウェブストライプ　未着用... | profit ¥-14,432 | margin -305.5%
+2026-06-15 11:18:51,451 - DEBUG -   [33] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,451 - INFO -   [34] ✅ GUCCI グッチ 指輪 リング シルバーリング Ag925 Gリング... | profit ¥-5,032 | margin -106.5%
+2026-06-15 11:18:51,451 - INFO -   [35] ✅ GUCCI グッチ サンダル スリングバックパンプス181493... | profit ¥-6,532 | margin -138.3%
+2026-06-15 11:18:51,451 - DEBUG -   [36] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,451 - INFO -   [37] ✅ 【極美品】　ルイヴィトン　 ポルトフォイユ・ヴィクトリーヌ モノグラム... | profit ¥-41,232 | margin -872.9%
+2026-06-15 11:18:51,451 - INFO -   [38] ✅ Louis Vuitton モノグラム サンダル... | profit ¥-31,032 | margin -657.0%
+2026-06-15 11:18:51,452 - INFO -   [39] ✅ ルイヴィトン オンザゴーPM ショルダーバッグ ハンドバッグ　トートバック　モノ... | profit ¥-137,632 | margin -2913.8%
+2026-06-15 11:18:51,452 - INFO -   [40] ✅ LOUIS VUITTON ルイヴィトン モノグラム チェーン ブレスレット シ... | profit ¥-14,112 | margin -298.8%
+2026-06-15 11:18:51,452 - DEBUG -   [41] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,452 - INFO -   [42] ✅ レゴ互換 HellBoy ヘルボーイ（1） ミニフィグ 1体... | profit ¥-112 | margin -2.4%
+2026-06-15 11:18:51,452 - INFO -   [43] ✅ HOBBYBRICK カスタムミニフィギュア もののけ姫 限定50個... | profit ¥-67,132 | margin -1421.3%
+2026-06-15 11:18:51,452 - INFO -   [44] ✅ LEGO レゴ GAME BOY ゲームボーイ 72046 421pcs... | profit ¥-8,722 | margin -184.7%
+2026-06-15 11:18:51,452 - INFO -   [45] ✅ レゴ 正規品　LEGO タイタニック号 10294 ブロック... | profit ¥-68,632 | margin -1453.0%
+2026-06-15 11:18:51,452 - DEBUG -   [46] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,452 - DEBUG -   [47] ❌ Match score too low: 0.47
+2026-06-15 11:18:51,452 - INFO -   [48] ✅ まんじゅう娘 つむぐ フィギュア Hobby sakura... | profit ¥-13,132 | margin -278.0%
+2026-06-15 11:18:51,452 - INFO -   [49] ✅ ジャンク品： バンダイ HG ホビーハイザック... | profit ¥-2,032 | margin -43.0%
+2026-06-15 11:18:51,452 - INFO -   [50] ✅ MG 1/100 ガンダムヘビーアームズ改 EW... | profit ¥-15,132 | margin -320.4%
+2026-06-15 11:18:51,452 - DEBUG -   [51] ❌ Match score too low: 0.37
+2026-06-15 11:18:51,452 - DEBUG -   [52] ❌ Match score too low: 0.22
+2026-06-15 11:18:51,452 - DEBUG -   [53] ❌ Match score too low: 0.22
+2026-06-15 11:18:51,453 - INFO - ✅ CSV output: output_operational_test\research_results.csv (34 rows)
+2026-06-15 11:18:51,454 - INFO - 
+✅ Test report: output_operational_test\test_report.json
+2026-06-15 11:18:51,454 - INFO - 
+=== Cleanup ===
+2026-06-15 11:18:51,556 - INFO - ✅ Closed browser
+2026-06-15 11:18:51,572 - INFO - ✅ Stopped playwright

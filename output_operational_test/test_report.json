@@ -1,0 +1,189 @@
+{
+  "execution_time": {
+    "total_seconds": 93.33,
+    "per_item_seconds": 1.761
+  },
+  "summary": {
+    "total_inputs": 53,
+    "csv_output_count": 34,
+    "skipped_count": 0,
+    "success_rate_pct": 64.2
+  },
+  "source_adapters": {
+    "items_found": {
+      "mercari": 22,
+      "yahoo_flea": 25,
+      "yahoo_auction": 5,
+      "hardoff": 0
+    },
+    "success_rates": {
+      "mercari": 0.0,
+      "yahoo_flea": 0.0,
+      "yahoo_auction": 0.0,
+      "hardoff": 0.0
+    }
+  },
+  "ebay_api": {
+    "search_success": 56,
+    "search_failed": 0,
+    "success_rate_pct": 100.0
+  },
+  "matching": {
+    "success": 34,
+    "failed": 19,
+    "success_rate_pct": 64.2
+  },
+  "failure_reasons": {},
+  "samples": [
+    {
+      "candidate_id": "RESEARCH-20260615-0001",
+      "product_name": "iPhone 16 Pro Max ハードケース クリア",
+      "source_channel": "mercari",
+      "source_price_jpy": 1000,
+      "source_url": "https://jp.mercari.com/item/m94493007877",
+      "condition_text": "unknown",
+      "ebay_title": "iPhone 16 Pro Max ハードケース クリア - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -131.96,
+      "profit_margin_pct": -2.79,
+      "match_score": 0.66,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0003",
+      "product_name": "新品未使用　LG XBOOM Go ワイヤレススピーカー XG2TBK",
+      "source_channel": "yahoo_flea",
+      "source_price_jpy": 2799,
+      "source_url": "https://paypayfleamarket.yahoo.co.jp/item/z594055822",
+      "condition_text": "unknown",
+      "ebay_title": "新品未使用　LG XBOOM Go ワイヤレススピーカー XG2TBK - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -1930.96,
+      "profit_margin_pct": -40.88,
+      "match_score": 0.66,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0006",
+      "product_name": "LG Electronics タブレット LGT02 （JCOMタブレット）",
+      "source_channel": "mercari",
+      "source_price_jpy": 3000,
+      "source_url": "https://jp.mercari.com/item/m76266339412",
+      "condition_text": "unknown",
+      "ebay_title": "LG Electronics タブレット LGT02 （JCOMタブレット） - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -2131.96,
+      "profit_margin_pct": -45.14,
+      "match_score": 0.6111111111111112,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0007",
+      "product_name": "Electronics Devices PROTECTIVE FILM",
+      "source_channel": "mercari",
+      "source_price_jpy": 800,
+      "source_url": "https://jp.mercari.com/item/m68309248122",
+      "condition_text": "unknown",
+      "ebay_title": "Electronics Devices PROTECTIVE FILM - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": 68.04,
+      "profit_margin_pct": 1.44,
+      "match_score": 0.55,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0008",
+      "product_name": "【箱付き】sE Electronics NEOM USB プロフェッショナルUSB マイク コンデンサーマイク 配信用マイク",
+      "source_channel": "yahoo_flea",
+      "source_price_jpy": 15000,
+      "source_url": "https://paypayfleamarket.yahoo.co.jp/item/z615454036",
+      "condition_text": "unknown",
+      "ebay_title": "【箱付き】sE Electronics NEOM USB プロフェッショナルUSB マイク コンデンサーマイク 配信用マイク - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -14131.96,
+      "profit_margin_pct": -299.19,
+      "match_score": 0.7333333333333334,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0009",
+      "product_name": "電動ドライバー 小型 精密ドライバー トルクス マイナス 三角 六角 プラス 星型 y字 switch カメラ スマホ 修理 kk",
+      "source_channel": "yahoo_flea",
+      "source_price_jpy": 7340,
+      "source_url": "https://paypayfleamarket.yahoo.co.jp/item/c1233557444",
+      "condition_text": "unknown",
+      "ebay_title": "電動ドライバー 小型 精密ドライバー トルクス マイナス 三角 六角 プラス 星型 y字 switch カメラ スマホ 修理 kk - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -6471.96,
+      "profit_margin_pct": -137.02,
+      "match_score": 0.868421052631579,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0011",
+      "product_name": "Canon EOS 80D 本体 EF-S 24mm F2.8 STM",
+      "source_channel": "mercari",
+      "source_price_jpy": 4200,
+      "source_url": "https://jp.mercari.com/item/m35367327799",
+      "condition_text": "unknown",
+      "ebay_title": "Canon EOS 80D 本体 EF-S 24mm F2.8 STM - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -3331.96,
+      "profit_margin_pct": -70.54,
+      "match_score": 0.7333333333333334,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0012",
+      "product_name": "キャノン Canon マウントアダプター EF-EOS R",
+      "source_channel": "mercari",
+      "source_price_jpy": 14500,
+      "source_url": "https://jp.mercari.com/item/m43799814241",
+      "condition_text": "unknown",
+      "ebay_title": "キャノン Canon マウントアダプター EF-EOS R - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -13631.96,
+      "profit_margin_pct": -288.6,
+      "match_score": 0.6111111111111112,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0013",
+      "product_name": "Canon EOS 5D Mark IV 5D4 15000ショット",
+      "source_channel": "yahoo_flea",
+      "source_price_jpy": 129000,
+      "source_url": "https://paypayfleamarket.yahoo.co.jp/item/z625023412",
+      "condition_text": "unknown",
+      "ebay_title": "Canon EOS 5D Mark IV 5D4 15000ショット - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": -128131.96,
+      "profit_margin_pct": -2712.69,
+      "match_score": 0.7000000000000001,
+      "status": "success"
+    },
+    {
+      "candidate_id": "RESEARCH-20260615-0014",
+      "product_name": "ストラップのみ　Canon EOS DIGITAL カメラストラップ ブラック　中古品",
+      "source_channel": "yahoo_flea",
+      "source_price_jpy": 540,
+      "source_url": "https://paypayfleamarket.yahoo.co.jp/item/z620875784",
+      "condition_text": "unknown",
+      "ebay_title": "ストラップのみ　Canon EOS DIGITAL カメラストラップ ブラック　中古品 - Official Item #1",
+      "ebay_price_usd": 29.99,
+      "ebay_item_id": "123456789001",
+      "profit_jpy": 328.04,
+      "profit_margin_pct": 6.94,
+      "match_score": 0.7000000000000001,
+      "status": "success"
+    }
+  ]
+}
