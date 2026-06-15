@@ -78,18 +78,8 @@ class ResearchProcessorWithSources:
             return {'total_input': 0, 'successful': 0, 'skipped': 0}
         
         # Initialize eBay API
-        from dotenv import load_dotenv
-        load_dotenv()
-        client_id = os.getenv('EBAY_CLIENT_ID', 'test_id')
-        client_secret = os.getenv('EBAY_CLIENT_SECRET', 'test_secret')
-        auth_handler = EbayAuthHandler(client_id, client_secret)
-        
-        try:
-            token = auth_handler.get_access_token()
-        except Exception as e:
-            print(f"[WARN] Failed to get eBay token, using mock: {e}")
-            token = "mock_token"
-            
+        auth_handler = EbayAuthHandler()
+        token = auth_handler.get_token()
         if not token:
             print("[ERROR] Failed to get eBay token")
             return {'total_input': total_input, 'successful': 0, 'skipped': 0, 'error': 'eBay auth failed'}
@@ -131,7 +121,7 @@ class ResearchProcessorWithSources:
                         
                         # Use best eBay match
                         ebay_item = ebay_items[0]
-                        ebay_price_usd = ebay_item.get('price', {}).get('value', 0)
+                        ebay_price_usd = float(ebay_item.get('price', {}).get('value', 0))
                         ebay_item_id = ebay_item.get('itemId', '')
                         
                         print(f"  [eBay] Found: {ebay_item.get('title', '')[:50]} @ ${ebay_price_usd:.2f}")
