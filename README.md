@@ -1,80 +1,173 @@
-# MarginScout v2.0 - eBay 爆益商品リサーチプラットフォーム
+# MarginScout v2.1
 
-![Status](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
-![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
-![License](https://img.shields.io/badge/License-MIT-green)
+**eBay をターゲット市場とした自動リサーチツール**
 
-## 概要
+> 日本国内の複数プラットフォーム（Mercari, Yahoo Flea Market, Yahoo Auction, Hardoff）から商品候補を自動抽出し、eBay Browse API を使用して参考価格・商品情報を取得。利益計算を自動実行し、CSV ファイルで結果出力するリサーチツール。
 
-**MarginScout** は、日本の仕入れ元（Mercari、Yahoo Flea、Hardoff など）から商品を探索し、
-eBay での参考相場を調査、自動的に利益を計算するリサーチ専用プラットフォームです。
+---
 
-### 特徴
+## ✨ 主な特徴
 
-- 🔍 **4つの仕入れ元を同時検索** - Mercari, Yahoo Flea Market, Yahoo Auction, Hardoff
-- 💰 **正確な利益計算** - eBay 手数料（13.6% + $0.40）+ 国際送料を自動計算
-- 📦 **複数キャリア対応** - 日本郵政 EMS と FedEx International Economy
-- 🤖 **自動商品マッチング** - Jaccard 類似度による精密マッチング
-- 📊 **完全なトレーサビリティ** - 監査ログ（JSONL）で全処理を記録
-- ⚡ **高速処理** - 平均 1.8 秒/件の高速リサーチ
+- **多ソース対応**: Mercari, Yahoo Flea Market, Yahoo Auction, Hardoff から同時検索
+- **eBay Live API 統合**: OAuth 2.0 で認証、参考市場価格を自動取得
+- **自動マッチング**: Jaccard 類似度 + SequenceMatcher で柔軟に商品マッチング
+- **利益自動計算**: eBay 手数料（FVF 13.6% + $0.40）+ 国際送料（$20）を含む正確な利益計算
+- **日本語対応**: 日本語キーワード → eBay 検索向け英語自動変換（pykakasi）
+- **CSV/JSONL ログ出力**: 結果を CSV・JSON で記録、監査ログも自動生成
 
-## インストール
+---
+
+## 📊 v2.1 パフォーマンス
+
+| 指標 | 値 |
+|------|-----|
+| **CSV 出力成功率** | 25.0% (13/52) |
+| **eBay 検索ヒット率** | 67.3% (37/52) |
+| **マッチング成功率** | 38.2% (13/34) |
+| **平均処理時間** | 2.7 秒/アイテム |
+| **Live API 対応** | ✅ 完全対応 |
+
+> **初期版との比較**: Sandbox 1.9% → Live 改善後 25.0%（**約 13 倍向上**）
+
+---
+
+## 🚀 インストール
 
 ### 前提条件
+- Python 3.11 以上
+- eBay Developer アカウント（Live API クレデンシャル取得済み）
+- インターネット接続
 
-- Python 3.11+
-- eBay Developer アカウント（Browse API アクセス権）
-- Playwright（Chrome / Chromium）
-
-### セットアップ
+### セットアップ手順
 
 ```bash
-# リポジトリをクローン
+# 1. リポジトリクローン
 git clone https://github.com/nario0715masa0619-create/margin-scout.git
 cd margin-scout
 
-# 仮想環境を作成
-python -m venv venv
-source venv/bin/activate  # Linux/Mac
-# または
-.\venv\Scripts\Activate.ps1  # Windows
-
-# 依存パッケージをインストール
+# 2. 依存パッケージインストール
 pip install -r requirements.txt
-playwright install chromium
 
-# 環境変数を設定
-cp .env.example .env
-# .env を編集して eBay API 認証情報を入力
+# 3. 環境変数設定
+# ~/.marginscount/.env または ./margin-scout/.env に以下を記載:
+cat > ~/.marginscount/.env << 'EOF'
+EBAY_ENV=live
+EBAY_CLIENT_ID=your_production_client_id
+EBAY_CLIENT_SECRET=your_production_client_secret
+EXCHANGE_RATE_JPY=157.50
+EBAY_REQUEST_TIMEOUT=30
+EBAY_MAX_RETRIES=3
+EOF
+
+# 4. 実行確認
+python cli.py --category electronics --days 90 --min-sales 2
 ```
 
-## 使用方法
-
-### 1. リサーチの実行
-
-実運用スクリプトを使用して、指定したカテゴリとキーワードで一括リサーチを行います。
-
+## 💻 使い方
+### CLI コマンド
 ```bash
-python test_operational_multicat_nonmock.py
+# 基本実行
+python cli.py --category electronics --days 90 --min-sales 2
+
+# オプション
+--category      : 検索カテゴリ (electronics, camera, fashion, hobby など)
+--days          : 検索期間（日数）
+--min-sales     : 最小販売数
+--output-dir    : 出力ディレクトリ (デフォルト: output_operational_test/)
+--verbose       : 詳細ログ出力
 ```
 
-### 2. 結果の確認
+### 出力ファイル
+```text
+output_operational_test/
+├── research_results.csv        # 利益候補リスト (13列)
+├── research_summary.json       # 実行サマリー
+└── logs/
+    ├── research_audit_*.jsonl  # 監査ログ（アイテム詳細）
+    └── error_*.log             # エラーログ
+```
 
-処理が完了すると、以下の結果が `output_operational_test` フォルダに出力されます。
+### CSV カラム説明
+| カラム | 説明 |
+|---|---|
+| candidate_id | 候補 ID |
+| product_name | 商品名 |
+| source_channel | 仕入れ元 (mercari / yahoo_flea / yahoo_auction / hardoff) |
+| source_price_jpy | 仕入れ価格 (JPY) |
+| source_url | 仕入れ元 URL |
+| condition_text | 商品状態 |
+| ebay_title | eBay 商品名 |
+| ebay_price_usd | eBay 参考価格 (USD) |
+| ebay_item_id | eBay アイテム ID |
+| profit_jpy | 利益額 (JPY) |
+| profit_margin_pct | 利益率 (%) |
+| match_score | マッチングスコア (0.0～1.0) |
+| status | ステータス (success / failed) |
 
-- `research_results.csv`: 抽出された商品リストと正確な利益計算結果（黒字・赤字判定含む）
-- `test_report.json`: 詳細な実行メトリクスと成功率サマリ
-- `test_run.log`: 実行時の詳細なログ情報
+## 💰 利益計算式
+```text
+eBay 参考価格 (USD) × 為替レート (157.50 JPY/USD)
+  - eBay 手数料 (FVF 13.6% + $0.40)
+  - 国際送料 ($20)
+  - 仕入れ価格 (JPY)
+= 利益額 (JPY)
+```
+例: 仕入れ ¥25,300、eBay 価格 $98.00
 
-## アーキテクチャ
+```text
+$98.00 × 157.50 = ¥15,435
+- eBay FVF (13.6% + $0.40) = -¥2,165.58
+- 送料 ($20) = -¥3,150
+- 仕入れ = -¥25,300
+= 利益 -¥15,180 (赤字)
+```
 
-MarginScout v2.0 は以下の主要モジュールで構成されています。
+## 🔧 トラブルシューティング
+### 401 Unauthorized エラー
+**原因**: eBay クレデンシャルが無効
+**対策**: `~/.marginscount/.env` の EBAY_CLIENT_ID/SECRET を確認
 
-- **Source Adapters** (`src/source_adapters/`): 日本の各プラットフォームから並列スクレイピングで商品データを抽出
-- **eBay Integration** (`src/ebay_integration/`): eBay Browse API を使用した市場相場のリサーチ
-- **Product Matcher** (`src/research_workflow/product_matcher.py`): Jaccard 類似度アルゴリズムを用いた高精度な同一商品判定
-- **Profit & Shipping Calculator** (`src/research_workflow/`): 実際の国際送料（EMS / FedEx）と eBay の詳細な手数料を加味したリアルな利益計算エンジン
+### eBay 検索結果 0 件
+**原因**: キーワードが eBay に存在しない、または条件が厳しい
+**対策**: 
+  1. キーワードを簡潔に (例: "Nikon D850" → "D850")
+  2. 仕入れ元でキーワード確認
+  3. `docs/KEYWORD_NORMALIZATION.md` 参照
 
-## ライセンス
+### マッチング失敗
+**原因**: 日本語商品の eBay 名と大きく異なる
+**対策**: 
+  1. Jaccard 類似度を確認 (CSV の match_score)
+  2. match_score < 0.35 は除外される
+  3. `docs/MATCHING_ALGORITHM.md` 参照
 
-This project is licensed under the MIT License.
+### 利益率が異常に高い/低い
+**原因**: 為替レート設定、送料設定の違い
+**対策**: `~/.marginscount/.env` の EXCHANGE_RATE_JPY を確認
+デフォルト: 157.50 JPY/USD
+
+## 📈 Phase B+ 改善詳細
+v2.1 では以下の改善を実施しました：
+
+- **クエリ最適化強化** → eBay ヒット率 7% → 67%
+- **マッチング精度向上** → 段階的マッチング・閾値緩和
+- **日本語キーワード正規化** → pykakasi による自動変換
+- **eBay 検索条件詳細化** → 中古品・正評価セラーに絞込み
+- **CSV 出力ロジック改善** → 利益フラグ・警告フラグ追加
+
+詳細は `docs/PHASE_B_PLUS_IMPROVEMENT_REPORT.md` を参照。
+
+## 📚 ドキュメント
+- `DEPLOYMENT_GUIDE.md` - 環境構築ガイド
+- `PHASE_B_PLUS_IMPROVEMENT_REPORT.md` - v2.1 改善ログ
+- `MARGINSCOUT_REDEFINED.md` - 仕様書
+- `MARGINSCOUT_SCOPE.md` - スコープ定義
+
+## 📄 ライセンス
+MIT License
+
+## 👨‍💻 開発
+- 初版: 2026-01 (Phase A～D)
+- v2.0: 2026-03 (eBay Browse API 本体実装)
+- v2.1: 2026-06-15 (Phase B+ 精度向上)
+- 最終更新: 2026-06-15 ステータス: ✅ Production Ready
