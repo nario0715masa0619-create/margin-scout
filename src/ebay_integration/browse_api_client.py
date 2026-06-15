@@ -1,69 +1,139 @@
-"""eBay Browse API クライアント"""
+"""
+eBay Browse API Client with Mock Support
+"""
+
 import requests
-from typing import Dict, List, Optional
-from datetime import datetime
-import logging
+import urllib.parse
+from typing import Dict, List, Any, Optional
+from src.ebay_integration.auth_handler import EbayAuthHandler
+from src.ebay_integration.error_handler import (
+    EbayApiException,
+    EbayAuthException,
+    EbaySearchException,
+)
+
 
 class EbayBrowseApiClient:
-    """eBay Browse API を呼び出すクライアント"""
+    """eBay Browse API client for searching and fetching item details."""
     
-    EBAY_SANDBOX_BASE_URL = "https://api.sandbox.ebay.com/buy/browse/v1"
+    SANDBOX_BASE_URL = "https://api.sandbox.ebay.com/buy/browse/v1"
+    PRODUCTION_BASE_URL = "https://api.ebay.com/buy/browse/v1"
     
-    def __init__(self, auth_handler):
+    def __init__(self, auth_handler: EbayAuthHandler):
+        """Initialize with auth handler."""
         self.auth_handler = auth_handler
-        self.logger = logging.getLogger(__name__)
+        self.base_url = self.SANDBOX_BASE_URL
+        self.timeout = 15
     
-    def search(self, query: str, limit: int = 50, category_id: Optional[str] = None) -> Dict:
+    async def search(self, query: str, limit: int = 5) -> List[Dict]:
         """
-        eBay で商品検索
+        Search eBay items by keyword.
         
         Args:
-            query: 検索キーワード
-            limit: 結果数（最大100）
-            category_id: カテゴリID（オプション）
+            query: Search query string
+            limit: Maximum items to return
         
         Returns:
-            API レスポンス（正規化前）
+            List of item summaries
         """
-        url = f"{self.EBAY_SANDBOX_BASE_URL}/item_summary/search"
-        headers = self._get_headers()
+        token = self.auth_handler.get_token()
+        if not token:
+            raise EbayAuthException("Failed to get eBay token")
         
-        params = {
-            "q": query,
-            "limit": min(limit, 100),
-            "sort": "newlyListed"
-        }
+        # Check if using mock
+        if self.auth_handler.use_mock:
+            print(f"[SEARCH-MOCK] Query: {query} (limit: {limit})")
+            return self._generate_mock_search_results(query, limit)
         
-        if category_id:
-            params["category_ids"] = category_id
-        
-        response = requests.get(url, headers=headers, params=params)
-        response.raise_for_status()
-        
-        return response.json()
+        try:
+            url = f"{self.base_url}/item_summary/search?q={urllib.parse.quote(query)}&limit={limit}"
+            headers = {'Authorization': f'Bearer {token}'}
+            
+            response = requests.get(url, headers=headers, timeout=self.timeout)
+            response.raise_for_status()
+            
+            data = response.json()
+            items = data.get('itemSummaries', [])
+            print(f"[SEARCH] Found {len(items)} items for: {query}")
+            return items
+            
+        except requests.exceptions.RequestException as e:
+            raise EbaySearchException(f"eBay search failed: {e}")
     
-    def get_item(self, item_id: str) -> Dict:
+    async def get_item(self, item_id: str) -> Dict:
         """
-        eBay から商品詳細情報を取得
+        Fetch detailed item information.
         
         Args:
             item_id: eBay item ID
         
         Returns:
-            API レスポンス（正規化前）
+            Item details
         """
-        url = f"{self.EBAY_SANDBOX_BASE_URL}/item/{item_id}"
-        headers = self._get_headers()
+        token = self.auth_handler.get_token()
+        if not token:
+            raise EbayAuthException("Failed to get eBay token")
         
-        response = requests.get(url, headers=headers)
-        response.raise_for_status()
+        # Check if using mock
+        if self.auth_handler.use_mock:
+            print(f"[GETITEM-MOCK] Item ID: {item_id}")
+            return self._generate_mock_item_details(item_id)
         
-        return response.json()
+        try:
+            full_id = f"v1|{item_id}|0" if item_id.isdigit() else item_id
+            url = f"{self.base_url}/item/{full_id}"
+            headers = {'Authorization': f'Bearer {token}'}
+            
+            response = requests.get(url, headers=headers, timeout=self.timeout)
+            response.raise_for_status()
+            
+            return response.json()
+            
+        except requests.exceptions.RequestException as e:
+            raise EbaySearchException(f"eBay getItem failed: {e}")
     
-    def _get_headers(self) -> Dict:
-        """API リクエスト用ヘッダー生成"""
-        access_token = self.auth_handler.get_access_token()
+    def _generate_mock_search_results(self, query: str, limit: int) -> List[Dict]:
+        """Generate realistic mock search results for testing."""
+        mock_items = [
+            {
+                'itemId': '123456789001',
+                'title': f'{query} - Official Item #1',
+                'price': {'value': '29.99', 'currency': 'USD'},
+                'condition': 'NEW',
+                'image': {'imageUrl': 'https://via.placeholder.com/300?text=Item1'},
+                'itemWebUrl': 'https://www.ebay.com/itm/123456789001',
+            },
+            {
+                'itemId': '123456789002',
+                'title': f'{query} - Official Item #2',
+                'price': {'value': '34.99', 'currency': 'USD'},
+                'condition': 'NEW',
+                'image': {'imageUrl': 'https://via.placeholder.com/300?text=Item2'},
+                'itemWebUrl': 'https://www.ebay.com/itm/123456789002',
+            },
+            {
+                'itemId': '123456789003',
+                'title': f'{query} - Official Item #3',
+                'price': {'value': '39.99', 'currency': 'USD'},
+                'condition': 'USED',
+                'image': {'imageUrl': 'https://via.placeholder.com/300?text=Item3'},
+                'itemWebUrl': 'https://www.ebay.com/itm/123456789003',
+            },
+        ]
+        return mock_items[:limit]
+    
+    def _generate_mock_item_details(self, item_id: str) -> Dict:
+        """Generate realistic mock item details."""
         return {
-            "Authorization": f"Bearer {access_token}",
-            "Accept": "application/json"
+            'itemId': item_id,
+            'title': f'Mock Product - {item_id}',
+            'price': {'value': '34.99', 'currency': 'USD'},
+            'condition': 'NEW',
+            'image': {'imageUrl': 'https://via.placeholder.com/300?text=MockItem'},
+            'itemWebUrl': f'https://www.ebay.com/itm/{item_id}',
+            'seller': {
+                'username': 'mock_seller',
+                'feedbackPercentage': '99.5',
+                'feedbackScore': 50000,
+            },
         }
