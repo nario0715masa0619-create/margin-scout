@@ -16,7 +16,5 @@ python test_operational_multicat_nonmock.py
 REM ログ出力
 echo [%date% %time%] Research completed >> logs\deploy.log
 
-REM 結果メール通知（オプション）
-REM powershell -ExecutionPolicy Bypass -File send_email.ps1
 
 exit /b 0

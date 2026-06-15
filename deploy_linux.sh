@@ -12,5 +12,3 @@ python test_operational_multicat_nonmock.py
 # ログ出力
 echo "[$(date)] Research completed" >> logs/deploy.log
 
-# 結果メール通知（オプション）
-# bash send_email.sh

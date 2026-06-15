@@ -121,37 +121,6 @@ tail -f logs/deploy.log
 
 ---
 
-## Step 4: メール通知設定（オプション）
-
-### 4.1 Gmail アプリパスワード取得
-
-1. https://myaccount.google.com/apppasswords へアクセス
-2. 16 文字のパスワードを生成
-3. コピーして .env に設定
-
-### 4.2 .env に追加
-
-```env
-# Email Notification
-EMAIL_SMTP_SERVER=smtp.gmail.com
-EMAIL_SMTP_PORT=587
-EMAIL_SENDER=your_email@gmail.com
-EMAIL_PASSWORD=xxxx_xxxx_xxxx_xxxx
-EMAIL_RECIPIENT=recipient@example.com
-```
-
-### 4.3 メール送信テスト
-
-```bash
-python -c "
-from src.research_workflow.email_notifier import EmailNotifier
-notifier = EmailNotifier('smtp.gmail.com', 587, 'sender@gmail.com', 'password')
-notifier.send_profit_report('recipient@example.com', 'output_operational_test/test_report.json', 'output_operational_test/research_results.csv')
-"
-```
-
----
-
 ## Step 5: データベース永続化（オプション）
 
 ### 5.1 SQLite データベース作成
@@ -188,7 +157,6 @@ print('✅ Database created')
 - [ ] 最初のリサーチを手動実行して確認
 - [ ] スケジューラー設定（Windows / Linux）
 - [ ] ログファイルのパスを確認
-- [ ] メール通知を設定（オプション）
 - [ ] バックアップスクリプトを作成
 - [ ] 監視・アラート設定（オプション）
 
@@ -203,10 +171,6 @@ print('✅ Database created')
 ### Q2: スケジューラーが自動実行されない
 
 → Windows: タスク スケジューラー の履歴を確認 → Linux: cron ログを確認 (journalctl -u cron)
-
-### Q3: メール送信が失敗する
-
-→ SMTP 設定を確認（Gmail は "安全性の低いアプリ" を許可） → ファイアウォールで SMTP ポート（587）を開く
 
 ---
 
@@ -238,7 +202,7 @@ DIFF=$((NOW - LAST_RUN))
 
 if [ $DIFF -gt 108000 ]; then
     echo "❌ ALERT: Research did not run for more than 30 hours"
-    # メール送信処理などを追加
+    # アラート処理などを追加
 else
     echo "✅ Health check passed"
 fi
@@ -248,7 +212,6 @@ fi
 - [x] eBay Live API 切り替え
 - [x] スケジューラー設定
 - [x] 初回自動実行確認
-- [x] メール通知テスト
 - [ ] 📊 ダッシュボード実装（オプション）
 - [ ] 🗄️ 大規模データ蓄積（オプション）
 
