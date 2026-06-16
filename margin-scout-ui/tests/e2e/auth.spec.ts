@@ -2,7 +2,7 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Authentication Flow', () => {
-  test.use({ baseURL: 'http://localhost:5173' });
+  test.use({ baseURL: 'https://margin-scout-staging-frontend-ddc7bb12af5f.herokuapp.com' });
 
   test('unauthorized access redirects to login', async ({ page }) => {
     await page.goto('/research');
