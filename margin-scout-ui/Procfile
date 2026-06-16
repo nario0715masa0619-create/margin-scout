@@ -1,1 +1,1 @@
-web: npx serve -s dist -l $PORT --single
+web: VITE_API_BASE_URL=$VITE_API_BASE_URL npx serve -s dist -l $PORT --single
