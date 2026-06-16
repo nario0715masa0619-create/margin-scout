@@ -1,0 +1,16 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+python-multipart
+pytest
+httpx
+python-dotenv
+aiofiles
+sqlalchemy>=2.0.23
+alembic>=1.12.1
+psycopg2-binary>=2.9.9
+PyJWT>=2.8.0
+passlib[bcrypt]>=1.7.4
+
+gunicorn>=21.2.0
