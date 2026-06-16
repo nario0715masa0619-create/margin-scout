@@ -1,21 +1,25 @@
 from sqlalchemy.orm import Session
-import passlib.handlers.bcrypt
-passlib.handlers.bcrypt.detect_wrap_bug = lambda *args, **kwargs: False
-from passlib.context import CryptContext
+import bcrypt
 from app.models.user import User
 from app.models.subscription import Subscription, SubscriptionTier
 from app.security.jwt import JWTHandler
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 class AuthService:
     @staticmethod
     def get_password_hash(password: str) -> str:
-        return pwd_context.hash(password)
+        pwd_bytes = password.encode('utf-8')
+        salt = bcrypt.gensalt()
+        hashed_password = bcrypt.hashpw(pwd_bytes, salt)
+        return hashed_password.decode('utf-8')
 
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
-        return pwd_context.verify(plain_password, hashed_password)
+        password_byte_enc = plain_password.encode('utf-8')
+        hashed_password_byte_enc = hashed_password.encode('utf-8')
+        try:
+            return bcrypt.checkpw(password_byte_enc, hashed_password_byte_enc)
+        except ValueError:
+            return False
 
     @staticmethod
     def register_user(db: Session, email: str, username: str, password: str):
