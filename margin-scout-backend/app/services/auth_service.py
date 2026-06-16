@@ -1,4 +1,6 @@
 from sqlalchemy.orm import Session
+import passlib.handlers.bcrypt
+passlib.handlers.bcrypt.detect_wrap_bug = lambda *args, **kwargs: False
 from passlib.context import CryptContext
 from app.models.user import User
 from app.models.subscription import Subscription, SubscriptionTier
