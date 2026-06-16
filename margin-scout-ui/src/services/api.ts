@@ -4,7 +4,7 @@ import { useErrorStore } from '../stores/error'
 import { useAuthStore } from '../stores/auth'
 import router from '../router'
 
-const API_BASE_URL = process.env.VITE_API_BASE_URL || import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -106,4 +106,5 @@ export const researchAPI = {
 }
 
 export default api
+
 
