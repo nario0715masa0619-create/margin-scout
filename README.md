@@ -63,18 +63,24 @@ EOF
 python cli.py --category electronics --days 90 --min-sales 2
 ```
 
-## 💻 使い方
-### CLI コマンド
-```bash
-# 基本実行
-python cli.py --category electronics --days 90 --min-sales 2
+## 💻 利用方法
 
-# オプション
---category      : 検索カテゴリ (electronics, camera, fashion, hobby など)
---days          : 検索期間（日数）
---min-sales     : 最小販売数
---output-dir    : 出力ディレクトリ (デフォルト: output_operational_test/)
---verbose       : 詳細ログ出力
+### UI から実行（推奨）
+```bash
+cd margin-scout-ui
+npm run dev
+```
+ブラウザで http://localhost:5173 を開いて操作。
+
+### CLI から実行
+```bash
+python cli.py --input-csv candidates.csv --output-dir ./output
+```
+詳細は `python cli.py --help` または `docs/CLI_USAGE.md` を参照。
+
+### ヘルプ表示
+```bash
+python cli.py --help
 ```
 
 ### 出力ファイル

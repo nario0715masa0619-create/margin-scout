@@ -3,9 +3,33 @@ from typing import List, Optional, Dict, Any
 from datetime import datetime
 from app.models.research_job import JobStatus
 
+from enum import Enum
+
+class SearchOptionEnum(str, Enum):
+    on_sale = "on_sale"
+    sold_out = "sold_out"
+    fixed_price = "fixed_price"
+    auction = "auction"
+
+class ItemConditionEnum(str, Enum):
+    new = "new"
+    almost_new = "almost_new"
+    no_scratches = "no_scratches"
+    slight_scratches = "slight_scratches"
+    scratched = "scratched"
+    bad_condition = "bad_condition"
+
+class JobConditions(BaseModel):
+    keywords: List[str]
+    sources: List[str]
+    days_back: int
+    min_sales: int
+    selected_options: List[SearchOptionEnum] = Field(default_factory=list)
+    selected_conditions: List[ItemConditionEnum] = Field(default_factory=list)
+
 class JobRequest(BaseModel):
     title: Optional[str] = "Untitled Research"
-    conditions: Dict[str, Any] = Field(..., description="検索条件（キーワード、価格帯など）")
+    conditions: JobConditions = Field(..., description="検索条件（キーワード、価格帯など）")
 
 class JobResponse(BaseModel):
     id: str

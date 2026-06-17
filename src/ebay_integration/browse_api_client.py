@@ -1,139 +1,114 @@
-"""
-eBay Browse API Client with Mock Support
-"""
-
-import requests
-import urllib.parse
-from typing import Dict, List, Any, Optional
-from src.ebay_integration.auth_handler import EbayAuthHandler
-from src.ebay_integration.error_handler import (
-    EbayApiException,
-    EbayAuthException,
-    EbaySearchException,
-)
-
+import aiohttp
+import asyncio
+from typing import Optional, Dict, List
 
 class EbayBrowseApiClient:
-    """eBay Browse API client for searching and fetching item details."""
+    """eBay Browse API クライアント"""
     
-    SANDBOX_BASE_URL = "https://api.sandbox.ebay.com/buy/browse/v1"
-    PRODUCTION_BASE_URL = "https://api.ebay.com/buy/browse/v1"
-    
-    def __init__(self, auth_handler: EbayAuthHandler):
-        """Initialize with auth handler."""
+    def __init__(self, auth_handler):
+        """
+        初期化（後方互換性維持）
+        
+        Args:
+            auth_handler: EbayAuthHandler インスタンス
+        """
         self.auth_handler = auth_handler
-        self.base_url = self.SANDBOX_BASE_URL
-        self.timeout = 15
+        self.api_mode = auth_handler.api_mode
+        self.token = auth_handler.get_token()
+        
+        # API ホスト設定
+        if self.api_mode == 'sandbox':
+            self.api_host = 'api.sandbox.ebay.com'
+        else:
+            self.api_host = 'api.ebay.com'
+        
+        self.base_url = f'https://{self.api_host}/buy/browse/v1'
     
-    async def search(self, query: str, limit: int = 5) -> List[Dict]:
+    async def search(
+        self,
+        q: str,
+        limit: int = 10,
+        sort: str = 'newlyListed',
+        **kwargs
+    ) -> List[Dict]:
         """
-        Search eBay items by keyword.
+        eBay で商品を検索
         
         Args:
-            query: Search query string
-            limit: Maximum items to return
-        
+            q (str): 検索キーワード
+            limit (int): 返す最大件数
+            sort (str): ソート方法
+            
         Returns:
-            List of item summaries
+            Dict: API レスポンス
         """
-        token = self.auth_handler.get_token()
-        if not token:
-            raise EbayAuthException("Failed to get eBay token")
+        endpoint = f'{self.base_url}/item_summary/search'
         
-        # Check if using mock
-        if self.auth_handler.use_mock:
-            print(f"[SEARCH-MOCK] Query: {query} (limit: {limit})")
-            return self._generate_mock_search_results(query, limit)
-        
-        try:
-            url = f"{self.base_url}/item_summary/search?q={urllib.parse.quote(query)}&limit={limit}"
-            headers = {'Authorization': f'Bearer {token}'}
-            
-            response = requests.get(url, headers=headers, timeout=self.timeout)
-            response.raise_for_status()
-            
-            data = response.json()
-            items = data.get('itemSummaries', [])
-            print(f"[SEARCH] Found {len(items)} items for: {query}")
-            return items
-            
-        except requests.exceptions.RequestException as e:
-            raise EbaySearchException(f"eBay search failed: {e}")
-    
-    async def get_item(self, item_id: str) -> Dict:
-        """
-        Fetch detailed item information.
-        
-        Args:
-            item_id: eBay item ID
-        
-        Returns:
-            Item details
-        """
-        token = self.auth_handler.get_token()
-        if not token:
-            raise EbayAuthException("Failed to get eBay token")
-        
-        # Check if using mock
-        if self.auth_handler.use_mock:
-            print(f"[GETITEM-MOCK] Item ID: {item_id}")
-            return self._generate_mock_item_details(item_id)
-        
-        try:
-            full_id = f"v1|{item_id}|0" if item_id.isdigit() else item_id
-            url = f"{self.base_url}/item/{full_id}"
-            headers = {'Authorization': f'Bearer {token}'}
-            
-            response = requests.get(url, headers=headers, timeout=self.timeout)
-            response.raise_for_status()
-            
-            return response.json()
-            
-        except requests.exceptions.RequestException as e:
-            raise EbaySearchException(f"eBay getItem failed: {e}")
-    
-    def _generate_mock_search_results(self, query: str, limit: int) -> List[Dict]:
-        """Generate realistic mock search results for testing."""
-        mock_items = [
-            {
-                'itemId': '123456789001',
-                'title': f'{query} - Official Item #1',
-                'price': {'value': '29.99', 'currency': 'USD'},
-                'condition': 'NEW',
-                'image': {'imageUrl': 'https://via.placeholder.com/300?text=Item1'},
-                'itemWebUrl': 'https://www.ebay.com/itm/123456789001',
-            },
-            {
-                'itemId': '123456789002',
-                'title': f'{query} - Official Item #2',
-                'price': {'value': '34.99', 'currency': 'USD'},
-                'condition': 'NEW',
-                'image': {'imageUrl': 'https://via.placeholder.com/300?text=Item2'},
-                'itemWebUrl': 'https://www.ebay.com/itm/123456789002',
-            },
-            {
-                'itemId': '123456789003',
-                'title': f'{query} - Official Item #3',
-                'price': {'value': '39.99', 'currency': 'USD'},
-                'condition': 'USED',
-                'image': {'imageUrl': 'https://via.placeholder.com/300?text=Item3'},
-                'itemWebUrl': 'https://www.ebay.com/itm/123456789003',
-            },
-        ]
-        return mock_items[:limit]
-    
-    def _generate_mock_item_details(self, item_id: str) -> Dict:
-        """Generate realistic mock item details."""
-        return {
-            'itemId': item_id,
-            'title': f'Mock Product - {item_id}',
-            'price': {'value': '34.99', 'currency': 'USD'},
-            'condition': 'NEW',
-            'image': {'imageUrl': 'https://via.placeholder.com/300?text=MockItem'},
-            'itemWebUrl': f'https://www.ebay.com/itm/{item_id}',
-            'seller': {
-                'username': 'mock_seller',
-                'feedbackPercentage': '99.5',
-                'feedbackScore': 50000,
-            },
+        headers = {
+            'Authorization': f'Bearer {self.token}',
+            'Content-Type': 'application/json'
         }
+        
+        params = {
+            'q': q,
+            'limit': limit,
+            'sort': sort
+        }
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    endpoint,
+                    headers=headers,
+                    params=params,
+                    timeout=aiohttp.ClientTimeout(total=15)
+                ) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        return data.get('itemSummaries', [])
+                    else:
+                        print(f'[ERROR] Browse API error: {response.status}')
+                        text = await response.text()
+                        print(f'[ERROR] Response: {text}')
+                        return []
+        
+        except asyncio.TimeoutError:
+            print('[ERROR] Browse API request timeout')
+            return []
+        except Exception as e:
+            print(f'[ERROR] Browse API request failed: {str(e)}')
+            return []
+    
+    async def get_item(self, item_id: str) -> Optional[Dict]:
+        """
+        eBay で特定の商品情報を取得
+        
+        Args:
+            item_id (str): 商品 ID
+            
+        Returns:
+            Dict: API レスポンス
+        """
+        endpoint = f'{self.base_url}/item/{item_id}'
+        
+        headers = {
+            'Authorization': f'Bearer {self.token}',
+            'Content-Type': 'application/json'
+        }
+        
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.get(
+                    endpoint,
+                    headers=headers,
+                    timeout=aiohttp.ClientTimeout(total=15)
+                ) as response:
+                    if response.status == 200:
+                        return await response.json()
+                    else:
+                        print(f'[ERROR] Get item error: {response.status}')
+                        return None
+        
+        except Exception as e:
+            print(f'[ERROR] Get item request failed: {str(e)}')
+            return None

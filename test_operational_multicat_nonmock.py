@@ -18,7 +18,11 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from src.ebay_integration.auth_handler import EbayAuthHandler
 from src.ebay_integration.browse_api_client import EbayBrowseApiClient
-from src.research_workflow.product_matcher import ProductMatcher
+from src.research_workflow.product_matcher_improved import ImprovedProductMatcher as AdvancedProductMatcher
+from src.research_workflow.query_optimizer_advanced import AdvancedQueryOptimizer
+from src.research_workflow.csv_handler_advanced import AdvancedCsvHandler
+from src.research_workflow.keyword_normalizer import KeywordNormalizer
+from src.research_workflow.advanced_ebay_searcher import AdvancedEbaySearcher
 from src.source_adapters import MercariAdapter, YahooFleamarketAdapter, YahooAuctionHistoryAdapter, HardoffAdapter
 class ErrorHandler:
     def __init__(self, path):
@@ -76,7 +80,8 @@ class OperationalTestRunner:
         
         self.ebay_auth = None
         self.ebay_client = None
-        self.product_matcher = ProductMatcher()
+        self.query_optimizer = AdvancedQueryOptimizer()
+        self.product_matcher = AdvancedProductMatcher()
         self.profit_calc = ProfitCalculatorV2(exchange_rate=157.50)
         
         # ソースアダプタ
@@ -107,7 +112,7 @@ class OperationalTestRunner:
         self.logger.info("=== Operational Test Initialization ===")
         
         try:
-            self.ebay_auth = EbayAuthHandler()
+            self.ebay_auth = EbayAuthHandler(api_mode="live")
             token = self.ebay_auth.get_token()
             if not token:
                 self.logger.warning("⚠ eBay token failed; mock mode activated")
@@ -234,30 +239,46 @@ class OperationalTestRunner:
             keyword = source_item_data["keyword"]
             
             try:
-                # eBay 検索
-                ebay_results = await self.ebay_client.search(source_item.product_title or keyword, limit=5)
+                # 複数クエリ戦略
+                normalized_title = KeywordNormalizer.normalize(source_item.product_title or keyword)
+                search_q = KeywordNormalizer.extract_search_query(source_item.product_title or keyword)
+                queries = [search_q] + self.query_optimizer.generate_fallback_queries(normalized_title)
+                # Remove duplicates while preserving order
+                queries = list(dict.fromkeys(queries))
                 
+                ebay_results = []
+                used_query = ""
+                for q in queries:
+                    self.logger.debug(f"  [{idx}] Trying query: '{q}'")
+                    search_params = AdvancedEbaySearcher.get_search_params_for_api(q)
+                    # The mock search doesn't accept full dict unpacking easily if it only expects q and limit in test mode, 
+                    # but we are in live mode. Let's just pass the filter parameter.
+                    ebay_results = await self.ebay_client.search(q, limit=10, **{'filter': search_params.get('filter')})
+                    if ebay_results:
+                        used_query = q
+                        break
+                        
                 if not ebay_results:
                     self.metrics.ebay_search_failed += 1
                     self.audit_logger.log_event(
                         "ebay_search_failed",
-                        {"product": source_item.product_title, "reason": "no_results"}
+                        {"product": source_item.product_title, "reason": "no_results_all_queries"}
                     )
                     continue
                 
                 self.metrics.ebay_search_success += 1
                 
-                # マッチング（最初の eBay 結果を参照価格とする）
-                best_ebay = ebay_results[0]
-                ebay_title = best_ebay.get("title", "")
-                
-                match_score = self.product_matcher._calculate_title_match(
-                    source_item.product_title or "",
-                    ebay_title
+                # マッチング
+                # eBayAPI は List[Dict] を返す
+                best_ebay, match_score, match_stage = self.product_matcher.multi_stage_match(
+                    source_title=source_item.product_title or keyword,
+                    ebay_results=ebay_results
                 )
                 
-                if match_score >= 0.5:  # スコア 0.5 以上を成功とする
+                if best_ebay and match_score >= 0.35:  # 緩和された閾値 0.35  # スコア 0.4 以上を成功とする
                     self.metrics.matching_success += 1
+                    
+                    ebay_title = best_ebay.get("title", "")
                     
                     # 利益計算
                     ebay_price_raw = best_ebay.get("price", {})

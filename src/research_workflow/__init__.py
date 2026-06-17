@@ -12,7 +12,7 @@ from .research_data import (
     JudgementFlag,
     Condition,
 )
-from .research_processor import ResearchWorkflowProcessor
+# from .research_processor import ResearchWorkflowProcessor
 
 __all__ = [
     'ResearchCandidate',
@@ -21,5 +21,5 @@ __all__ = [
     'ResearchStatus',
     'JudgementFlag',
     'Condition',
-    'ResearchWorkflowProcessor',
+    # 'ResearchWorkflowProcessor',
 ]

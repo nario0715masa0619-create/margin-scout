@@ -1,12 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 
+import type { SearchOption, ItemCondition } from '../types/research'
+
 // ==================== Types ====================
 export interface ExecutionConditions {
   sources: string[]
   keywords: string[]
   daysBack: number
   minSales: number
+  selectedOptions: SearchOption[]
+  selectedConditions: ItemCondition[]
 }
 
 export interface JobState {
@@ -43,6 +47,8 @@ export const useResearchStore = defineStore('research', () => {
     keywords: [],
     daysBack: 90,
     minSales: 2,
+    selectedOptions: ['on_sale', 'fixed_price'],
+    selectedConditions: ['new', 'almost_new', 'no_scratches']
   })
 
   // State: ジョブ実行状態 (S02)

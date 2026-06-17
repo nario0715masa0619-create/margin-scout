@@ -1,92 +1,84 @@
-"""
-eBay OAuth 2.0 Authentication Handler with Mock Support
-"""
-
 import os
 import requests
-from datetime import datetime, timedelta
-from typing import Optional
+from dotenv import load_dotenv
+from pathlib import Path
 
+# .env を読み込み
+load_dotenv(Path.home() / '.marginscount' / '.env')
 
 class EbayAuthHandler:
-    """
-    Handle eBay OAuth 2.0 authentication (Client Credentials flow).
-    Supports mock mode for testing when credentials are not available.
-    """
+    """eBay OAuth 認証ハンドラー"""
     
-    SANDBOX_AUTH_URL = "https://api.sandbox.ebay.com/identity/v1/oauth2/token"
-    PRODUCTION_AUTH_URL = "https://api.ebay.com/identity/v1/oauth2/token"
-    
-    def __init__(self, use_mock: bool = False):
+    def __init__(self, api_mode='sandbox'):
         """
-        Initialize auth handler.
+        初期化
         
         Args:
-            use_mock: If True, use mock token instead of real eBay auth
+            api_mode (str): 'sandbox' または 'live'
         """
-        self.client_id = os.getenv('EBAY_BROWSE_CLIENT_ID', '')
-        self.client_secret = os.getenv('EBAY_BROWSE_CLIENT_SECRET', '')
-        self.use_mock = use_mock or (not self.client_id or not self.client_secret)
+        self.api_mode = api_mode
+        self.client_id = os.getenv('EBAY_CLIENT_ID', '')
+        self.client_secret = os.getenv('EBAY_CLIENT_SECRET', '')
         
+        # エンドポイント設定
+        if api_mode == 'sandbox':
+            self.auth_host = 'api.sandbox.ebay.com'
+        else:
+            self.auth_host = 'api.ebay.com'
+        
+        self.auth_url = f'https://{self.auth_host}/identity/v1/oauth2/token'
         self.token = None
-        self.token_expiry = None
-        self.scope = 'https://api.ebay.com/oauth/api_scope'
+        self._token_timestamp = None
     
-    def get_token(self) -> Optional[str]:
+    def get_token(self):
         """
-        Get valid eBay OAuth token. Refresh if expired.
+        eBay OAuth トークンを取得
         
         Returns:
-            str: Valid access token, or None if auth fails
+            str: OAuth トークン
+            
+        Raises:
+            ValueError: クレデンシャルが設定されていない場合
+            requests.RequestException: OAuth サーバーからのエラー
         """
-        # Check if token is still valid (5 min buffer)
-        if self.token and self.token_expiry and datetime.now() < (self.token_expiry - timedelta(minutes=5)):
+        # クレデンシャル確認
+        if not self.client_id or not self.client_secret:
+            raise ValueError(
+                f'eBay credentials not configured. '
+                f'Please set EBAY_CLIENT_ID and EBAY_CLIENT_SECRET in .env '
+                f'(path: {Path.home() / ".marginscount" / ".env"})'
+            )
+        
+        # キャッシュ済みトークンがあれば返す（簡易版）
+        if self.token:
             return self.token
         
-        # Use mock token if credentials not available
-        if self.use_mock:
-            print("[AUTH] Using mock token (credentials not configured)")
-            self.token = self._generate_mock_token()
-            self.token_expiry = datetime.now() + timedelta(hours=1)
-            return self.token
-        
-        # Try real eBay auth
+        # OAuth リクエスト
         try:
-            print("[AUTH] Authenticating with eBay Sandbox...")
+            headers = {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+            data = {
+                'grant_type': 'client_credentials',
+                'scope': 'https://api.ebay.com/oauth/api_scope'
+            }
+            
             response = requests.post(
-                self.SANDBOX_AUTH_URL,
+                self.auth_url,
+                headers=headers,
+                data=data,
                 auth=(self.client_id, self.client_secret),
-                data={
-                    'grant_type': 'client_credentials',
-                    'scope': self.scope
-                },
                 timeout=15
             )
-            response.raise_for_status()
             
-            data = response.json()
-            self.token = data.get('access_token')
-            expires_in = data.get('expires_in', 3600)
-            self.token_expiry = datetime.now() + timedelta(seconds=expires_in)
-            
-            print(f"[AUTH] Token acquired (expires in {expires_in}s)")
-            return self.token
-            
-        except requests.exceptions.RequestException as e:
-            print(f"[AUTH] eBay auth failed: {e}")
-            print("[AUTH] Falling back to mock token for testing")
-            self.use_mock = True
-            self.token = self._generate_mock_token()
-            self.token_expiry = datetime.now() + timedelta(hours=1)
-            return self.token
-    
-    def _generate_mock_token(self) -> str:
-        """Generate a mock token for testing."""
-        # Format: v1|<timestamp>|<mock_id>
-        import time
-        timestamp = int(time.time())
-        return f"v1|{timestamp}|mock_sandbox_token_for_testing_only"
-    
-    def is_valid(self) -> bool:
-        """Check if current token is valid."""
-        return bool(self.token and (not self.token_expiry or datetime.now() < self.token_expiry))
+            if response.status_code == 200:
+                result = response.json()
+                self.token = result.get('access_token')
+                print(f'[AUTH] Token obtained from {self.auth_host}')
+                return self.token
+            else:
+                raise Exception(f'OAuth error: {response.status_code} - {response.text}')
+        
+        except requests.RequestException as e:
+            raise Exception(f'OAuth request failed: {str(e)}')
+

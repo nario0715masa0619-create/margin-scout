@@ -8,47 +8,21 @@ class ProductMatcher:
     
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+        # Threshold lowered from 0.5 to 0.4 as per Phase B
+        self.min_match_score = 0.4
     
     def generate_search_query(self, source_product: Dict) -> str:
         """
-        仕入れ元の商品情報から eBay 検索クエリを生成
-        
-        Args:
-            source_product: {
-                "product_name": str,
-                "brand": Optional[str],
-                "model_number": Optional[str],
-                "category": Optional[str],
-            }
-        
-        Returns:
-            検索クエリ文字列
+        [DEPRECATED] QueryOptimizer.generate_queries を代わりに使用してください。
+        互換性のために残しています。
         """
-        query_parts = []
-        
-        # ブランド + モデル番号 を優先
-        if source_product.get("brand") and source_product.get("model_number"):
-            query = f"{source_product['brand']} {source_product['model_number']}"
-            query_parts.append(query)
-        
-        # 商品名全体
-        query_parts.append(source_product.get("product_name", ""))
-        
-        # 商品名から最初の2-3単語を抽出（ブランド + キータイプ）
-        name_parts = source_product.get("product_name", "").split()
-        if len(name_parts) >= 2:
-            query_parts.append(" ".join(name_parts[:3]))
-        
-        # クエリを組み立て（最初のものを使用）
-        final_query = query_parts[0] if query_parts else "product"
-        
-        self.logger.debug(f"Generated search query: {final_query}")
-        return final_query
+        return source_product.get("product_name", "product")
     
     def match_items(
         self,
         source_product: Dict,
-        ebay_search_results: List[Dict]
+        ebay_search_results: List[Dict],
+        source_price_jpy: Optional[float] = None
     ) -> Tuple[Optional[Dict], float]:
         """
         eBay 検索結果から最適な商品を選択
@@ -56,6 +30,7 @@ class ProductMatcher:
         Args:
             source_product: 仕入れ元商品
             ebay_search_results: eBay search API の結果リスト
+            source_price_jpy: 仕入れ価格（価格チェック用）
         
         Returns:
             (最適な eBay 商品, 信頼度スコア)
@@ -67,14 +42,39 @@ class ProductMatcher:
         best_score = 0.0
         
         for ebay_item in ebay_search_results:
+            # 価格チェック（10倍以上の乖離があれば除外）
+            if source_price_jpy is not None and source_price_jpy > 0:
+                ebay_price_raw = ebay_item.get("price", {})
+                ebay_price_usd = 0.0
+                if isinstance(ebay_price_raw, dict):
+                    ebay_price_usd = float(ebay_price_raw.get("value", 0))
+                else:
+                    ebay_price_usd = float(ebay_price_raw)
+                    
+                # 簡易的に 1 USD = 150 JPY として計算
+                ebay_price_jpy_est = ebay_price_usd * 150
+                
+                # 異常な価格差（10倍以上違う）場合はスキップ
+                if ebay_price_jpy_est > 0:
+                    ratio = source_price_jpy / ebay_price_jpy_est
+                    if ratio > 10.0 or ratio < 0.1:
+                        self.logger.debug(f"Skipping due to extreme price difference: JPY {source_price_jpy} vs USD {ebay_price_usd}")
+                        continue
+
             score = self._calculate_match_score(source_product, ebay_item)
             
+            # 完全一致レベルなら即時採用（1.0）
+            if score >= 0.99:
+                best_score = score
+                best_match = ebay_item
+                break
+                
             if score > best_score:
                 best_score = score
                 best_match = ebay_item
         
         # 信頼度が低すぎる場合は除外
-        if best_score < 0.5:
+        if best_score < self.min_match_score:
             self.logger.warning(
                 f"Match confidence too low ({best_score:.2%}) for {source_product.get('product_name')}"
             )

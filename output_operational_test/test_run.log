@@ -139,3 +139,1210 @@ Category: hobby
 === Cleanup ===
 2026-06-15 11:18:51,556 - INFO - ✅ Closed browser
 2026-06-15 11:18:51,572 - INFO - ✅ Stopped playwright
+2026-06-15 15:32:55,236 - INFO - === Operational Test Initialization ===
+2026-06-15 15:32:56,064 - INFO - ✅ eBay token acquired successfully
+2026-06-15 15:32:57,295 - INFO - ✅ All components initialized
+2026-06-15 15:32:57,295 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 15:32:57,295 - INFO - 
+Category: electronics
+2026-06-15 15:32:57,295 - INFO -   Testing keyword: iPhone
+2026-06-15 15:32:57,295 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 15:33:00,805 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:00,805 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 15:33:01,803 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:01,803 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 15:33:03,629 - INFO -     ✅ Found 1 items
+2026-06-15 15:33:03,629 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 15:33:05,505 - INFO -     ✅ Found 0 items
+2026-06-15 15:33:05,505 - INFO - 
+Category: camera
+2026-06-15 15:33:05,505 - INFO -   Testing keyword: Canon EOS
+2026-06-15 15:33:05,505 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 15:33:07,960 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:07,960 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 15:33:08,867 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:08,867 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 15:33:10,683 - INFO -     ✅ Found 1 items
+2026-06-15 15:33:10,683 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 15:33:12,010 - INFO -     ✅ Found 0 items
+2026-06-15 15:33:12,010 - INFO - 
+Category: games
+2026-06-15 15:33:12,010 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 15:33:12,010 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 15:33:14,479 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:14,479 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 15:33:15,322 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:15,322 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 15:33:17,106 - INFO -     ✅ Found 1 items
+2026-06-15 15:33:17,106 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 15:33:18,332 - INFO -     ✅ Found 0 items
+2026-06-15 15:33:18,332 - INFO - 
+Category: fashion
+2026-06-15 15:33:18,332 - INFO -   Testing keyword: Gucci
+2026-06-15 15:33:18,332 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 15:33:19,811 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:19,811 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 15:33:20,558 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:20,558 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 15:33:22,231 - INFO -     ✅ Found 1 items
+2026-06-15 15:33:22,231 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 15:33:23,513 - INFO -     ✅ Found 0 items
+2026-06-15 15:33:23,513 - INFO - 
+Category: hobby
+2026-06-15 15:33:23,513 - INFO -   Testing keyword: LEGO
+2026-06-15 15:33:23,513 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 15:33:25,197 - INFO -     ✅ Found 2 items
+2026-06-15 15:33:25,197 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 15:33:25,990 - INFO -     ✅ Found 5 items
+2026-06-15 15:33:25,990 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 15:33:27,694 - INFO -     ✅ Found 1 items
+2026-06-15 15:33:27,694 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 15:33:28,868 - INFO -     ✅ Found 0 items
+2026-06-15 15:33:28,868 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 15:33:28,868 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 15:33:28,868 - ERROR -   ❌ eBay search failed: 'EbayBrowseApiClient' object has no attribute 'search'
+2026-06-15 15:33:28,868 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 15:33:28,868 - ERROR -   ❌ eBay search failed: 'EbayBrowseApiClient' object has no attribute 'search'
+2026-06-15 15:33:28,868 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 15:33:28,868 - ERROR -   ❌ eBay search failed: 'EbayBrowseApiClient' object has no attribute 'search'
+2026-06-15 15:33:28,868 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 15:33:28,868 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 15:34:21,280 - INFO - === Operational Test Initialization ===
+2026-06-15 15:34:21,811 - INFO - ✅ eBay token acquired successfully
+2026-06-15 15:34:22,418 - INFO - ✅ All components initialized
+2026-06-15 15:34:22,418 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 15:34:22,418 - INFO - 
+Category: electronics
+2026-06-15 15:34:22,418 - INFO -   Testing keyword: iPhone
+2026-06-15 15:34:22,418 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 15:34:26,362 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:26,362 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 15:34:27,387 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:27,387 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 15:34:29,475 - INFO -     ✅ Found 1 items
+2026-06-15 15:34:29,475 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 15:34:31,163 - INFO -     ✅ Found 0 items
+2026-06-15 15:34:31,163 - INFO - 
+Category: camera
+2026-06-15 15:34:31,163 - INFO -   Testing keyword: Canon EOS
+2026-06-15 15:34:31,163 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 15:34:33,632 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:33,632 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 15:34:35,615 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:35,615 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 15:34:37,696 - INFO -     ✅ Found 1 items
+2026-06-15 15:34:37,696 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 15:34:38,985 - INFO -     ✅ Found 0 items
+2026-06-15 15:34:38,985 - INFO - 
+Category: games
+2026-06-15 15:34:38,985 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 15:34:38,985 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 15:34:41,792 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:41,792 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 15:34:42,465 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:42,465 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 15:34:44,416 - INFO -     ✅ Found 1 items
+2026-06-15 15:34:44,416 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 15:34:45,632 - INFO -     ✅ Found 0 items
+2026-06-15 15:34:45,632 - INFO - 
+Category: fashion
+2026-06-15 15:34:45,632 - INFO -   Testing keyword: Gucci
+2026-06-15 15:34:45,632 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 15:34:47,658 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:47,658 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 15:34:49,004 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:49,004 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 15:34:50,722 - INFO -     ✅ Found 1 items
+2026-06-15 15:34:50,722 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 15:34:51,976 - INFO -     ✅ Found 0 items
+2026-06-15 15:34:51,976 - INFO - 
+Category: hobby
+2026-06-15 15:34:51,976 - INFO -   Testing keyword: LEGO
+2026-06-15 15:34:51,976 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 15:34:53,708 - INFO -     ✅ Found 1 items
+2026-06-15 15:34:53,708 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 15:34:54,458 - INFO -     ✅ Found 5 items
+2026-06-15 15:34:54,458 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 15:34:56,210 - INFO -     ✅ Found 1 items
+2026-06-15 15:34:56,210 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 15:34:57,407 - INFO -     ✅ Found 0 items
+2026-06-15 15:34:57,407 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 15:34:57,407 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 15:34:59,359 - INFO -   ✅ Found 6 items
+2026-06-15 15:34:59,359 - ERROR -   ❌ eBay search failed: slice(None, 2, None)
+2026-06-15 15:34:59,359 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 15:34:59,708 - INFO -   ✅ Found 4 items
+2026-06-15 15:34:59,708 - ERROR -   ❌ eBay search failed: slice(None, 2, None)
+2026-06-15 15:34:59,708 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 15:35:00,252 - INFO -   ✅ Found 4 items
+2026-06-15 15:35:00,252 - ERROR -   ❌ eBay search failed: slice(None, 2, None)
+2026-06-15 15:35:00,252 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 15:35:00,252 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 15:35:46,187 - INFO - === Operational Test Initialization ===
+2026-06-15 15:35:46,862 - INFO - ✅ eBay token acquired successfully
+2026-06-15 15:35:47,508 - INFO - ✅ All components initialized
+2026-06-15 15:35:47,508 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 15:35:47,508 - INFO - 
+Category: electronics
+2026-06-15 15:35:47,508 - INFO -   Testing keyword: iPhone
+2026-06-15 15:35:47,508 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 15:35:50,801 - INFO -     ✅ Found 5 items
+2026-06-15 15:35:50,801 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 15:35:51,805 - INFO -     ✅ Found 5 items
+2026-06-15 15:35:51,805 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 15:35:53,533 - INFO -     ✅ Found 1 items
+2026-06-15 15:35:53,533 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 15:35:55,227 - INFO -     ✅ Found 0 items
+2026-06-15 15:35:55,227 - INFO - 
+Category: camera
+2026-06-15 15:35:55,227 - INFO -   Testing keyword: Canon EOS
+2026-06-15 15:35:55,227 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 15:35:56,190 - INFO -     ✅ Found 5 items
+2026-06-15 15:35:56,190 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 15:35:57,056 - INFO -     ✅ Found 5 items
+2026-06-15 15:35:57,056 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 15:35:58,925 - INFO -     ✅ Found 1 items
+2026-06-15 15:35:58,925 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 15:36:00,199 - INFO -     ✅ Found 0 items
+2026-06-15 15:36:00,200 - INFO - 
+Category: games
+2026-06-15 15:36:00,200 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 15:36:00,200 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 15:36:01,732 - INFO -   ✅ Total source items: 53
+2026-06-15 15:36:01,732 - INFO - 
+[Step 2] Processing 53 items...
+2026-06-15 15:36:02,035 - INFO -     ✅ Found 5 items
+2026-06-15 15:36:02,035 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 15:36:02,734 - DEBUG -   [1] ⚠ Skipped: 0
+2026-06-15 15:36:02,797 - INFO -     ✅ Found 5 items
+2026-06-15 15:36:02,797 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 15:36:03,133 - DEBUG -   [2] ⚠ Skipped: 0
+2026-06-15 15:36:03,513 - DEBUG -   [3] ⚠ Skipped: 0
+2026-06-15 15:36:04,037 - DEBUG -   [4] ⚠ Skipped: 0
+2026-06-15 15:36:04,631 - INFO -     ✅ Found 1 items
+2026-06-15 15:36:04,631 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 15:36:04,632 - DEBUG -   [5] ⚠ Skipped: 0
+2026-06-15 15:36:05,048 - DEBUG -   [6] ⚠ Skipped: 0
+2026-06-15 15:36:05,541 - DEBUG -   [7] ⚠ Skipped: 0
+2026-06-15 15:36:05,837 - INFO -     ✅ Found 0 items
+2026-06-15 15:36:05,837 - INFO - 
+Category: fashion
+2026-06-15 15:36:05,837 - INFO -   Testing keyword: Gucci
+2026-06-15 15:36:05,837 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 15:36:05,982 - DEBUG -   [8] ⚠ Skipped: 0
+2026-06-15 15:36:06,376 - DEBUG -   [9] ⚠ Skipped: 0
+2026-06-15 15:36:06,705 - DEBUG -   [10] ⚠ Skipped: 0
+2026-06-15 15:36:07,076 - DEBUG -   [11] ⚠ Skipped: 0
+2026-06-15 15:36:07,502 - DEBUG -   [12] ⚠ Skipped: 0
+2026-06-15 15:36:07,826 - INFO -     ✅ Found 5 items
+2026-06-15 15:36:07,826 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 15:36:07,902 - DEBUG -   [13] ⚠ Skipped: 0
+2026-06-15 15:36:08,312 - DEBUG -   [14] ⚠ Skipped: 0
+2026-06-15 15:36:08,620 - INFO -     ✅ Found 5 items
+2026-06-15 15:36:08,620 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 15:36:08,744 - DEBUG -   [15] ⚠ Skipped: 0
+2026-06-15 15:36:09,181 - DEBUG -   [16] ⚠ Skipped: 0
+2026-06-15 15:36:09,615 - DEBUG -   [17] ⚠ Skipped: 0
+2026-06-15 15:36:10,033 - DEBUG -   [18] ⚠ Skipped: 0
+2026-06-15 15:36:10,294 - INFO -     ✅ Found 1 items
+2026-06-15 15:36:10,294 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 15:36:10,612 - DEBUG -   [19] ⚠ Skipped: 0
+2026-06-15 15:36:11,011 - DEBUG -   [20] ⚠ Skipped: 0
+2026-06-15 15:36:11,520 - INFO -     ✅ Found 0 items
+2026-06-15 15:36:11,520 - INFO - 
+Category: hobby
+2026-06-15 15:36:11,520 - INFO -   Testing keyword: LEGO
+2026-06-15 15:36:11,520 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 15:36:11,870 - DEBUG -   [21] ⚠ Skipped: 0
+2026-06-15 15:36:12,323 - DEBUG -   [22] ⚠ Skipped: 0
+2026-06-15 15:36:12,806 - DEBUG -   [23] ⚠ Skipped: 0
+2026-06-15 15:36:13,202 - DEBUG -   [24] ⚠ Skipped: 0
+2026-06-15 15:36:13,237 - INFO -     ✅ Found 2 items
+2026-06-15 15:36:13,237 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 15:36:13,610 - DEBUG -   [25] ⚠ Skipped: 0
+2026-06-15 15:36:13,926 - DEBUG -   [26] ⚠ Skipped: 0
+2026-06-15 15:36:13,942 - INFO -     ✅ Found 5 items
+2026-06-15 15:36:13,942 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 15:36:14,333 - DEBUG -   [27] ⚠ Skipped: 0
+2026-06-15 15:36:14,730 - DEBUG -   [28] ⚠ Skipped: 0
+2026-06-15 15:36:15,505 - DEBUG -   [29] ⚠ Skipped: 0
+2026-06-15 15:36:15,735 - INFO -     ✅ Found 1 items
+2026-06-15 15:36:15,735 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 15:36:16,058 - DEBUG -   [30] ⚠ Skipped: 0
+2026-06-15 15:36:16,437 - DEBUG -   [31] ⚠ Skipped: 0
+2026-06-15 15:36:16,839 - DEBUG -   [32] ⚠ Skipped: 0
+2026-06-15 15:36:16,902 - INFO -     ✅ Found 0 items
+2026-06-15 15:36:16,902 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 15:36:16,902 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 15:36:17,161 - DEBUG -   [33] ⚠ Skipped: 0
+2026-06-15 15:36:17,577 - DEBUG -   [34] ⚠ Skipped: 0
+2026-06-15 15:36:18,022 - DEBUG -   [35] ⚠ Skipped: 0
+2026-06-15 15:36:18,366 - DEBUG -   [36] ⚠ Skipped: 0
+2026-06-15 15:36:18,775 - DEBUG -   [37] ⚠ Skipped: 0
+2026-06-15 15:36:18,817 - INFO -   ✅ Found 3 items
+2026-06-15 15:36:18,817 - INFO -     - Test Dropship iPhone 12 Pro Max - 128GB: ${'value': '776.01', 'currency': 'USD'}
+2026-06-15 15:36:18,817 - INFO -     - Iphone 12: ${'value': '0.99', 'currency': 'USD'}
+2026-06-15 15:36:18,817 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 15:36:19,152 - WARNING -   ❌ No results for 'Sony Alpha'
+2026-06-15 15:36:19,152 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 15:36:19,156 - DEBUG -   [38] ⚠ Skipped: 0
+2026-06-15 15:36:19,697 - WARNING -   ❌ No results for 'Pokemon Card'
+2026-06-15 15:36:19,697 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 15:36:19,697 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 15:36:19,827 - DEBUG -   [39] ⚠ Skipped: 0
+2026-06-15 15:36:20,275 - DEBUG -   [40] ⚠ Skipped: 0
+2026-06-15 15:36:20,631 - DEBUG -   [41] ⚠ Skipped: 0
+2026-06-15 15:36:21,108 - DEBUG -   [42] ⚠ Skipped: 0
+2026-06-15 15:36:21,599 - DEBUG -   [43] ⚠ Skipped: 0
+2026-06-15 15:36:21,995 - DEBUG -   [44] ⚠ Skipped: 0
+2026-06-15 15:36:22,375 - DEBUG -   [45] ⚠ Skipped: 0
+2026-06-15 15:36:22,724 - DEBUG -   [46] ⚠ Skipped: 0
+2026-06-15 15:36:23,116 - DEBUG -   [47] ⚠ Skipped: 0
+2026-06-15 15:36:23,548 - DEBUG -   [48] ⚠ Skipped: 0
+2026-06-15 15:36:24,065 - DEBUG -   [49] ⚠ Skipped: 0
+2026-06-15 15:36:24,463 - DEBUG -   [50] ⚠ Skipped: 0
+2026-06-15 15:36:24,862 - DEBUG -   [51] ⚠ Skipped: 0
+2026-06-15 15:36:26,991 - DEBUG -   [52] ⚠ Skipped: 0
+2026-06-15 15:36:28,627 - DEBUG -   [53] ⚠ Skipped: 0
+2026-06-15 15:36:28,628 - WARNING - ⚠ No results to output
+2026-06-15 15:36:28,628 - INFO - 
+✅ Test report: output_operational_test\test_report.json
+2026-06-15 15:36:28,628 - INFO - 
+=== Cleanup ===
+2026-06-15 15:36:28,718 - INFO - ✅ Closed browser
+2026-06-15 15:36:28,735 - INFO - ✅ Stopped playwright
+2026-06-15 15:37:22,138 - INFO -   ✅ Total source items: 53
+2026-06-15 15:37:22,139 - INFO - 
+[Step 2] Processing 53 items...
+2026-06-15 15:37:31,122 - INFO -   [21] ✅ NIKON... | profit ¥-15,927 | margin -103.2%
+2026-06-15 15:37:45,420 - DEBUG -   [52] ❌ Match score too low: 0.10
+2026-06-15 15:37:47,048 - DEBUG -   [53] ❌ Match score too low: 0.10
+2026-06-15 15:37:47,049 - INFO - ✅ CSV output: output_operational_test\research_results.csv (1 rows)
+2026-06-15 15:37:47,049 - INFO - 
+✅ Test report: output_operational_test\test_report.json
+2026-06-15 15:37:47,049 - INFO - 
+=== Cleanup ===
+2026-06-15 15:37:47,142 - INFO - ✅ Closed browser
+2026-06-15 15:37:47,155 - INFO - ✅ Stopped playwright
+2026-06-15 15:47:24,434 - INFO - === Operational Test Initialization ===
+2026-06-15 15:47:25,330 - INFO - ✅ eBay token acquired successfully
+2026-06-15 15:47:25,947 - INFO - ✅ All components initialized
+2026-06-15 15:47:25,947 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 15:47:25,947 - INFO - 
+Category: electronics
+2026-06-15 15:47:25,947 - INFO -   Testing keyword: iPhone
+2026-06-15 15:47:25,947 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 15:47:29,726 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:29,726 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 15:47:30,648 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:30,648 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 15:47:32,425 - INFO -     ✅ Found 1 items
+2026-06-15 15:47:32,425 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 15:47:34,115 - INFO -     ✅ Found 0 items
+2026-06-15 15:47:34,115 - INFO - 
+Category: camera
+2026-06-15 15:47:34,115 - INFO -   Testing keyword: Canon EOS
+2026-06-15 15:47:34,115 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 15:47:35,407 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:35,407 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 15:47:36,384 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:36,384 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 15:47:38,094 - INFO -     ✅ Found 1 items
+2026-06-15 15:47:38,094 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 15:47:39,451 - INFO -     ✅ Found 0 items
+2026-06-15 15:47:39,451 - INFO - 
+Category: games
+2026-06-15 15:47:39,451 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 15:47:39,451 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 15:47:41,195 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:41,195 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 15:47:42,704 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:42,704 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 15:47:44,500 - INFO -     ✅ Found 1 items
+2026-06-15 15:47:44,500 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 15:47:45,671 - INFO -     ✅ Found 0 items
+2026-06-15 15:47:45,671 - INFO - 
+Category: fashion
+2026-06-15 15:47:45,671 - INFO -   Testing keyword: Gucci
+2026-06-15 15:47:45,671 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 15:47:47,552 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:47,552 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 15:47:48,325 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:48,325 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 15:47:50,052 - INFO -     ✅ Found 1 items
+2026-06-15 15:47:50,052 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 15:47:51,294 - INFO -     ✅ Found 0 items
+2026-06-15 15:47:51,294 - INFO - 
+Category: hobby
+2026-06-15 15:47:51,294 - INFO -   Testing keyword: LEGO
+2026-06-15 15:47:51,294 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 15:47:52,985 - INFO -     ✅ Found 2 items
+2026-06-15 15:47:52,985 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 15:47:53,791 - INFO -     ✅ Found 5 items
+2026-06-15 15:47:53,791 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 15:47:55,467 - INFO -     ✅ Found 1 items
+2026-06-15 15:47:55,467 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 15:47:56,628 - INFO -     ✅ Found 0 items
+2026-06-15 15:47:56,628 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 15:47:56,628 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 15:47:58,239 - INFO -   ✅ Found 3 items
+2026-06-15 15:47:58,240 - INFO -     - Test Dropship iPhone 12 Pro Max - 128GB: ${'value': '776.01', 'currency': 'USD'}
+2026-06-15 15:47:58,240 - INFO -     - Iphone 12: ${'value': '0.99', 'currency': 'USD'}
+2026-06-15 15:47:58,240 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 15:47:58,949 - WARNING -   ❌ No results for 'Sony Alpha'
+2026-06-15 15:47:58,949 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 15:47:59,430 - WARNING -   ❌ No results for 'Pokemon Card'
+2026-06-15 15:47:59,430 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 15:47:59,430 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 15:49:03,843 - INFO -   ✅ Total source items: 52
+2026-06-15 15:49:03,843 - INFO - 
+[Step 2] Processing 52 items...
+2026-06-15 15:49:03,847 - DEBUG -   [1] Trying query: 'apple iPhone16ケ'
+2026-06-15 15:49:04,392 - DEBUG -   [1] Trying query: 'tegaki kaze memodezain iPhone16'
+2026-06-15 15:49:04,834 - DEBUG -   [2] Trying query: 'apple iPhone Pro Max 16'
+2026-06-15 15:49:05,528 - DEBUG -   [2] Trying query: 'iPhone 16 Pro Max'
+2026-06-15 15:49:07,425 - INFO -   [2] ✅ iPhone 16 Pro Max ハードケース クリア... | profit ¥-4,402 | margin -678.4%
+2026-06-15 15:49:07,425 - DEBUG -   [3] Trying query: 'LG XBOOM Go XG2TBK'
+2026-06-15 15:49:08,049 - DEBUG -   [3] Trying query: 'LG XBOOM Go waiyaresusupi'
+2026-06-15 15:49:08,515 - DEBUG -   [4] Trying query: 'LG MSC-04JR'
+2026-06-15 15:49:08,868 - DEBUG -   [4] Trying query: 'AC adaputa MSC-04JR LG'
+2026-06-15 15:49:21,378 - INFO - === Operational Test Initialization ===
+2026-06-15 15:49:21,914 - INFO - ✅ eBay token acquired successfully
+2026-06-15 15:49:22,516 - INFO - ✅ All components initialized
+2026-06-15 15:49:22,516 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 15:49:22,516 - INFO - 
+Category: electronics
+2026-06-15 15:49:22,516 - INFO -   Testing keyword: iPhone
+2026-06-15 15:49:22,516 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 15:49:25,968 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:25,968 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 15:49:28,142 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:28,142 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 15:49:29,819 - INFO -     ✅ Found 1 items
+2026-06-15 15:49:29,819 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 15:49:31,701 - INFO -     ✅ Found 0 items
+2026-06-15 15:49:31,701 - INFO - 
+Category: camera
+2026-06-15 15:49:31,701 - INFO -   Testing keyword: Canon EOS
+2026-06-15 15:49:31,701 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 15:49:33,523 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:33,523 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 15:49:35,219 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:35,219 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 15:49:37,114 - INFO -     ✅ Found 1 items
+2026-06-15 15:49:37,114 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 15:49:38,332 - INFO -     ✅ Found 0 items
+2026-06-15 15:49:38,332 - INFO - 
+Category: games
+2026-06-15 15:49:38,332 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 15:49:38,332 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 15:49:40,187 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:40,187 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 15:49:41,261 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:41,261 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 15:49:43,018 - INFO -     ✅ Found 1 items
+2026-06-15 15:49:43,018 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 15:49:44,223 - INFO -     ✅ Found 0 items
+2026-06-15 15:49:44,223 - INFO - 
+Category: fashion
+2026-06-15 15:49:44,223 - INFO -   Testing keyword: Gucci
+2026-06-15 15:49:44,223 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 15:49:45,272 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:45,272 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 15:49:46,243 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:46,243 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 15:49:48,166 - INFO -     ✅ Found 1 items
+2026-06-15 15:49:48,166 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 15:49:49,374 - INFO -     ✅ Found 0 items
+2026-06-15 15:49:49,374 - INFO - 
+Category: hobby
+2026-06-15 15:49:49,374 - INFO -   Testing keyword: LEGO
+2026-06-15 15:49:49,374 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 15:49:51,781 - INFO -     ✅ Found 1 items
+2026-06-15 15:49:51,781 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 15:49:52,525 - INFO -     ✅ Found 5 items
+2026-06-15 15:49:52,525 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 15:49:54,229 - INFO -     ✅ Found 1 items
+2026-06-15 15:49:54,229 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 15:49:55,401 - INFO -     ✅ Found 0 items
+2026-06-15 15:49:55,401 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 15:49:55,401 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 15:49:57,156 - INFO -   ✅ Found 3 items
+2026-06-15 15:49:57,156 - INFO -     - Test Dropship iPhone 12 Pro Max - 128GB: ${'value': '776.01', 'currency': 'USD'}
+2026-06-15 15:49:57,156 - INFO -     - Iphone 12: ${'value': '0.99', 'currency': 'USD'}
+2026-06-15 15:49:57,156 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 15:49:57,835 - WARNING -   ❌ No results for 'Sony Alpha'
+2026-06-15 15:49:57,835 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 15:49:58,427 - WARNING -   ❌ No results for 'Pokemon Card'
+2026-06-15 15:49:58,427 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 15:49:58,427 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 16:27:19,844 - INFO - === Operational Test Initialization ===
+2026-06-15 16:27:20,777 - ERROR - ❌ Initialization failed: OAuth error: 401 - {"error":"invalid_client","error_description":"client authentication failed"}
+2026-06-15 16:27:20,777 - INFO - 
+=== Cleanup ===
+2026-06-15 16:27:20,778 - ERROR - ❌ Test execution failed: OAuth error: 401 - {"error":"invalid_client","error_description":"client authentication failed"}
+Traceback (most recent call last):
+  File "C:\NewProjects\margin-scout\test_operational_multicat_nonmock.py", line 412, in run
+    await self.initialize()
+  File "C:\NewProjects\margin-scout\test_operational_multicat_nonmock.py", line 113, in initialize
+    token = self.ebay_auth.get_token()
+  File "C:\NewProjects\margin-scout\src\ebay_integration\auth_handler.py", line 80, in get_token
+    raise Exception(f'OAuth error: {response.status_code} - {response.text}')
+Exception: OAuth error: 401 - {"error":"invalid_client","error_description":"client authentication failed"}
+2026-06-15 16:27:20,780 - INFO - 
+=== Cleanup ===
+2026-06-15 18:03:43,488 - INFO - === Operational Test Initialization ===
+2026-06-15 18:03:44,415 - ERROR - ❌ Initialization failed: OAuth error: 401 - {"error":"invalid_client","error_description":"client authentication failed"}
+2026-06-15 18:03:44,415 - INFO - 
+=== Cleanup ===
+2026-06-15 18:03:44,416 - ERROR - ❌ Test execution failed: OAuth error: 401 - {"error":"invalid_client","error_description":"client authentication failed"}
+Traceback (most recent call last):
+  File "C:\NewProjects\margin-scout\test_operational_multicat_nonmock.py", line 412, in run
+    await self.initialize()
+  File "C:\NewProjects\margin-scout\test_operational_multicat_nonmock.py", line 113, in initialize
+    token = self.ebay_auth.get_token()
+  File "C:\NewProjects\margin-scout\src\ebay_integration\auth_handler.py", line 80, in get_token
+    raise Exception(f'OAuth error: {response.status_code} - {response.text}')
+Exception: OAuth error: 401 - {"error":"invalid_client","error_description":"client authentication failed"}
+2026-06-15 18:03:44,417 - INFO - 
+=== Cleanup ===
+2026-06-15 18:08:05,912 - INFO - === Operational Test Initialization ===
+2026-06-15 18:08:06,450 - INFO - ✅ eBay token acquired successfully
+2026-06-15 18:08:07,084 - INFO - ✅ All components initialized
+2026-06-15 18:08:07,084 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 18:08:07,084 - INFO - 
+Category: electronics
+2026-06-15 18:08:07,084 - INFO -   Testing keyword: iPhone
+2026-06-15 18:08:07,084 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 18:08:10,226 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:10,226 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 18:08:12,167 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:12,167 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 18:08:14,800 - INFO -     ✅ Found 1 items
+2026-06-15 18:08:14,800 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 18:08:16,550 - INFO -     ✅ Found 0 items
+2026-06-15 18:08:16,551 - INFO - 
+Category: camera
+2026-06-15 18:08:16,551 - INFO -   Testing keyword: Canon EOS
+2026-06-15 18:08:16,551 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 18:08:18,193 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:18,193 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 18:08:19,239 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:19,239 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 18:08:21,063 - INFO -     ✅ Found 1 items
+2026-06-15 18:08:21,063 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 18:08:25,312 - INFO -     ✅ Found 0 items
+2026-06-15 18:08:25,312 - INFO - 
+Category: games
+2026-06-15 18:08:25,312 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 18:08:25,312 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 18:08:27,832 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:27,832 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 18:08:28,822 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:28,822 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 18:08:30,934 - INFO -     ✅ Found 1 items
+2026-06-15 18:08:30,934 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 18:08:32,287 - INFO -     ✅ Found 0 items
+2026-06-15 18:08:32,287 - INFO - 
+Category: fashion
+2026-06-15 18:08:32,287 - INFO -   Testing keyword: Gucci
+2026-06-15 18:08:32,288 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 18:08:34,284 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:34,284 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 18:08:35,654 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:35,654 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 18:08:37,367 - INFO -     ✅ Found 1 items
+2026-06-15 18:08:37,367 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 18:08:38,667 - INFO -     ✅ Found 0 items
+2026-06-15 18:08:38,667 - INFO - 
+Category: hobby
+2026-06-15 18:08:38,667 - INFO -   Testing keyword: LEGO
+2026-06-15 18:08:38,667 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 18:08:39,866 - INFO -     ✅ Found 2 items
+2026-06-15 18:08:39,866 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 18:08:40,699 - INFO -     ✅ Found 5 items
+2026-06-15 18:08:40,699 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 18:08:42,431 - INFO -     ✅ Found 1 items
+2026-06-15 18:08:42,431 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 18:08:43,877 - INFO -     ✅ Found 0 items
+2026-06-15 18:08:43,878 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 18:08:43,878 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 18:08:45,387 - INFO -   ✅ Found 3 items
+2026-06-15 18:08:45,387 - INFO -     - USB C 40W PD Fast Charger Adapter Type C Cable For iPhone 17 16 15 14 13 12 11 X: ${'value': '7.21', 'currency': 'USD'}
+2026-06-15 18:08:45,387 - INFO -     - Apple iPhone 12 mini A2176 128GB Green Unlocked Clean ESN 95% battery health: ${'value': '229.69', 'currency': 'USD'}
+2026-06-15 18:08:45,387 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 18:08:46,302 - INFO -   ✅ Found 3 items
+2026-06-15 18:08:46,302 - INFO -     - Sony ZV-E10 ZVE10 24.2MP Mirrorless Camera with 16-50mm Lens White - 95% new: ${'value': '516.99', 'currency': 'USD'}
+2026-06-15 18:08:46,302 - INFO -     - Sony Alpha ZVE10 4K Mirrorless Interchangeable with/16-50mm Lens Black & White: ${'value': '542.00', 'currency': 'USD'}
+2026-06-15 18:08:46,302 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 18:08:47,364 - INFO -   ✅ Found 3 items
+2026-06-15 18:08:47,364 - INFO -     - Graveler 37/62 Base Set Fossil Pokemon Card: ${'value': '3.57', 'currency': 'USD', 'convertedFromValue': '2.66', 'convertedFromCurrency': 'GBP'}
+2026-06-15 18:08:47,364 - INFO -     - Porygon-Z LV.X 2008 DP5 Japanese Pokemon Card  - EX: ${'value': '24.29', 'currency': 'USD'}
+2026-06-15 18:08:47,364 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 18:08:47,364 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 18:09:52,249 - INFO -   ✅ Total source items: 52
+2026-06-15 18:09:52,249 - INFO - 
+[Step 2] Processing 52 items...
+2026-06-15 18:09:52,250 - DEBUG -   [1] Trying query: 'apple iPhone Pro Max 16'
+2026-06-15 18:09:52,832 - INFO -   [1] ✅ iPhone 16 Pro Max ハードケース クリア... | profit ¥-4,148 | margin -439.7%
+2026-06-15 18:09:52,833 - DEBUG -   [2] Trying query: 'apple iPhone16ケ'
+2026-06-15 18:09:53,291 - DEBUG -   [2] Trying query: 'tegaki kaze memodezain iPhone16'
+2026-06-15 18:09:53,746 - DEBUG -   [3] Trying query: 'Phison NVME SSD pcle 2TB 2230サイズ gen4'
+2026-06-15 18:09:54,173 - DEBUG -   [3] Trying query: 'Phison NVME SSD 2TB'
+2026-06-15 18:09:54,695 - INFO -   [3] ✅ Phison NVME SSD 2TB 2230サイズ　pcle gen4... | profit ¥22,700 | margin 34.6%
+2026-06-15 18:09:54,696 - DEBUG -   [4] Trying query: 'LG XBOOM Go XG2TBK'
+2026-06-15 18:09:55,265 - INFO -   [4] ✅ 新品未使用　LG XBOOM Go ワイヤレススピーカー XG2TBK... | profit ¥-3,360 | margin -85.3%
+2026-06-15 18:09:55,266 - DEBUG -   [5] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:09:55,780 - DEBUG -   [6] Trying query: 'LG Electronics LGT02'
+2026-06-15 18:09:56,288 - DEBUG -   [6] Trying query: 'LG Electronics taburetto LGT02'
+2026-06-15 18:09:56,757 - DEBUG -   [7] Trying query: 'Electronics Devices PROTECTIVE FILM'
+2026-06-15 18:09:57,292 - INFO -   [7] ✅ Electronics Devices PROTECTIVE FILM... | profit ¥-2,108 | margin -68.6%
+2026-06-15 18:09:57,293 - DEBUG -   [8] Trying query: 'sE Electronics NEOM USB'
+2026-06-15 18:09:57,808 - INFO -   [8] ✅ 【箱付き】sE Electronics NEOM USB プロフェッショナルUS... | profit ¥5,442 | margin 19.3%
+2026-06-15 18:09:57,809 - DEBUG -   [9] Trying query: 'nintendo switch tk'
+2026-06-15 18:09:58,640 - INFO -   [9] ✅ 電動ドライバー 小型 精密ドライバー トルクス マイナス 三角 六角 プラス 星... | profit ¥-7,346 | margin -129.1%
+2026-06-15 18:09:58,640 - DEBUG -   [10] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:09:59,144 - DEBUG -   [11] Trying query: 'Canon EOS Kiss X'
+2026-06-15 18:09:59,630 - INFO -   [11] ✅ Canon EOS Kiss X 本体 望遠レンズ付 ダブルレンズ 動作確認済... | profit ¥20,342 | margin 44.7%
+2026-06-15 18:09:59,631 - DEBUG -   [12] Trying query: 'Canon Mount Adapter R'
+2026-06-15 18:10:00,127 - INFO -   [12] ✅ Canon Mount Adapter EF-EOS R マウントアダプター... | profit ¥-11,151 | margin -200.2%
+2026-06-15 18:10:00,128 - DEBUG -   [13] Trying query: 'Canon Mark II EOS-1D'
+2026-06-15 18:10:00,565 - DEBUG -   [13] ❌ Match score too low: 0.00
+2026-06-15 18:10:00,565 - DEBUG -   [14] Trying query: 'Canon EOS Mark IV 5D 5D4 15000ショット'
+2026-06-15 18:10:01,078 - DEBUG -   [14] Trying query: 'Canon EOS 5D Mark'
+2026-06-15 18:10:01,582 - INFO -   [14] ✅ Canon EOS 5D Mark IV 5D4 15000ショット... | profit ¥-94,655 | margin -213.5%
+2026-06-15 18:10:01,582 - DEBUG -   [15] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:02,132 - DEBUG -   [16] Trying query: 'nikon AF 28-300mm F3 A061'
+2026-06-15 18:10:02,625 - DEBUG -   [16] Trying query: 'tamuron AF 28-300mm F3'
+2026-06-15 18:10:03,095 - DEBUG -   [17] Trying query: 'Nikon NIKKOR f 50mm 8G'
+2026-06-15 18:10:03,523 - INFO -   [17] ✅ Nikon AF-S NIKKOR 50mm f/1.8G 付属品付... | profit ¥4,678 | margin 16.3%
+2026-06-15 18:10:03,523 - DEBUG -   [18] Trying query: 'Nikon 10本'
+2026-06-15 18:10:04,022 - DEBUG -   [18] Trying query: 'Nikon kamerasutorappu 10 hon'
+2026-06-15 18:10:04,509 - DEBUG -   [19] Trying query: 'Nikon D850 ストラップ付き★A149H 151'
+2026-06-15 18:10:05,009 - DEBUG -   [19] Trying query: 'Nikon nikon D850 bodi'
+2026-06-15 18:10:05,476 - INFO -   [19] ✅ ★美品★Nikon ニコン D850 ボディ カメラ デジタル一眼 元箱 チャー... | profit ¥58,055 | margin 21.6%
+2026-06-15 18:10:05,476 - DEBUG -   [20] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:05,990 - DEBUG -   [21] Trying query: 'NIKON'
+2026-06-15 18:10:06,437 - INFO -   [21] ✅ NIKON... | profit ¥1,966 | margin 5.4%
+2026-06-15 18:10:06,438 - DEBUG -   [22] Trying query: 'AR MEGA 199…'
+2026-06-15 18:10:06,975 - INFO -   [22] ✅ コダック AR MEGA ハイクラスパック MEGAドリームex キラ 199…... | profit ¥-2,669 | margin -77.0%
+2026-06-15 18:10:06,975 - DEBUG -   [23] Trying query: 'itazura suki no pichu'
+2026-06-15 18:10:07,452 - DEBUG -   [24] Trying query: 'pokemon Oink Games'
+2026-06-15 18:10:07,956 - INFO -   [24] ✅ ナインタイル ポケモンドコダ！ Oink Games ボードゲーム ... | profit ¥-3,062 | margin -77.8%
+2026-06-15 18:10:07,957 - DEBUG -   [25] Trying query: 'oinkuge muzu naintairu pokemondokoda'
+2026-06-15 18:10:08,438 - DEBUG -   [26] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:09,051 - DEBUG -   [27] Trying query: 'katsura no fu a'
+2026-06-15 18:10:09,966 - DEBUG -   [28] Trying query: 'yuugi ou majimaji ☆'
+2026-06-15 18:10:10,469 - DEBUG -   [29] Trying query: 'Duel Monsters King of Games Notebook'
+2026-06-15 18:10:10,956 - DEBUG -   [29] Trying query: 'yuugi ou deyuerumonsuta zu'
+2026-06-15 18:10:11,384 - DEBUG -   [30] Trying query: 'shinki PROJECT soru yoyakutokuten'
+2026-06-15 18:10:11,912 - DEBUG -   [31] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:12,430 - DEBUG -   [32] Trying query: 'Gucci'
+2026-06-15 18:10:12,947 - INFO -   [32] ✅ Gucci GG柄 ショルダーバッグ... | profit ¥22,816 | margin 61.6%
+2026-06-15 18:10:12,948 - DEBUG -   [33] Trying query: 'GUCCI'
+2026-06-15 18:10:13,460 - INFO -   [33] ✅ GUCCI ベルトモチーフスカーフリング ゴールド... | profit ¥19,128 | margin 51.7%
+2026-06-15 18:10:13,461 - DEBUG -   [34] Trying query: 'GUCCI SYNC YA137104'
+2026-06-15 18:10:13,993 - INFO -   [34] ✅ GUCCI SYNC グッチ シンク YA137104 デジタル腕時計... | profit ¥40,212 | margin 55.9%
+2026-06-15 18:10:13,994 - DEBUG -   [35] Trying query: 'GUCCI'
+2026-06-15 18:10:14,512 - DEBUG -   [35] ❌ Match score too low: 0.00
+2026-06-15 18:10:14,512 - DEBUG -   [36] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:15,020 - DEBUG -   [37] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:10:15,458 - INFO -   [37] ✅ LOUIS VUITTON モノグラム ショルダーバッグ... | profit ¥37,665 | margin 68.3%
+2026-06-15 18:10:15,459 - DEBUG -   [38] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:10:15,903 - DEBUG -   [38] ❌ Match score too low: 0.00
+2026-06-15 18:10:15,904 - DEBUG -   [39] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:10:16,426 - INFO -   [39] ✅ LOUIS VUITTON ルイヴィトン モノグラム チェーン ブレスレット シ... | profit ¥28,685 | margin 52.0%
+2026-06-15 18:10:16,427 - DEBUG -   [40] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:10:17,005 - INFO -   [40] ✅ LOUIS VUITTON ルイヴィトン エピ LVサークル ポルトフォイユプラ... | profit ¥13,765 | margin 25.0%
+2026-06-15 18:10:17,005 - DEBUG -   [41] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:17,531 - DEBUG -   [42] Trying query: 'HOBBYBRICK 50個'
+2026-06-15 18:10:17,994 - DEBUG -   [42] Trying query: 'HOBBYBRICK kasutamuminifigyua mononoke hime'
+2026-06-15 18:10:18,520 - DEBUG -   [43] Trying query: 'LEGO GAME BOY 72046 421pcs'
+2026-06-15 18:10:19,018 - INFO -   [43] ✅ LEGO レゴ GAME BOY ゲームボーイ 72046 421pcs... | profit ¥-8,110 | margin -128.7%
+2026-06-15 18:10:19,018 - DEBUG -   [44] Trying query: 'LEGO 10294'
+2026-06-15 18:10:19,531 - INFO -   [44] ✅ レゴ 正規品　LEGO タイタニック号 10294 ブロック... | profit ¥14,920 | margin 14.6%
+2026-06-15 18:10:19,531 - DEBUG -   [45] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:20,079 - DEBUG -   [46] Trying query: 'Hobby 2026年6月号〈特別付録⭕️〉'
+2026-06-15 18:10:20,679 - DEBUG -   [46] Trying query: 'Hobby JAPAN ( hobi'
+2026-06-15 18:10:21,169 - INFO -   [46] ✅ Hobby JAPAN（ホビージャパン）　2026年6月号〈特別付録⭕️〉... | profit ¥5,362 | margin 44.0%
+2026-06-15 18:10:21,169 - DEBUG -   [47] Trying query: 'MAGAZINE Vol'
+2026-06-15 18:10:21,661 - INFO -   [47] ✅ 電撃HOBBY MAGAZINE 6周年記念特別号 Vol.3... | profit ¥-4,356 | margin -925.0%
+2026-06-15 18:10:21,661 - DEBUG -   [48] Trying query: 'BANDAI'
+2026-06-15 18:10:22,201 - INFO -   [48] ✅ ［新品未開封］LBX ガウンタ・イゼルファー ダンボール戦機 プラモデル BAN... | profit ¥2,782 | margin 24.7%
+2026-06-15 18:10:22,201 - DEBUG -   [49] Trying query: 'MG EW 100'
+2026-06-15 18:10:22,748 - INFO -   [49] ✅ MG 1/100 ガンダムヘビーアームズ改 EW... | profit ¥-12,059 | margin -153.1%
+2026-06-15 18:10:22,748 - DEBUG -   [50] Trying query: 'rakusatsu souba 3 ken'
+2026-06-15 18:10:23,220 - DEBUG -   [51] Trying query: 'BANDAI'
+2026-06-15 18:10:23,717 - INFO -   [51] ✅ BANDAI... | profit ¥1,032 | margin 10.8%
+2026-06-15 18:10:23,717 - DEBUG -   [52] Trying query: 'BANDAI'
+2026-06-15 18:10:24,198 - INFO -   [52] ✅ BANDAI... | profit ¥774 | margin 8.3%
+2026-06-15 18:10:24,199 - INFO - ✅ CSV output: output_operational_test\research_results.csv (28 rows)
+2026-06-15 18:10:24,199 - INFO - 
+✅ Test report: output_operational_test\test_report.json
+2026-06-15 18:10:24,199 - INFO - 
+=== Cleanup ===
+2026-06-15 18:10:24,263 - INFO - ✅ Closed browser
+2026-06-15 18:10:24,278 - INFO - ✅ Stopped playwright
+2026-06-15 18:26:05,648 - INFO - === Operational Test Initialization ===
+2026-06-15 18:26:06,118 - INFO - ✅ eBay token acquired successfully
+2026-06-15 18:26:06,738 - INFO - ✅ All components initialized
+2026-06-15 18:26:06,738 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 18:26:06,738 - INFO - 
+Category: electronics
+2026-06-15 18:26:06,738 - INFO -   Testing keyword: iPhone
+2026-06-15 18:26:06,738 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 18:26:10,201 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:10,201 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 18:26:11,463 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:11,463 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 18:26:13,330 - INFO -     ✅ Found 1 items
+2026-06-15 18:26:13,330 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 18:26:15,070 - INFO -     ✅ Found 0 items
+2026-06-15 18:26:15,070 - INFO - 
+Category: camera
+2026-06-15 18:26:15,070 - INFO -   Testing keyword: Canon EOS
+2026-06-15 18:26:15,070 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 18:26:16,506 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:16,506 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 18:26:17,494 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:17,494 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 18:26:19,199 - INFO -     ✅ Found 1 items
+2026-06-15 18:26:19,199 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 18:26:20,592 - INFO -     ✅ Found 0 items
+2026-06-15 18:26:20,592 - INFO - 
+Category: games
+2026-06-15 18:26:20,592 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 18:26:20,592 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 18:26:22,471 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:22,471 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 18:26:23,135 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:23,135 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 18:26:24,925 - INFO -     ✅ Found 1 items
+2026-06-15 18:26:24,925 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 18:26:26,102 - INFO -     ✅ Found 0 items
+2026-06-15 18:26:26,102 - INFO - 
+Category: fashion
+2026-06-15 18:26:26,102 - INFO -   Testing keyword: Gucci
+2026-06-15 18:26:26,102 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 18:26:28,528 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:28,528 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 18:26:31,169 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:31,170 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 18:26:32,819 - INFO -     ✅ Found 1 items
+2026-06-15 18:26:32,819 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 18:26:34,013 - INFO -     ✅ Found 0 items
+2026-06-15 18:26:34,013 - INFO - 
+Category: hobby
+2026-06-15 18:26:34,013 - INFO -   Testing keyword: LEGO
+2026-06-15 18:26:34,013 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 18:26:35,255 - INFO -     ✅ Found 1 items
+2026-06-15 18:26:35,255 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 18:26:36,702 - INFO -     ✅ Found 5 items
+2026-06-15 18:26:36,702 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 18:26:38,441 - INFO -     ✅ Found 1 items
+2026-06-15 18:26:38,441 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 18:26:39,598 - INFO -     ✅ Found 0 items
+2026-06-15 18:26:39,598 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 18:26:39,598 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 18:26:40,172 - INFO -   ✅ Found 3 items
+2026-06-15 18:26:40,173 - INFO -     - For iPhone 17 16 15 14 13 12 Pro Max Mag Safe Case Frosted Ring Kickstand Cover : ${'value': '13.85', 'currency': 'USD'}
+2026-06-15 18:26:40,173 - INFO -     - 3PACK 20w USB-C PD Fast Wall Charger Lot For Apple iPhone 14 13 12 11 iPad Cable: ${'value': '16.77', 'currency': 'USD'}
+2026-06-15 18:26:40,173 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 18:26:40,808 - INFO -   ✅ Found 3 items
+2026-06-15 18:26:40,808 - INFO -     - Sony Alpha NEX-6 16.1MP APS-C Digital Camera with 16-50mm Lens English Black: ${'value': '254.00', 'currency': 'USD'}
+2026-06-15 18:26:40,808 - INFO -     - [ Mint English Language ] Sony Alpha ZV-E1 #26895: ${'value': '1650.00', 'currency': 'USD'}
+2026-06-15 18:26:40,808 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 18:26:41,525 - INFO -   ✅ Found 3 items
+2026-06-15 18:26:41,525 - INFO -     - M Metagross EX 102/XY-P - Special Pack Unlimited PROMO Pokemon card Japanese: ${'value': '49.99', 'currency': 'USD'}
+2026-06-15 18:26:41,525 - INFO -     - Pokémon Evolving Skiess Singles | Pick Your Card | NM: ${'value': '2.00', 'currency': 'USD', 'convertedFromValue': '1.49', 'convertedFromCurrency': 'GBP'}
+2026-06-15 18:26:41,525 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 18:26:41,525 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 18:27:36,869 - INFO -   ✅ Total source items: 52
+2026-06-15 18:27:36,869 - INFO - 
+[Step 2] Processing 52 items...
+2026-06-15 18:27:36,870 - DEBUG -   [1] Trying query: 'iPhone Pro Max'
+2026-06-15 18:27:37,663 - DEBUG -   [1] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:37,663 - DEBUG -   [2] Trying query: '手書き風メモデザイン iPhone16ケ'
+2026-06-15 18:27:38,196 - DEBUG -   [3] Trying query: 'XBOOM'
+2026-06-15 18:27:38,720 - DEBUG -   [3] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:38,720 - DEBUG -   [4] Trying query: 'Phison NVME SSD'
+2026-06-15 18:27:39,244 - DEBUG -   [4] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:39,245 - DEBUG -   [5] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:39,635 - DEBUG -   [6] Trying query: 'Electronics'
+2026-06-15 18:27:40,264 - DEBUG -   [6] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:40,264 - DEBUG -   [7] Trying query: 'Electronics Devices PROTECTIVE'
+2026-06-15 18:27:40,793 - DEBUG -   [7] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:40,793 - DEBUG -   [8] Trying query: 'Electronics NEOM USB'
+2026-06-15 18:27:41,266 - DEBUG -   [8] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:41,267 - DEBUG -   [9] Trying query: 'switch'
+2026-06-15 18:27:41,966 - DEBUG -   [9] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:41,966 - DEBUG -   [10] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:42,375 - DEBUG -   [11] Trying query: 'Canon Mount Adapter'
+2026-06-15 18:27:42,865 - DEBUG -   [11] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:42,866 - DEBUG -   [12] Trying query: 'Canon EOS Kiss'
+2026-06-15 18:27:43,247 - DEBUG -   [12] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:43,248 - DEBUG -   [13] Trying query: 'Canon EOS Mark'
+2026-06-15 18:27:43,771 - DEBUG -   [13] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:43,771 - DEBUG -   [14] Trying query: 'Canon EOS 5'
+2026-06-15 18:27:44,237 - DEBUG -   [14] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:44,237 - DEBUG -   [15] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:44,717 - DEBUG -   [16] Trying query: 'タムロン AF 28-300mm F3.'
+2026-06-15 18:27:45,218 - DEBUG -   [17] Trying query: 'Nikon NIKKOR'
+2026-06-15 18:27:45,700 - DEBUG -   [17] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:45,700 - DEBUG -   [18] Trying query: 'Nikon D850'
+2026-06-15 18:27:46,171 - DEBUG -   [18] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:46,172 - DEBUG -   [19] Trying query: 'Nikon'
+2026-06-15 18:27:46,655 - DEBUG -   [19] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:46,655 - DEBUG -   [20] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:47,101 - DEBUG -   [21] Trying query: 'NIKON'
+2026-06-15 18:27:47,718 - DEBUG -   [21] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:47,718 - DEBUG -   [22] Trying query: 'いたずら好きのピチュー：ポケモンカードゲ'
+2026-06-15 18:27:48,536 - DEBUG -   [23] Trying query: 'MEGA'
+2026-06-15 18:27:49,050 - DEBUG -   [23] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:49,050 - DEBUG -   [24] Trying query: 'Oink Games'
+2026-06-15 18:27:49,499 - DEBUG -   [24] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:49,499 - DEBUG -   [25] Trying query: 'オインクゲームズ　ナインタイル　ポケモン'
+2026-06-15 18:27:50,003 - DEBUG -   [26] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:50,478 - DEBUG -   [27] Trying query: '遊戯王　マジマジ☆マジシャンギャル'
+2026-06-15 18:27:51,020 - DEBUG -   [28] Trying query: 'カツラのファイヤー ★ ジム拡張第2弾 '
+2026-06-15 18:27:51,491 - DEBUG -   [29] Trying query: 'Duel Monsters King'
+2026-06-15 18:27:51,961 - DEBUG -   [29] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:51,961 - DEBUG -   [30] Trying query: '神姫PROJECT ソル　予約特典スリー'
+2026-06-15 18:27:52,445 - DEBUG -   [31] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:52,896 - DEBUG -   [32] Trying query: 'Gucci'
+2026-06-15 18:27:53,437 - DEBUG -   [32] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:53,437 - DEBUG -   [33] Trying query: 'GUCCI'
+2026-06-15 18:27:53,941 - DEBUG -   [33] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:53,941 - DEBUG -   [34] Trying query: 'GUCCI'
+2026-06-15 18:27:54,459 - DEBUG -   [34] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:54,459 - DEBUG -   [35] Trying query: 'GUCCI SYNC'
+2026-06-15 18:27:54,985 - DEBUG -   [35] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:54,985 - DEBUG -   [36] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:55,419 - DEBUG -   [37] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:27:55,965 - DEBUG -   [37] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:55,965 - DEBUG -   [38] Trying query: 'Louis Vuitton'
+2026-06-15 18:27:56,494 - DEBUG -   [38] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:56,495 - DEBUG -   [39] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:27:56,949 - DEBUG -   [39] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:56,950 - DEBUG -   [40] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:27:57,425 - DEBUG -   [40] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:57,425 - DEBUG -   [41] Trying query: '落札相場 (3件)'
+2026-06-15 18:27:57,881 - DEBUG -   [42] Trying query: 'HOBBYBRICK'
+2026-06-15 18:27:58,488 - DEBUG -   [42] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:58,489 - DEBUG -   [43] Trying query: 'LEGO GAME BOY'
+2026-06-15 18:27:58,982 - DEBUG -   [43] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:58,982 - DEBUG -   [44] Trying query: 'LEGO'
+2026-06-15 18:27:59,560 - DEBUG -   [44] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:27:59,560 - DEBUG -   [45] Trying query: '落札相場 (3件)'
+2026-06-15 18:28:00,023 - DEBUG -   [46] Trying query: 'Hobby JAPAN'
+2026-06-15 18:28:00,491 - DEBUG -   [46] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:28:00,492 - DEBUG -   [47] Trying query: 'MAGAZINE Vol'
+2026-06-15 18:28:00,929 - DEBUG -   [47] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:28:00,930 - DEBUG -   [48] Trying query: 'バンダイ公式 ガシャポンマシントライ カ'
+2026-06-15 18:28:01,436 - DEBUG -   [49] Trying query: 'MG 1/100 ガンダムヘビーアームズ'
+2026-06-15 18:28:01,934 - DEBUG -   [50] Trying query: '落札相場 (3件)'
+2026-06-15 18:28:02,575 - DEBUG -   [51] Trying query: 'BANDAI'
+2026-06-15 18:28:03,027 - DEBUG -   [51] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:28:03,027 - DEBUG -   [52] Trying query: 'BANDAI'
+2026-06-15 18:28:03,466 - DEBUG -   [52] ⚠ Skipped: 'AdvancedProductMatcher' object has no attribute 'match_items'
+2026-06-15 18:28:03,466 - WARNING - ⚠ No results to output
+2026-06-15 18:28:03,466 - INFO - 
+✅ Test report: output_operational_test\test_report.json
+2026-06-15 18:28:03,466 - INFO - 
+=== Cleanup ===
+2026-06-15 18:28:03,547 - INFO - ✅ Closed browser
+2026-06-15 18:28:03,558 - INFO - ✅ Stopped playwright
+2026-06-15 18:29:13,011 - INFO - === Operational Test Initialization ===
+2026-06-15 18:29:13,683 - INFO - ✅ eBay token acquired successfully
+2026-06-15 18:29:14,294 - INFO - ✅ All components initialized
+2026-06-15 18:29:14,294 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 18:29:14,294 - INFO - 
+Category: electronics
+2026-06-15 18:29:14,294 - INFO -   Testing keyword: iPhone
+2026-06-15 18:29:14,294 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 18:29:18,160 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:18,160 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 18:29:20,689 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:20,689 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 18:29:22,507 - INFO -     ✅ Found 1 items
+2026-06-15 18:29:22,507 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 18:29:24,235 - INFO -     ✅ Found 0 items
+2026-06-15 18:29:24,235 - INFO - 
+Category: camera
+2026-06-15 18:29:24,235 - INFO -   Testing keyword: Canon EOS
+2026-06-15 18:29:24,235 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 18:29:26,097 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:26,097 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 18:29:27,074 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:27,074 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 18:29:29,582 - INFO -     ✅ Found 1 items
+2026-06-15 18:29:29,582 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 18:29:30,812 - INFO -     ✅ Found 0 items
+2026-06-15 18:29:30,812 - INFO - 
+Category: games
+2026-06-15 18:29:30,812 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 18:29:30,812 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 18:29:33,220 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:33,220 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 18:29:33,927 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:33,927 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 18:29:35,626 - INFO -     ✅ Found 1 items
+2026-06-15 18:29:35,626 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 18:29:36,792 - INFO -     ✅ Found 0 items
+2026-06-15 18:29:36,792 - INFO - 
+Category: fashion
+2026-06-15 18:29:36,792 - INFO -   Testing keyword: Gucci
+2026-06-15 18:29:36,792 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 18:29:38,890 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:38,890 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 18:29:40,254 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:40,254 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 18:29:41,958 - INFO -     ✅ Found 1 items
+2026-06-15 18:29:41,958 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 18:29:43,149 - INFO -     ✅ Found 0 items
+2026-06-15 18:29:43,149 - INFO - 
+Category: hobby
+2026-06-15 18:29:43,149 - INFO -   Testing keyword: LEGO
+2026-06-15 18:29:43,149 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 18:29:44,849 - INFO -     ✅ Found 2 items
+2026-06-15 18:29:44,849 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 18:29:45,582 - INFO -     ✅ Found 5 items
+2026-06-15 18:29:45,582 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 18:29:47,481 - INFO -     ✅ Found 1 items
+2026-06-15 18:29:47,481 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 18:29:48,633 - INFO -     ✅ Found 0 items
+2026-06-15 18:29:48,633 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 18:29:48,633 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 18:29:49,149 - INFO -   ✅ Found 3 items
+2026-06-15 18:29:49,149 - INFO -     - Fhyeugfy [3 Pack] for iPhone 17 Pro Max 6.9 17 pro max, Transparent 1: ${'value': '9.11', 'currency': 'USD'}
+2026-06-15 18:29:49,149 - INFO -     - Shacoryze for iPhone 17 Pro Max Front and Back Screen & (2-piece): ${'value': '13.35', 'currency': 'USD'}
+2026-06-15 18:29:49,149 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 18:29:49,715 - INFO -   ✅ Found 3 items
+2026-06-15 18:29:49,716 - INFO -     - Sony Alpha NEX-6 16.1MP APS-C Digital Camera with 16-50mm Lens English Black: ${'value': '254.00', 'currency': 'USD'}
+2026-06-15 18:29:49,716 - INFO -     - [ Mint English Language ] Sony Alpha ZV-E1 #26895: ${'value': '1650.00', 'currency': 'USD'}
+2026-06-15 18:29:49,716 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 18:29:50,529 - INFO -   ✅ Found 3 items
+2026-06-15 18:29:50,529 - INFO -     - Lillie's Ribombee - SVP 183 - STAFF Stamped - Black Star Promo  - Pokemon Card: ${'value': '26.18', 'currency': 'USD', 'convertedFromValue': '19.53', 'convertedFromCurrency': 'GBP'}
+2026-06-15 18:29:50,529 - INFO -     - Pokemon Card Japanese - Slot Machine Arcade Game - Banned Art - Neo Genesis: ${'value': '38.00', 'currency': 'USD'}
+2026-06-15 18:29:50,529 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 18:29:50,529 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 18:30:48,817 - INFO -   ✅ Total source items: 52
+2026-06-15 18:30:48,817 - INFO - 
+[Step 2] Processing 52 items...
+2026-06-15 18:30:48,817 - DEBUG -   [1] Trying query: 'iPhone Pro Max'
+2026-06-15 18:30:49,519 - INFO -   [1] ✅ iPhone 16 Pro Max ハードケース クリア... | profit ¥-1,033 | margin -22.7%
+2026-06-15 18:30:49,520 - DEBUG -   [2] Trying query: '手書き風メモデザイン iPhone16ケ'
+2026-06-15 18:30:50,048 - DEBUG -   [3] Trying query: 'XBOOM'
+2026-06-15 18:30:50,477 - DEBUG -   [3] ❌ Match score too low: 0.00
+2026-06-15 18:30:50,477 - DEBUG -   [4] Trying query: 'Phison NVME SSD'
+2026-06-15 18:30:51,025 - INFO -   [4] ✅ Phison NVME SSD 2TB 2230サイズ　pcle gen4... | profit ¥-27,838 | margin -392.8%
+2026-06-15 18:30:51,026 - DEBUG -   [5] Trying query: '落札相場 (3件)'
+2026-06-15 18:30:51,510 - DEBUG -   [6] Trying query: 'Electronics'
+2026-06-15 18:30:52,148 - DEBUG -   [6] ❌ Match score too low: 0.00
+2026-06-15 18:30:52,149 - DEBUG -   [7] Trying query: 'Electronics Devices PROTECTIVE'
+2026-06-15 18:30:52,610 - INFO -   [7] ✅ Electronics Devices PROTECTIVE FILM... | profit ¥6,548 | margin 50.0%
+2026-06-15 18:30:52,611 - DEBUG -   [8] Trying query: 'Electronics NEOM USB'
+2026-06-15 18:30:53,170 - INFO -   [8] ✅ 【箱付き】sE Electronics NEOM USB プロフェッショナルUS... | profit ¥-6,731 | margin -47.5%
+2026-06-15 18:30:53,170 - DEBUG -   [9] Trying query: 'switch'
+2026-06-15 18:30:53,910 - DEBUG -   [9] ❌ Match score too low: 0.00
+2026-06-15 18:30:53,910 - DEBUG -   [10] Trying query: '落札相場 (3件)'
+2026-06-15 18:30:54,394 - DEBUG -   [11] Trying query: 'Canon Mount Adapter'
+2026-06-15 18:30:54,880 - INFO -   [11] ✅ Canon Mount Adapter EF-EOS R マウントアダプター... | profit ¥-11,172 | margin -201.4%
+2026-06-15 18:30:54,881 - DEBUG -   [12] Trying query: 'Canon EOS Kiss'
+2026-06-15 18:30:55,352 - DEBUG -   [12] ❌ Match score too low: 0.00
+2026-06-15 18:30:55,352 - DEBUG -   [13] Trying query: 'Canon EOS Mark'
+2026-06-15 18:30:55,854 - DEBUG -   [13] ❌ Match score too low: 0.00
+2026-06-15 18:30:55,854 - DEBUG -   [14] Trying query: 'Canon EOS 5'
+2026-06-15 18:30:56,534 - INFO -   [14] ✅ Canon EOS 5D Mark IV 5D4 15000ショット... | profit ¥-98,001 | margin -242.2%
+2026-06-15 18:30:56,534 - DEBUG -   [15] Trying query: '落札相場 (3件)'
+2026-06-15 18:30:57,073 - DEBUG -   [16] Trying query: 'タムロン AF 28-300mm F3.'
+2026-06-15 18:30:57,496 - DEBUG -   [17] Trying query: 'Nikon NIKKOR'
+2026-06-15 18:30:57,898 - INFO -   [17] ✅ Nikon AF-S NIKKOR 50mm f/1.8G 付属品付... | profit ¥27,564 | margin 50.0%
+2026-06-15 18:30:57,899 - DEBUG -   [18] Trying query: 'Nikon ion'
+2026-06-15 18:30:58,426 - INFO -   [18] ✅ 【純正中古】 Nikon ニコン バッテリーパック EN-EL14 | Li-i... | profit ¥3,243 | margin 27.4%
+2026-06-15 18:30:58,427 - DEBUG -   [19] Trying query: 'Nikon D850'
+2026-06-15 18:30:58,965 - DEBUG -   [19] ❌ Match score too low: 0.00
+2026-06-15 18:30:58,965 - DEBUG -   [20] Trying query: '落札相場 (3件)'
+2026-06-15 18:30:59,446 - DEBUG -   [21] Trying query: 'NIKON'
+2026-06-15 18:30:59,914 - DEBUG -   [21] ❌ Match score too low: 0.00
+2026-06-15 18:30:59,914 - DEBUG -   [22] Trying query: 'VMAX'
+2026-06-15 18:31:00,421 - DEBUG -   [22] ❌ Match score too low: 0.00
+2026-06-15 18:31:00,422 - DEBUG -   [23] Trying query: 'いたずら好きのピチュー：ポケモンカードゲ'
+2026-06-15 18:31:00,873 - DEBUG -   [24] Trying query: 'Oink Games'
+2026-06-15 18:31:01,476 - DEBUG -   [24] ❌ Match score too low: 0.00
+2026-06-15 18:31:01,477 - DEBUG -   [25] Trying query: 'オインクゲームズ　ナインタイル　ポケモン'
+2026-06-15 18:31:01,913 - DEBUG -   [26] Trying query: '落札相場 (3件)'
+2026-06-15 18:31:02,539 - DEBUG -   [27] Trying query: '遊戯王　マジマジ☆マジシャンギャル'
+2026-06-15 18:31:03,073 - DEBUG -   [28] Trying query: 'カツラのファイヤー ★ ジム拡張第2弾 '
+2026-06-15 18:31:03,630 - DEBUG -   [29] Trying query: 'Duel Monsters King'
+2026-06-15 18:31:04,074 - INFO -   [29] ✅ 送料無料　遊戯王　デュエルモンスターズ　Yu-Gi-Oh!　ノート　Duel M... | profit ¥2,962 | margin 33.1%
+2026-06-15 18:31:04,075 - DEBUG -   [30] Trying query: '神姫PROJECT ソル　予約特典スリー'
+2026-06-15 18:31:04,565 - DEBUG -   [31] Trying query: '落札相場 (3件)'
+2026-06-15 18:31:05,038 - DEBUG -   [32] Trying query: 'Gucci'
+2026-06-15 18:31:05,538 - DEBUG -   [32] ❌ Match score too low: 0.00
+2026-06-15 18:31:05,539 - DEBUG -   [33] Trying query: 'GUCCI'
+2026-06-15 18:31:06,051 - DEBUG -   [33] ❌ Match score too low: 0.00
+2026-06-15 18:31:06,051 - DEBUG -   [34] Trying query: 'GUCCI'
+2026-06-15 18:31:06,546 - DEBUG -   [34] ❌ Match score too low: 0.00
+2026-06-15 18:31:06,546 - DEBUG -   [35] Trying query: 'GUCCI SYNC'
+2026-06-15 18:31:07,014 - INFO -   [35] ✅ GUCCI SYNC グッチ シンク YA137104 デジタル腕時計... | profit ¥9,028 | margin 25.2%
+2026-06-15 18:31:07,015 - DEBUG -   [36] Trying query: '落札相場 (3件)'
+2026-06-15 18:31:07,523 - DEBUG -   [37] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:31:08,065 - DEBUG -   [37] ❌ Match score too low: 0.00
+2026-06-15 18:31:08,065 - DEBUG -   [38] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:31:08,529 - DEBUG -   [38] ❌ Match score too low: 0.00
+2026-06-15 18:31:08,529 - DEBUG -   [39] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:31:09,050 - DEBUG -   [39] ❌ Match score too low: 0.00
+2026-06-15 18:31:09,050 - DEBUG -   [40] Trying query: 'LOUIS VUITTON'
+2026-06-15 18:31:09,569 - DEBUG -   [40] ❌ Match score too low: 0.00
+2026-06-15 18:31:09,569 - DEBUG -   [41] Trying query: '落札相場 (3件)'
+2026-06-15 18:31:10,084 - DEBUG -   [42] Trying query: 'HOBBYBRICK'
+2026-06-15 18:31:10,710 - DEBUG -   [42] ❌ Match score too low: 0.00
+2026-06-15 18:31:10,710 - DEBUG -   [43] Trying query: 'LEGO GAME BOY'
+2026-06-15 18:31:11,225 - INFO -   [43] ✅ LEGO レゴ GAME BOY ゲームボーイ 72046 421pcs... | profit ¥-6,614 | margin -82.4%
+2026-06-15 18:31:11,225 - DEBUG -   [44] Trying query: 'LEGO'
+2026-06-15 18:31:11,840 - DEBUG -   [44] ❌ Match score too low: 0.00
+2026-06-15 18:31:11,840 - DEBUG -   [45] Trying query: '落札相場 (3件)'
+2026-06-15 18:31:12,355 - DEBUG -   [46] Trying query: 'Hobby JAPAN'
+2026-06-15 18:31:12,854 - DEBUG -   [46] ❌ Match score too low: 0.00
+2026-06-15 18:31:12,854 - DEBUG -   [47] Trying query: 'MAGAZINE Vol'
+2026-06-15 18:31:13,352 - INFO -   [47] ✅ 電撃HOBBY MAGAZINE 6周年記念特別号 Vol.3... | profit ¥-4,219 | margin -669.6%
+2026-06-15 18:31:13,352 - DEBUG -   [48] Trying query: 'バンダイ公式 ガシャポンマシントライ カ'
+2026-06-15 18:31:13,909 - DEBUG -   [49] Trying query: 'MG 1/100 ガンダムヘビーアームズ'
+2026-06-15 18:31:14,397 - DEBUG -   [50] Trying query: '落札相場 (3件)'
+2026-06-15 18:31:14,846 - DEBUG -   [51] Trying query: 'BANDAI'
+2026-06-15 18:31:15,361 - DEBUG -   [51] ❌ Match score too low: 0.00
+2026-06-15 18:31:15,361 - DEBUG -   [52] Trying query: 'BANDAI'
+2026-06-15 18:31:15,993 - DEBUG -   [52] ❌ Match score too low: 0.00
+2026-06-15 18:31:15,993 - INFO - ✅ CSV output: output_operational_test\research_results.csv (12 rows)
+2026-06-15 18:31:15,994 - INFO - 
+✅ Test report: output_operational_test\test_report.json
+2026-06-15 18:31:15,994 - INFO - 
+=== Cleanup ===
+2026-06-15 18:31:16,041 - INFO - ✅ Closed browser
+2026-06-15 18:31:16,055 - INFO - ✅ Stopped playwright
+2026-06-15 18:43:14,793 - INFO - === Operational Test Initialization ===
+2026-06-15 18:43:15,632 - INFO - ✅ eBay token acquired successfully
+2026-06-15 18:43:16,242 - INFO - ✅ All components initialized
+2026-06-15 18:43:16,243 - INFO - 
+=== Testing Source Adapters ===
+2026-06-15 18:43:16,243 - INFO - 
+Category: electronics
+2026-06-15 18:43:16,243 - INFO -   Testing keyword: iPhone
+2026-06-15 18:43:16,243 - INFO -   [mercari] Searching 'iPhone'...
+2026-06-15 18:43:20,436 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:20,436 - INFO -   [yahoo_flea] Searching 'iPhone'...
+2026-06-15 18:43:22,097 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:22,097 - INFO -   [yahoo_auction] Searching 'iPhone'...
+2026-06-15 18:43:25,602 - INFO -     ✅ Found 1 items
+2026-06-15 18:43:25,602 - INFO -   [hardoff] Searching 'iPhone'...
+2026-06-15 18:43:27,829 - INFO -     ✅ Found 0 items
+2026-06-15 18:43:27,829 - INFO - 
+Category: camera
+2026-06-15 18:43:27,829 - INFO -   Testing keyword: Canon EOS
+2026-06-15 18:43:27,829 - INFO -   [mercari] Searching 'Canon EOS'...
+2026-06-15 18:43:29,156 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:29,156 - INFO -   [yahoo_flea] Searching 'Canon EOS'...
+2026-06-15 18:43:30,117 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:30,117 - INFO -   [yahoo_auction] Searching 'Canon EOS'...
+2026-06-15 18:43:31,790 - INFO -     ✅ Found 1 items
+2026-06-15 18:43:31,790 - INFO -   [hardoff] Searching 'Canon EOS'...
+2026-06-15 18:43:33,073 - INFO -     ✅ Found 0 items
+2026-06-15 18:43:33,073 - INFO - 
+Category: games
+2026-06-15 18:43:33,073 - INFO -   Testing keyword: Pokemon Card
+2026-06-15 18:43:33,073 - INFO -   [mercari] Searching 'Pokemon Card'...
+2026-06-15 18:43:35,843 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:35,844 - INFO -   [yahoo_flea] Searching 'Pokemon Card'...
+2026-06-15 18:43:36,772 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:36,773 - INFO -   [yahoo_auction] Searching 'Pokemon Card'...
+2026-06-15 18:43:38,540 - INFO -     ✅ Found 1 items
+2026-06-15 18:43:38,540 - INFO -   [hardoff] Searching 'Pokemon Card'...
+2026-06-15 18:43:39,832 - INFO -     ✅ Found 0 items
+2026-06-15 18:43:39,832 - INFO - 
+Category: fashion
+2026-06-15 18:43:39,832 - INFO -   Testing keyword: Gucci
+2026-06-15 18:43:39,832 - INFO -   [mercari] Searching 'Gucci'...
+2026-06-15 18:43:42,243 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:42,243 - INFO -   [yahoo_flea] Searching 'Gucci'...
+2026-06-15 18:43:43,206 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:43,206 - INFO -   [yahoo_auction] Searching 'Gucci'...
+2026-06-15 18:43:45,191 - INFO -     ✅ Found 1 items
+2026-06-15 18:43:45,191 - INFO -   [hardoff] Searching 'Gucci'...
+2026-06-15 18:43:46,461 - INFO -     ✅ Found 0 items
+2026-06-15 18:43:46,461 - INFO - 
+Category: hobby
+2026-06-15 18:43:46,461 - INFO -   Testing keyword: LEGO
+2026-06-15 18:43:46,461 - INFO -   [mercari] Searching 'LEGO'...
+2026-06-15 18:43:48,238 - INFO -     ✅ Found 2 items
+2026-06-15 18:43:48,238 - INFO -   [yahoo_flea] Searching 'LEGO'...
+2026-06-15 18:43:49,242 - INFO -     ✅ Found 5 items
+2026-06-15 18:43:49,242 - INFO -   [yahoo_auction] Searching 'LEGO'...
+2026-06-15 18:43:51,200 - INFO -     ✅ Found 1 items
+2026-06-15 18:43:51,200 - INFO -   [hardoff] Searching 'LEGO'...
+2026-06-15 18:43:52,391 - INFO -     ✅ Found 0 items
+2026-06-15 18:43:52,391 - INFO - 
+=== Testing eBay Browse API ===
+2026-06-15 18:43:52,391 - INFO - Searching eBay: 'iPhone 12'...
+2026-06-15 18:43:52,948 - INFO -   ✅ Found 3 items
+2026-06-15 18:43:52,948 - INFO -     - 12-Piece NFC Business Card Set - NTAG216 Chips Compatible with Iphone and All Nf: ${'value': '16.98', 'currency': 'USD'}
+2026-06-15 18:43:52,948 - INFO -     - Handmade Women's Crystal Diamond Soft Phone Case For iPhone 14 15 16 17 PRO MAX: ${'value': '16.99', 'currency': 'USD'}
+2026-06-15 18:43:52,948 - INFO - Searching eBay: 'Sony Alpha'...
+2026-06-15 18:43:53,480 - INFO -   ✅ Found 3 items
+2026-06-15 18:43:53,480 - INFO -     - #Sony Alpha a6400 24.2MP Mirrorless Camera+16-50mm lens kit-SILVER (3K COUNT): ${'value': '649.99', 'currency': 'USD'}
+2026-06-15 18:43:53,480 - INFO -     - Sony Alpha a5000 Mirrorless Digital Camera with 16-50mm Lens Black English: ${'value': '219.85', 'currency': 'USD'}
+2026-06-15 18:43:53,480 - INFO - Searching eBay: 'Pokemon Card'...
+2026-06-15 18:43:54,082 - INFO -   ✅ Found 3 items
+2026-06-15 18:43:54,082 - INFO -     - Squirtle McDonald's Promo 007/018 Japanese 2002 Pokemon Card: ${'value': '2499.00', 'currency': 'USD'}
+2026-06-15 18:43:54,082 - INFO -     - PSA 10 Gengar & Mimikyu GX 038/095 Tag Team sm9 Tag Bolt Japanese Pokemon Card: ${'value': '458.06', 'currency': 'USD', 'convertedFromValue': '650.00', 'convertedFromCurrency': 'AUD'}
+2026-06-15 18:43:54,082 - INFO - 
+=== End-to-End Research Flow ===
+2026-06-15 18:43:54,082 - INFO - 
+[Step 1] Fetching from all sources...
+2026-06-15 18:44:57,976 - INFO -   ✅ Total source items: 52
+2026-06-15 18:44:57,976 - INFO - 
+[Step 2] Processing 52 items...
+2026-06-15 18:44:57,977 - DEBUG -   [1] Trying query: 'iPhone 16 Pro'
+2026-06-15 18:44:58,597 - INFO -   [1] ✅ iPhone 16 Pro Max ハードケース クリア... | profit ¥-3,178 | margin -153.8%
+2026-06-15 18:44:58,598 - DEBUG -   [2] Trying query: '手書き風メモデザイン iPhone16ケース Lサイズ'
+2026-06-15 18:44:59,052 - DEBUG -   [2] Trying query: '手書き風メモデザイン iPhone16ケ'
+2026-06-15 18:44:59,586 - DEBUG -   [3] Trying query: 'newnew LG XBOOM'
+2026-06-15 18:45:00,171 - INFO -   [3] ✅ 新品未使用　LG XBOOM Go ワイヤレススピーカー XG2TBK... | profit ¥20,453 | margin 64.9%
+2026-06-15 18:45:00,172 - DEBUG -   [4] Trying query: 'ACアダプタ MSC-04JR LG'
+2026-06-15 18:45:00,567 - DEBUG -   [4] Trying query: 'MSC'
+2026-06-15 18:45:01,122 - DEBUG -   [4] ❌ Match score too low: 0.00
+2026-06-15 18:45:01,122 - DEBUG -   [5] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:01,629 - DEBUG -   [6] Trying query: 'LG Electronics タブレット'
+2026-06-15 18:45:02,195 - DEBUG -   [6] Trying query: 'Electronics'
+2026-06-15 18:45:04,494 - DEBUG -   [6] ❌ Match score too low: 0.00
+2026-06-15 18:45:04,494 - DEBUG -   [7] Trying query: 'Electronics Devices PROTECTIVE'
+2026-06-15 18:45:05,059 - INFO -   [7] ✅ Electronics Devices PROTECTIVE FILM... | profit ¥1,803 | margin 23.7%
+2026-06-15 18:45:05,060 - DEBUG -   [8] Trying query: '【箱付き】sE Electronics NEOM'
+2026-06-15 18:45:05,538 - DEBUG -   [8] Trying query: 'Electronics NEOM USB'
+2026-06-15 18:45:06,393 - INFO -   [8] ✅ 【箱付き】sE Electronics NEOM USB プロフェッショナルUS... | profit ¥-1,273 | margin -6.2%
+2026-06-15 18:45:06,393 - DEBUG -   [9] Trying query: '電動ドライバー 小型 精密ドライバー'
+2026-06-15 18:45:07,107 - DEBUG -   [9] Trying query: 'switch'
+2026-06-15 18:45:07,974 - DEBUG -   [9] ❌ Match score too low: 0.00
+2026-06-15 18:45:07,975 - DEBUG -   [10] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:08,527 - DEBUG -   [11] Trying query: 'Canon EOS 50'
+2026-06-15 18:45:08,927 - INFO -   [11] ✅ Canon EOS 50D ボディ + レンズセット... | profit ¥11,480 | margin 31.5%
+2026-06-15 18:45:08,927 - DEBUG -   [12] Trying query: 'Canon'
+2026-06-15 18:45:09,506 - INFO -   [12] ✅ Canon Mount Adapter EF-EOS R マウントアダプター... | profit ¥37,787 | margin 60.7%
+2026-06-15 18:45:09,507 - DEBUG -   [13] Trying query: 'Canon'
+2026-06-15 18:45:10,062 - DEBUG -   [13] ❌ Match score too low: 0.00
+2026-06-15 18:45:10,063 - DEBUG -   [14] Trying query: 'Canon'
+2026-06-15 18:45:10,596 - DEBUG -   [14] ❌ Match score too low: 0.00
+2026-06-15 18:45:10,597 - DEBUG -   [15] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:11,119 - DEBUG -   [16] Trying query: 'Nikon'
+2026-06-15 18:45:11,602 - DEBUG -   [16] ❌ Match score too low: 0.00
+2026-06-15 18:45:11,602 - DEBUG -   [17] Trying query: 'Nikon'
+2026-06-15 18:45:12,088 - DEBUG -   [17] ❌ Match score too low: 0.00
+2026-06-15 18:45:12,089 - DEBUG -   [18] Trying query: 'Nikon'
+2026-06-15 18:45:12,593 - DEBUG -   [18] ❌ Match score too low: 0.00
+2026-06-15 18:45:12,594 - DEBUG -   [19] Trying query: 'Nikon D850'
+2026-06-15 18:45:13,053 - INFO -   [19] ✅ ★美品★Nikon ニコン D850 ボディ カメラ デジタル一眼 元箱 チャー... | profit ¥58,055 | margin 21.6%
+2026-06-15 18:45:13,053 - DEBUG -   [20] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:13,502 - DEBUG -   [21] Trying query: 'Nikon'
+2026-06-15 18:45:13,991 - DEBUG -   [21] ❌ Match score too low: 0.00
+2026-06-15 18:45:13,991 - DEBUG -   [22] Trying query: 'ピカチュウ VMAX 付録'
+2026-06-15 18:45:14,530 - DEBUG -   [22] Trying query: 'VMAX'
+2026-06-15 18:45:14,986 - DEBUG -   [22] ❌ Match score too low: 0.00
+2026-06-15 18:45:14,987 - DEBUG -   [23] Trying query: 'いたずら好きのピチュー：Pokemonカードゲーム×はじめしゃちょー×グラニフ コラ…'
+2026-06-15 18:45:15,392 - DEBUG -   [23] Trying query: 'いたずら好きのピチュー：Pokemonカ'
+2026-06-15 18:45:15,858 - DEBUG -   [24] Trying query: 'ナインタイル Pokemonドコダ！ Oink'
+2026-06-15 18:45:16,328 - DEBUG -   [24] Trying query: 'Oink Games'
+2026-06-15 18:45:16,842 - INFO -   [24] ✅ ナインタイル ポケモンドコダ！ Oink Games ボードゲーム ... | profit ¥-3,333 | margin -92.0%
+2026-06-15 18:45:16,842 - DEBUG -   [25] Trying query: 'オインクゲームズ ナインタイル Pokemonドコダ！'
+2026-06-15 18:45:17,325 - DEBUG -   [25] Trying query: 'オインクゲームズ ナインタイル Poke'
+2026-06-15 18:45:17,784 - DEBUG -   [26] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:18,226 - DEBUG -   [27] Trying query: 'カツラのファイヤー ★ ジム拡張第2弾'
+2026-06-15 18:45:19,065 - DEBUG -   [27] Trying query: 'カツラのファイヤー ★ ジム拡張第2弾 '
+2026-06-15 18:45:19,585 - DEBUG -   [28] Trying query: 'Yu-Gi-Oh マジマジ☆マジシャンギャル'
+2026-06-15 18:45:20,014 - DEBUG -   [28] Trying query: 'Yu-Gi-Oh マジマジ☆マジシャンギ'
+2026-06-15 18:45:20,540 - DEBUG -   [29] Trying query: '送料無料 Yu-Gi-Oh デュエルモンスターズ'
+2026-06-15 18:45:21,045 - DEBUG -   [29] Trying query: 'Duel Monsters King'
+2026-06-15 18:45:21,519 - INFO -   [29] ✅ 送料無料　遊戯王　デュエルモンスターズ　Yu-Gi-Oh!　ノート　Duel M... | profit ¥2,962 | margin 33.1%
+2026-06-15 18:45:21,519 - DEBUG -   [30] Trying query: '神姫PROJECT ソル 予約特典スリーブ'
+2026-06-15 18:45:22,012 - DEBUG -   [30] Trying query: '神姫PROJECT ソル 予約特典スリー'
+2026-06-15 18:45:22,421 - DEBUG -   [31] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:22,888 - DEBUG -   [32] Trying query: 'Gucci GG'
+2026-06-15 18:45:23,357 - DEBUG -   [32] ❌ Match score too low: 0.00
+2026-06-15 18:45:23,357 - DEBUG -   [33] Trying query: 'Gucci GG'
+2026-06-15 18:45:23,799 - DEBUG -   [33] ❌ Match score too low: 0.00
+2026-06-15 18:45:23,799 - DEBUG -   [34] Trying query: 'Gucci'
+2026-06-15 18:45:24,316 - DEBUG -   [34] ❌ Match score too low: 0.00
+2026-06-15 18:45:24,316 - DEBUG -   [35] Trying query: 'Gucci'
+2026-06-15 18:45:24,893 - DEBUG -   [35] ❌ Match score too low: 0.00
+2026-06-15 18:45:24,894 - DEBUG -   [36] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:25,417 - DEBUG -   [37] Trying query: 'Louis Vuitton'
+2026-06-15 18:45:25,948 - DEBUG -   [37] ❌ Match score too low: 0.00
+2026-06-15 18:45:25,948 - DEBUG -   [38] Trying query: 'Louis Vuitton'
+2026-06-15 18:45:26,420 - INFO -   [38] ✅ Louis Vuitton スニーカー ブラック グレー... | profit ¥39,582 | margin 53.7%
+2026-06-15 18:45:26,421 - DEBUG -   [39] Trying query: 'Louis Vuitton'
+2026-06-15 18:45:26,997 - DEBUG -   [39] ❌ Match score too low: 0.00
+2026-06-15 18:45:26,998 - DEBUG -   [40] Trying query: 'Louis Vuitton'
+2026-06-15 18:45:27,582 - INFO -   [40] ✅ LOUIS VUITTON ルイヴィトン モノグラム チェーン ブレスレット シ... | profit ¥44,702 | margin 60.7%
+2026-06-15 18:45:27,582 - DEBUG -   [41] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:28,092 - DEBUG -   [42] Trying query: 'HOBBYBRICK カスタムミニフィギュア もののけ姫'
+2026-06-15 18:45:28,586 - DEBUG -   [42] Trying query: 'HOBBYBRICK'
+2026-06-15 18:45:29,253 - INFO -   [42] ✅ HOBBYBRICK カスタムミニフィギュア もののけ姫 限定50個... | profit ¥9,549 | margin 10.1%
+2026-06-15 18:45:29,253 - DEBUG -   [43] Trying query: 'LEGO レゴ GAME'
+2026-06-15 18:45:29,975 - DEBUG -   [43] ❌ Match score too low: 0.00
+2026-06-15 18:45:29,975 - DEBUG -   [44] Trying query: 'レゴ 正規品 LEGO'
+2026-06-15 18:45:30,449 - DEBUG -   [44] Trying query: 'LEGO'
+2026-06-15 18:45:30,983 - DEBUG -   [44] ❌ Match score too low: 0.00
+2026-06-15 18:45:30,983 - DEBUG -   [45] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:31,523 - DEBUG -   [46] Trying query: 'Hobby JAPAN（ホビージャパン） 2026年6月号〈特別付録⭕️〉'
+2026-06-15 18:45:31,964 - DEBUG -   [46] Trying query: 'Hobby JAPAN'
+2026-06-15 18:45:32,428 - DEBUG -   [46] ❌ Match score too low: 0.00
+2026-06-15 18:45:32,429 - DEBUG -   [47] Trying query: '電撃HOBBY MAGAZINE 6周年記念特別号'
+2026-06-15 18:45:33,131 - DEBUG -   [47] Trying query: 'MAGAZINE Vol'
+2026-06-15 18:45:33,720 - INFO -   [47] ✅ 電撃HOBBY MAGAZINE 6周年記念特別号 Vol.3... | profit ¥-4,219 | margin -669.6%
+2026-06-15 18:45:33,720 - DEBUG -   [48] Trying query: 'バンダイ公式 ガシャポンマシントライ カラフルカプセル9個付き'
+2026-06-15 18:45:34,212 - DEBUG -   [48] Trying query: 'バンダイ公式 ガシャポンマシントライ カ'
+2026-06-15 18:45:35,058 - DEBUG -   [49] Trying query: 'MG 1/100 ガンダムヘビーアームズ改'
+2026-06-15 18:45:35,486 - DEBUG -   [49] Trying query: 'MG 1/100 ガンダムヘビーアームズ'
+2026-06-15 18:45:35,922 - DEBUG -   [50] Trying query: '落札相場 (3件)'
+2026-06-15 18:45:36,423 - DEBUG -   [51] Trying query: 'BANDAI'
+2026-06-15 18:45:36,969 - DEBUG -   [51] ❌ Match score too low: 0.00
+2026-06-15 18:45:36,969 - DEBUG -   [52] Trying query: 'BANDAI'
+2026-06-15 18:45:37,488 - DEBUG -   [52] ❌ Match score too low: 0.00
+2026-06-15 18:45:37,489 - INFO - ✅ CSV output: output_operational_test\research_results.csv (13 rows)
+2026-06-15 18:45:37,489 - INFO - 
+✅ Test report: output_operational_test\test_report.json
+2026-06-15 18:45:37,489 - INFO - 
+=== Cleanup ===
+2026-06-15 18:45:37,566 - INFO - ✅ Closed browser
+2026-06-15 18:45:37,588 - INFO - ✅ Stopped playwright

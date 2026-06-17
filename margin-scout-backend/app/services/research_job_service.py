@@ -18,7 +18,7 @@ class ResearchJobService:
             "user_id": user_id,
             "title": req.title,
             "status": JobStatus.pending,
-            "conditions": req.conditions,
+            "conditions": req.conditions.model_dump(),
             "progress": 0,
             "total_items": 0,
             "matched_items": 0

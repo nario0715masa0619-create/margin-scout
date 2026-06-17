@@ -38,6 +38,50 @@
         <input v-model.number="minSales" type="number" min="1" class="form-input" />
       </div>
 
+      <!-- 検索オプション -->
+      <div class="form-group">
+        <label>検索オプション（複数選択可）</label>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" value="on_sale" v-model="selectedOptions" /> 販売中
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="sold_out" v-model="selectedOptions" /> 売り切れ
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="fixed_price" v-model="selectedOptions" /> 通常出品
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="auction" v-model="selectedOptions" /> オークション
+          </label>
+        </div>
+      </div>
+
+      <!-- コンディション -->
+      <div class="form-group">
+        <label>コンディション（複数選択可）</label>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" value="new" v-model="selectedConditions" /> 新品、未使用
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="almost_new" v-model="selectedConditions" /> 未使用に近い
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="no_scratches" v-model="selectedConditions" /> 目立った傷や汚れなし
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="slight_scratches" v-model="selectedConditions" /> やや傷や汚れあり
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="scratched" v-model="selectedConditions" /> 傷や汚れあり
+          </label>
+          <label class="checkbox-label">
+            <input type="checkbox" value="bad_condition" v-model="selectedConditions" /> 全体的に状態が悪い
+          </label>
+        </div>
+      </div>
+
       <!-- 送信ボタン -->
       <button
         :disabled="!keywords || selectedSources.length === 0 || isLoading"
@@ -75,6 +119,8 @@ const keywords = ref('')
 const selectedSources = ref(['mercari', 'yahoo_flea', 'yahoo_auction', 'hardoff'])
 const daysBack = ref(90)
 const minSales = ref(2)
+const selectedOptions = ref<string[]>(['on_sale', 'fixed_price'])
+const selectedConditions = ref<string[]>(['new', 'almost_new', 'no_scratches'])
 const error = ref('')
 const isLoading = ref(false)
 
@@ -102,7 +148,9 @@ const startResearch = async () => {
       keywords: keywordList,
       sources: selectedSources.value,
       daysBack: daysBack.value,
-      minSales: minSales.value
+      minSales: minSales.value,
+      selectedOptions: selectedOptions.value,
+      selectedConditions: selectedConditions.value
     })
 
     // API 呼び出し
@@ -112,11 +160,13 @@ const startResearch = async () => {
         keywords: keywordList,
         sources: selectedSources.value,
         days_back: daysBack.value,
-        min_sales: minSales.value
+        min_sales: minSales.value,
+        selected_options: selectedOptions.value,
+        selected_conditions: selectedConditions.value
       }
     })
 
-    const jobId = response.job_id
+    const jobId = response.id || response.job_id
 
     // ジョブ状態を更新
     store.setJobState({

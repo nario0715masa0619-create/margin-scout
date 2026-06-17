@@ -3,6 +3,7 @@ import axios from 'axios'
 import { useErrorStore } from '../stores/error'
 import { useAuthStore } from '../stores/auth'
 import router from '../router'
+import type { ResearchStartPayload } from '../types/research'
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
 
@@ -79,8 +80,8 @@ api.interceptors.response.use(
 
 export const researchAPI = {
   // 既存メソッドの実装を維持（パスを /research-jobs に適応）
-  async startResearch(conditions: any) {
-    const response = await api.post('/research-jobs', conditions)
+  async startResearch(payload: ResearchStartPayload) {
+    const response = await api.post('/research-jobs', payload)
     return response.data
   },
   async getJobStatus(jobId: string) {

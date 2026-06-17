@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-06-15T15:26:07.862960",
+  "api_mode": "sandbox",
+  "api_host": "api.sandbox.ebay.com",
+  "searches": [
+    {
+      "keyword": "iPhone 16",
+      "success": true,
+      "item_count": 3,
+      "title": "Magnetic Chargers Type C Fast Wireless Charger Pad",
+      "price": "14.99",
+      "currency": "USD"
+    },
+    {
+      "keyword": "Canon EOS",
+      "success": true,
+      "item_count": 1,
+      "title": "Canon EOS 5D",
+      "price": "98.00",
+      "currency": "USD"
+    },
+    {
+      "keyword": "Nintendo Switch",
+      "success": false,
+      "reason": "No items found"
+    }
+  ]
+}
