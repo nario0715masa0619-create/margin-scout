@@ -53,13 +53,17 @@ def get_research_results(
     # モック: 10 件の固定データを返す
     mock_items = [
         {
-            "id": f"item-{i}",
-            "job_id": job_id,
-            "title": f"iPhone {i+1}",
-            "price": 5000 + (i * 100),
-            "source": "mercari",
-            "url": f"https://mercari.jp/items/{i}",
-            "created_at": job.created_at.isoformat()
+            "candidateId": f"item-{i}",
+            "productName": f"iPhone {i+1}",
+            "sourceChannel": "mercari",
+            "sourcePrice": 5000 + (i * 100),
+            "sourceUrl": f"https://mercari.jp/items/{i}",
+            "ebayTitle": f"Apple iPhone {i+1} Unlocked",
+            "ebayPrice": 100.0 + (i * 10),
+            "profitJpy": 10000 + (i * 500),
+            "profitMarginPct": 30.5 + i,
+            "matchScore": 0.95 - (i * 0.01),
+            "status": "new"
         }
         for i in range(10)
     ]
