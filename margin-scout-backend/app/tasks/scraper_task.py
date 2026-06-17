@@ -1,14 +1,16 @@
-import asyncio
+import time
 import logging
 from sqlalchemy.orm import Session
 from app.db.database import SessionLocal
 from app.repositories.research_job_repository import research_job_repo
 from app.models.research_job import JobStatus
+from app.celery_app import celery_app
 
 logger = logging.getLogger(__name__)
 
-async def run_research_job(job_id: str):
-    logger.info(f"Starting background scraping task for job: {job_id}")
+@celery_app.task(name="run_research_job")
+def run_research_job(job_id: str):
+    logger.info(f"Starting Celery scraping task for job: {job_id}")
     db: Session = SessionLocal()
     try:
         # 1. Update status to running
@@ -23,7 +25,7 @@ async def run_research_job(job_id: str):
         # 2. Call scraper adapters
         # (Phase 1 mock logic)
         logger.info(f"Executing mock scraping for job: {job_id}")
-        await asyncio.sleep(5)  # Simulate long-running scraping task
+        time.sleep(5)  # Simulate long-running scraping task
 
         # 3. Complete
         job.status = JobStatus.completed

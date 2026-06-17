@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 from app.db.database import get_db
@@ -14,9 +14,9 @@ def get_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), cur
     return ResearchJobService.get_user_jobs(db, user_id=current_user_id, skip=skip, limit=limit)
 
 @router.post("/", response_model=JobResponse, status_code=status.HTTP_201_CREATED)
-def create_job(req: JobRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db), current_user_id: str = Depends(get_current_user_id)):
+def create_job(req: JobRequest, db: Session = Depends(get_db), current_user_id: str = Depends(get_current_user_id)):
     job = ResearchJobService.create_job(db, user_id=current_user_id, req=req)
-    background_tasks.add_task(run_research_job, job.id)
+    run_research_job.delay(str(job.id))
     return job
 
 @router.get("/{job_id}", response_model=JobResponse)
