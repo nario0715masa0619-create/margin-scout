@@ -155,7 +155,7 @@ const fetchCandidates = async () => {
     const jobId = route.params.jobId as string
     const data = await researchAPI.getCandidates(jobId, 100, 0)
 
-    candidates.value = data.results || []
+    candidates.value = data.items || []
     store.setCandidatesList(candidates.value)
   } catch (err: any) {
     console.error('Failed to fetch candidates:', err)
