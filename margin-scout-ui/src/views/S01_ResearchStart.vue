@@ -107,10 +107,13 @@ const startResearch = async () => {
 
     // API 呼び出し
     const response = await researchAPI.startResearch({
-      keywords: keywordList,
-      sources: selectedSources.value,
-      days_back: daysBack.value,
-      min_sales: minSales.value
+      title: "Untitled Research",
+      conditions: {
+        keywords: keywordList,
+        sources: selectedSources.value,
+        days_back: daysBack.value,
+        min_sales: minSales.value
+      }
     })
 
     const jobId = response.job_id
