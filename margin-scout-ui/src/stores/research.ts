@@ -32,7 +32,7 @@ export interface Candidate {
   conditionText?: string
   ebayTitle: string
   ebayPrice: number
-  ebayItemId?: string
+  ebayPriceJpy: number
   profitJpy: number
   profitMarginPct: number
   matchScore: number

@@ -5,6 +5,7 @@ from app.db.database import get_db
 from app.dependencies import get_current_user_id
 from app.schemas.research_job import JobRequest, JobResponse
 from app.services.research_job_service import ResearchJobService
+from app.services.exchange_rate_service import ExchangeRateService
 from app.tasks.scraper_task import run_research_job
 from app.models.research_job import JobStatus
 
@@ -35,7 +36,7 @@ def delete_job(job_id: str, db: Session = Depends(get_db), current_user_id: str 
     return None
 
 @router.get("/{job_id}/results", response_model=dict)
-def get_research_results(
+async def get_research_results(
     job_id: str,
     limit: int = Query(100, ge=1, le=1000),
     offset: int = Query(0, ge=0),
@@ -50,6 +51,9 @@ def get_research_results(
     if job.status != JobStatus.completed:
         raise HTTPException(status_code=400, detail="Job not completed")
     
+    # ドル円レート取得
+    usd_to_jpy = await ExchangeRateService.get_usd_to_jpy_rate()
+
     # モック: 10 件の固定データを返す
     mock_items = [
         {
@@ -60,6 +64,7 @@ def get_research_results(
             "sourceUrl": f"https://mercari.jp/items/{i}",
             "ebayTitle": f"Apple iPhone {i+1} Unlocked",
             "ebayPrice": 100.0 + (i * 10),
+            "ebayPriceJpy": round((100.0 + (i * 10)) * usd_to_jpy),
             "profitJpy": 10000 + (i * 500),
             "profitMarginPct": 30.5 + i,
             "matchScore": 0.95 - (i * 0.01),

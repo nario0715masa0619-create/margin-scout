@@ -57,7 +57,7 @@
             </td>
             <td>{{ candidate.sourceChannel }}</td>
             <td class="text-right">¥{{ formatNumber(candidate.sourcePrice) }}</td>
-            <td class="text-right">${{ candidate.ebayPrice.toFixed(2) }}</td>
+            <td class="text-right">¥{{ formatNumber(candidate.ebayPriceJpy) }}</td>
             <td :class="['text-right', candidate.profitJpy >= 0 ? 'profit-value' : 'loss-value']">
               ¥{{ formatNumber(candidate.profitJpy) }}
             </td>
