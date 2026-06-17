@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List
 from app.db.database import get_db
@@ -6,6 +6,7 @@ from app.dependencies import get_current_user_id
 from app.schemas.research_job import JobRequest, JobResponse
 from app.services.research_job_service import ResearchJobService
 from app.tasks.scraper_task import run_research_job
+from app.models.research_job import JobStatus
 
 router = APIRouter()
 
@@ -32,3 +33,40 @@ def delete_job(job_id: str, db: Session = Depends(get_db), current_user_id: str 
     if not success:
         raise HTTPException(status_code=404, detail="Job not found")
     return None
+
+@router.get("/{job_id}/results", response_model=dict)
+def get_research_results(
+    job_id: str,
+    limit: int = Query(100, ge=1, le=1000),
+    offset: int = Query(0, ge=0),
+    current_user_id: str = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+):
+    job = ResearchJobService.get_user_job(db, user_id=current_user_id, job_id=job_id)
+    
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    
+    if job.status != JobStatus.completed:
+        raise HTTPException(status_code=400, detail="Job not completed")
+    
+    # モック: 10 件の固定データを返す
+    mock_items = [
+        {
+            "id": f"item-{i}",
+            "job_id": job_id,
+            "title": f"iPhone {i+1}",
+            "price": 5000 + (i * 100),
+            "source": "mercari",
+            "url": f"https://mercari.jp/items/{i}",
+            "created_at": job.created_at.isoformat()
+        }
+        for i in range(10)
+    ]
+    
+    return {
+        "items": mock_items[offset:offset+limit],
+        "total": 10,
+        "limit": limit,
+        "offset": offset
+    }
