@@ -1,8 +1,9 @@
 {
   "build": {
-    "builder": "nixpacks"
+    "builder": "nixpacks",
+    "buildCommand": "cd margin-scout-backend && pip install -r requirements.txt"
   },
   "deploy": {
-    "startCommand": "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    "startCommand": "cd margin-scout-backend && uvicorn app.main:app --host 0.0.0.0 --port `$PORT"
   }
 }
