@@ -1,0 +1,1372 @@
+<USER_REQUEST>
+Antigravity 実装指示】P2-2a.5 + P2-2 Backend + Frontend 実装
+【指示概要】
+P2-2（SaaS Dashboard 実装）を以下の順序で実施してください：
+
+P2-2a.5: API 仕様書確定（docs 更新）
+P2-2-Backend: Backend エンドポイント追加実装
+P2-2-Frontend: Frontend ダッシュボード実装
+P2-2-Integration: 統合テスト実施
+【P2-2a.5: API 仕様書確定】
+ファイル
+margin-scout-backend/docs/API_SPEC.md（既存を拡張）
+実施内容
+既存の POST /api/v1/captures 仕様に以下を追加・確定してください：
+
+エンドポイント一覧
+Copy1. GET   /api/v1/captures
+   - 説明: ImportSession 一覧（ページング対応）
+   - 認証: Bearer token（user_id 自動フィルタ）
+   - クエリ: ?limit=20&offset=0
+   - レスポンス: sessions[], total, limit, offset
+
+2. GET   /api/v1/captures/{capture_id}
+   - 説明: ImportSession 詳細
+   - 認証: Bearer token
+   - 所有権: user_id で確認（他ユーザー → 404）
+   - レスポンス: id, source, import_type, item_count, processed_count, matched_count, error_count, created_at, completed_at, items[]
+
+3. GET   /api/v1/captures/{capture_id}/items
+   - 説明: セッション内の SourceItem 一覧
+   - 認証: Bearer token
+   - クエリ: ?limit=100&offset=0
+   - 所有権: capture_id の user_id 確認
+   - レスポンス: items[], total, limit, offset
+
+4. POST  /api/v1/captures/{capture_id}/export/csv
+   - 説明: セッションの CSV エクスポート
+   - 認証: Bearer token
+   - 入力: なし（capture_id で確定）
+   - 所有権: capture_id の user_id 確認
+   - レスポンス: Content-Type: text/csv, Content-Disposition: attachment
+   - CSV ヘッダ: 商品名,ソース,フリマ価格,eBay価格,利益,利益率,%
+
+5. GET   /api/v1/saved-items
+   - 説明: 保存済み SourceItem 一覧（全セッション）
+   - 認証: Bearer token（user_id 自動フィルタ）
+   - クエリ: ?limit=100&offset=0&source=mercari&sort=profit_desc
+   - レスポンス: items[], total, limit, offset
+
+6. GET   /api/v1/saved-items/{item_id}
+   - 説明: SourceItem 詳細（ProfitSnapshot, EbayMatch 含む）
+   - 認証: Bearer token
+   - 所有権: item_id の user_id 確認（source_item → import_session → user_id）
+   - レスポンス: id, title, source, source_price_jpy, url, image_url, seller_name, condition, category, ebay_price_jpy, ebay_title, profit_jpy, profit_margin_pct, exchange_rate_usd_jpy, match_score, match_status, import_session_id, created_at
+
+7. POST  /api/v1/saved-items/export/csv
+   - 説明: 複数 SourceItem の CSV エクスポート
+   - 認証: Bearer token
+   - 入力: { "item_ids": ["uuid1", "uuid2", ...] }
+   - 所有権: 全 item_ids が current_user_id 配下であること確認
+   - レスポンス: CSV ファイル
+共通仕様
+ページング:
+
+すべてのリスト取得エンドポイントに ?limit=N&offset=M をサポート
+デフォルト: limit=20, offset=0
+最大値: limit ≤ 100（超過時は 400 エラー）
+レスポンスに常に total（総件数）を含める
+日時フォーマット:
+
+すべて ISO 8601 UTC（例: 2026-06-17T10:30:00Z）
+Rate Limit ヘッダー (すべてのレスポンスに含める):
+
+CopyX-RateLimit-Limit: 1000
+X-RateLimit-Remaining: 456
+X-RateLimit-Reset: 1718623200
+認証エラー:
+
+401: 認証なし / トークン無効
+403: 権限なし（他ユーザーデータアクセス）
+404: リソースなし
+バリデーションエラー:
+
+400: ペイロード検証失敗 / 不正な クエリパラメータ
+422: ペイロード型エラー
+エラーレスポンス形式:
+
+Copy{
+  "detail": "Error message"
+}
+レスポンス形式詳細
+GET /api/v1/captures (ImportSession 一覧):
+
+Copy{
+  "sessions": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440000",
+      "source": "mercari",
+      "import_type": "manual",
+      "item_count": 10,
+      "processed_count": 10,
+      "matched_count": 8,
+      "error_count": 0,
+      "created_at": "2026-06-17T10:30:00Z",
+      "completed_at": "2026-06-17T10:31:00Z"
+    }
+  ],
+  "total": 42,
+  "limit": 20,
+  "offset": 0
+}
+GET /api/v1/captures/{capture_id} (ImportSession 詳細):
+
+Copy{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "source": "mercari",
+  "import_type": "manual",
+  "item_count": 10,
+  "processed_count": 10,
+  "matched_count": 8,
+  "error_count": 0,
+  "created_at": "2026-06-17T10:30:00Z",
+  "completed_at": "2026-06-17T10:31:00Z",
+  "items": [
+    {
+      "id": "uuid",
+      "title": "iPhone 14 Pro",
+      "source_price_jpy": 95000,
+      "ebay_price_jpy": 152000,
+      "profit_jpy": 57000,
+      "profit_margin_pct": 60.0,
+      "status": "matched"
+    }
+  ]
+}
+GET /api/v1/captured/{capture_id}/items (セッション内 SourceItem):
+
+Copy{
+  "items": [
+    {
+      "id": "uuid",
+      "title": "iPhone 14 Pro",
+      "source": "mercari",
+      "source_price_jpy": 95000,
+      "url": "https://mercari.jp/item/m123",
+      "image_url": "https://...",
+      "seller_name": "User123",
+      "condition": "new",
+      "ebay_price_jpy": 152000,
+      "profit_jpy": 57000,
+      "profit_margin_pct": 60.0,
+      "match_score": 0.95,
+      "match_status": "matched",
+      "created_at": "2026-06-17T10:30:00Z"
+    }
+  ],
+  "total": 10,
+  "limit": 100,
+  "offset": 0
+}
+GET /api/v1/saved-items (保存済み SourceItem 一覧):
+
+Copy{
+  "items": [
+    {
+      "id": "uuid",
+      "title": "iPhone 14 Pro",
+      "source": "mercari",
+      "source_price_jpy": 95000,
+      "url": "https://mercari.jp/item/m123",
+      "ebay_price_jpy": 152000,
+      "profit_jpy": 57000,
+      "profit_margin_pct": 60.0,
+      "import_session_id": "uuid",
+      "created_at": "2026-06-17T10:30:00Z"
+    }
+  ],
+  "total": 123,
+  "limit": 100,
+  "offset": 0
+}
+GET /api/v1/saved-items/{item_id} (SourceItem 詳細):
+
+Copy{
+  "id": "uuid",
+  "title": "iPhone 14 Pro",
+  "source": "mercari",
+  "source_price_jpy": 95000,
+  "url": "https://mercari.jp/item/m123",
+  "image_url": "https://...",
+  "seller_name": "User123",
+  "condition": "new",
+  "category": "smartphones",
+  "ebay_price_jpy": 152000,
+  "ebay_title": "Apple iPhone 14 Pro Max",
+  "profit_jpy": 57000,
+  "profit_margin_pct": 60.0,
+  "exchange_rate_usd_jpy": 160.36,
+  "match_score": 0.95,
+  "match_status": "matched",
+  "import_session_id": "uuid",
+  "created_at": "2026-06-17T10:30:00Z"
+}
+成果物
+ docs/API_SPEC.md に上記エンドポイント 7 個の仕様を記載
+ レスポンス形式・共通仕様を統一記述
+ エラーハンドリング・認証・Rate Limit 仕様を明記
+ 所有権チェック要件を明記
+所要時間
+1-2 時間（ドキュメント作成のみ、実装なし）
+
+【P2-2-Backend: Backend エンドポイント追加実装】
+ファイル
+margin-scout-backend/app/routers/captures.py（既存を拡張）
+margin-scout-backend/tests/test_captures_api.py（既存を拡張）
+実施内容
+P2-2a.5 で確定した API 仕様に基づき、以下を実装してください：
+
+1. GET /api/v1/captures（ImportSession 一覧）
+Copy@router.get("/captures")
+async def list_captures(
+    current_user_id: str = Depends(get_current_user),
+    limit: int = Query(20, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db)
+):
+    """
+    ImportSession 一覧取得（user_id 自動フィルタ、ページング対応）
+    
+    Args:
+        current_user_id: JWT から抽出した user_id
+        limit: ページサイズ（1-100）
+        offset: オフセット
+        db: Database session
+    
+    Returns:
+        { "sessions": [...], "total": N, "limit": ..., "offset": ... }
+    
+    Errors:
+        401: 認証失敗
+        400: クエリ検証失敗
+    """
+    # user_id でフィルタ + 時系列ソート
+    sessions = db.query(ImportSession).filter(
+        ImportSession.user_id == current_user_id
+    ).order_by(ImportSession.created_at.desc()).limit(limit).offset(offset).all()
+    
+    total = db.query(ImportSession).filter(
+        ImportSession.user_id == current_user_id
+    ).count()
+    
+    return {
+        "sessions": [
+            {
+                "id": str(s.id),
+                "source": s.source,
+                "import_type": s.import_type,
+                "item_count": s.item_count,
+                "processed_count": s.processed_count,
+                "matched_count": s.matched_count,
+                "error_count": s.error_count,
+                "created_at": s.created_at.isoformat() + "Z",
+                "completed_at": s.completed_at.isoformat() + "Z" if s.completed_at else None,
+            }
+            for s in sessions
+        ],
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
+Copy
+2. GET /api/v1/captures/{capture_id}（ImportSession 詳細）
+Copy@router.get("/captures/{capture_id}")
+async def get_capture_detail(
+    capture_id: str,
+    current_user_id: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    ImportSession 詳細取得（items[] 含む）
+    
+    Errors:
+        404: リソースなし / 他ユーザーのリソース
+    """
+    session = db.query(ImportSession).filter(
+        ImportSession.id == capture_id,
+        ImportSession.user_id == current_user_id
+    ).first()
+    
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    items = db.query(SourceItem).filter(
+        SourceItem.import_session_id == capture_id
+    ).all()
+    
+    items_list = []
+    for item in items:
+        profit = item.ebay_match.profit_snapshot if item.ebay_match else None
+        items_list.append({
+            "id": str(item.id),
+            "title": item.title,
+            "source_price_jpy": item.price_jpy,
+            "ebay_price_jpy": profit.ebay_price_jpy if profit else None,
+            "profit_jpy": profit.profit_jpy if profit else None,
+            "profit_margin_pct": profit.profit_margin_pct if profit else None,
+            "status": item.ebay_match.match_status if item.ebay_match else "pending",
+        })
+    
+    return {
+        "id": str(session.id),
+        "source": session.source,
+        "import_type": session.import_type,
+        "item_count": session.item_count,
+        "processed_count": session.processed_count,
+        "matched_count": session.matched_count,
+        "error_count": session.error_count,
+        "created_at": session.created_at.isoformat() + "Z",
+        "completed_at": session.completed_at.isoformat() + "Z" if session.completed_at else None,
+        "items": items_list,
+    }
+Copy
+3. GET /api/v1/captures/{capture_id}/items（セッション内 SourceItem）
+Copy@router.get("/captures/{capture_id}/items")
+async def get_capture_items(
+    capture_id: str,
+    current_user_id: str = Depends(get_current_user),
+    limit: int = Query(100, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    db: Session = Depends(get_db)
+):
+    """
+    セッション内の SourceItem 一覧（ページング対応）
+    
+    Errors:
+        404: セッションなし / 他ユーザーのセッション
+    """
+    # 所有権チェック
+    session = db.query(ImportSession).filter(
+        ImportSession.id == capture_id,
+        ImportSession.user_id == current_user_id
+    ).first()
+    
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    items = db.query(SourceItem).filter(
+        SourceItem.import_session_id == capture_id
+    ).order_by(SourceItem.created_at.desc()).limit(limit).offset(offset).all()
+    
+    total = db.query(SourceItem).filter(
+        SourceItem.import_session_id == capture_id
+    ).count()
+    
+    items_list = []
+    for item in items:
+        profit = item.ebay_match.profit_snapshot if item.ebay_match else None
+        items_list.append({
+            "id": str(item.id),
+            "title": item.title,
+            "source": item.source,
+            "source_price_jpy": item.price_jpy,
+            "url": item.url,
+            "image_url": item.image_url,
+            "seller_name": item.seller_name,
+            "condition": item.condition,
+            "ebay_price_jpy": profit.ebay_price_jpy if profit else None,
+            "profit_jpy": profit.profit_jpy if profit else None,
+            "profit_margin_pct": profit.profit_margin_pct if profit else None,
+            "match_score": item.ebay_match.match_score if item.ebay_match else 0.0,
+            "match_status": item.ebay_match.match_status if item.ebay_match else "pending",
+            "created_at": item.created_at.isoformat() + "Z",
+        })
+    
+    return {
+        "items": items_list,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
+Copy
+4. POST /api/v1/captures/{capture_id}/export/csv（セッション CSV 出力）
+Copyfrom fastapi.responses import StreamingResponse
+import csv
+from io import StringIO
+from datetime import datetime
+
+@router.post("/captures/{capture_id}/export/csv")
+async def export_capture_csv(
+    capture_id: str,
+    current_user_id: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    セッションの CSV エクスポート
+    
+    Errors:
+        404: セッションなし / 他ユーザーのセッション
+    """
+    # 所有権チェック
+    session = db.query(ImportSession).filter(
+        ImportSession.id == capture_id,
+        ImportSession.user_id == current_user_id
+    ).first()
+    
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+    
+    items = db.query(SourceItem).filter(
+        SourceItem.import_session_id == capture_id
+    ).all()
+    
+    # CSV 生成
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["商品名", "ソース", "フリマ価格", "eBay価格", "利益", "利益率"])
+    
+    for item in items:
+        profit = item.ebay_match.profit_snapshot if item.ebay_match else None
+        writer.writerow([
+            item.title,
+            item.source,
+            item.price_jpy,
+            profit.ebay_price_jpy if profit else "",
+            profit.profit_jpy if profit else "",
+            f"{profit.profit_margin_pct:.1f}%" if profit else "",
+        ])
+    
+    csv_content = output.getvalue()
+    
+    return StreamingResponse(
+        iter([csv_content]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": f"attachment;filename=margin-scout-{capture_id}-{datetime.now().strftime('%Y%m%d')}.csv"
+        }
+    )
+Copy
+5. GET /api/v1/saved-items（保存済み SourceItem 一覧）
+Copy@router.get("/saved-items")
+async def list_saved_items(
+    current_user_id: str = Depends(get_current_user),
+    limit: int = Query(100, ge=1, le=100),
+    offset: int = Query(0, ge=0),
+    source: Optional[str] = Query(None),
+    sort: str = Query("date_desc"),
+    db: Session = Depends(get_db)
+):
+    """
+    保存済み SourceItem 一覧（全セッション、ページング対応）
+    
+    クエリ:
+        source: フィルタ（mercari, yahoo_auction, yahoo_flea）
+        sort: ソート順（date_desc, profit_desc, margin_desc）
+    """
+    query = db.query(SourceItem).join(
+        ImportSession, ImportSession.id == SourceItem.import_session_id
+    ).filter(ImportSession.user_id == current_user_id)
+    
+    if source:
+        query = query.filter(SourceItem.source == source)
+    
+    # ソート
+    if sort == "profit_desc":
+        query = query.outerjoin(EbayMatch).outerjoin(ProfitSnapshot).order_by(
+            ProfitSnapshot.profit_jpy.desc()
+        )
+    elif sort == "margin_desc":
+        query = query.outerjoin(EbayMatch).outerjoin(ProfitSnapshot).order_by(
+            ProfitSnapshot.profit_margin_pct.desc()
+        )
+    else:  # date_desc
+        query = query.order_by(SourceItem.created_at.desc())
+    
+    items = query.limit(limit).offset(offset).all()
+    total = query.count()
+    
+    items_list = []
+    for item in items:
+        profit = item.ebay_match.profit_snapshot if item.ebay_match else None
+        items_list.append({
+            "id": str(item.id),
+            "title": item.title,
+            "source": item.source,
+            "source_price_jpy": item.price_jpy,
+            "url": item.url,
+            "ebay_price_jpy": profit.ebay_price_jpy if profit else None,
+            "profit_jpy": profit.profit_jpy if profit else None,
+            "profit_margin_pct": profit.profit_margin_pct if profit else None,
+            "import_session_id": str(item.import_session_id),
+            "created_at": item.created_at.isoformat() + "Z",
+        })
+    
+    return {
+        "items": items_list,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
+Copy
+6. GET /api/v1/saved-items/{item_id}（SourceItem 詳細）
+Copy@router.get("/saved-items/{item_id}")
+async def get_saved_item(
+    item_id: str,
+    current_user_id: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    SourceItem 詳細（所有権チェック付き）
+    
+    Errors:
+        404: アイテムなし / 他ユーザーのアイテム
+    """
+    item = db.query(SourceItem).join(
+        ImportSession, ImportSession.id == SourceItem.import_session_id
+    ).filter(
+        SourceItem.id == item_id,
+        ImportSession.user_id == current_user_id
+    ).first()
+    
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+    
+    profit = item.ebay_match.profit_snapshot if item.ebay_match else None
+    
+    return {
+        "id": str(item.id),
+        "title": item.title,
+        "source": item.source,
+        "source_price_jpy": item.price_jpy,
+        "url": item.url,
+        "image_url": item.image_url,
+        "seller_name": item.seller_name,
+        "condition": item.condition,
+        "category": item.category,
+        "ebay_price_jpy": profit.ebay_price_jpy if profit else None,
+        "ebay_title": item.ebay_match.ebay_title if item.ebay_match else None,
+        "profit_jpy": profit.profit_jpy if profit else None,
+        "profit_margin_pct": profit.profit_margin_pct if profit else None,
+        "exchange_rate_usd_jpy": profit.exchange_rate_usd_jpy if profit else None,
+        "match_score": item.ebay_match.match_score if item.ebay_match else 0.0,
+        "match_status": item.ebay_match.match_status if item.ebay_match else "pending",
+        "import_session_id": str(item.import_session_id),
+        "created_at": item.created_at.isoformat() + "Z",
+    }
+Copy
+7. POST /api/v1/saved-items/export/csv（複数 SourceItem CSV 出力）
+Copy@router.post("/saved-items/export/csv")
+async def export_saved_items_csv(
+    payload: dict,
+    current_user_id: str = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    """
+    複数 SourceItem の CSV エクスポート
+    
+    入力:
+        { "item_ids": ["uuid1", "uuid2", ...] }
+    
+    Errors:
+        400: item_ids が他ユーザーのデータを含む
+    """
+    item_ids = payload.get("item_ids", [])
+    
+    if not item_ids:
+        raise HTTPException(status_code=400, detail="item_ids is required")
+    
+    # 所有権チェック: 全 item_ids が current_user_id 配下であることを確認
+    items = db.query(SourceItem).join(
+        ImportSession, ImportSession.id == SourceItem.import_session_id
+    ).filter(
+        SourceItem.id.in_(item_ids),
+        ImportSession.user_id == current_user_id
+    ).all()
+    
+    if len(items) != len(item_ids):
+        raise HTTPException(
+            status_code=400,
+            detail="Some items do not belong to the current user"
+        )
+    
+    # CSV 生成
+    output = StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["商品名", "ソース", "フリマ価格", "eBay価格", "利益", "利益率"])
+    
+    for item in items:
+        profit = item.ebay_match.profit_snapshot if item.ebay_match else None
+        writer.writerow([
+            item.title,
+            item.source,
+            item.price_jpy,
+            profit.ebay_price_jpy if profit else "",
+            profit.profit_jpy if profit else "",
+            f"{profit.profit_margin_pct:.1f}%" if profit else "",
+        ])
+    
+    csv_content = output.getvalue()
+    
+    return StreamingResponse(
+        iter([csv_content]),
+        media_type="text/csv",
+        headers={
+            "Content-Disposition": f"attachment;filename=margin-scout-items-{datetime.now().strftime('%Y%m%d')}.csv"
+        }
+    )
+Copy
+テスト実装（pytest）
+以下をテストケースとして tests/test_captures_api.py に追加してください：
+
+Copy# テストケース例
+
+def test_list_captures_success(client, test_db, test_token, test_user_id):
+    """GET /api/v1/captures: 正常系"""
+    response = client.get(
+        "/api/v1/captures",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert "sessions" in response.json()
+    assert "total" in response.json()
+
+def test_list_captures_unauthorized():
+    """GET /api/v1/captures: 認証なし"""
+    response = client.get("/api/v1/captures")
+    assert response.status_code == 401
+
+def test_list_captures_pagination(client, test_db, test_token):
+    """GET /api/v1/captures: ページング確認"""
+    response = client.get(
+        "/api/v1/captures?limit=5&offset=0",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert response.json()["limit"] == 5
+
+def test_list_captures_limit_exceeded(client, test_db, test_token):
+    """GET /api/v1/captures: limit > 100 で 400"""
+    response = client.get(
+        "/api/v1/captures?limit=101",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 422
+
+def test_get_capture_detail_success(client, test_db, test_token, test_user_id):
+    """GET /api/v1/captures/{capture_id}: 正常系"""
+    # 事前に capture を作成
+    capture = create_test_capture(db, test_user_id)
+    response = client.get(
+        f"/api/v1/captures/{capture.id}",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert response.json()["id"] == str(capture.id)
+
+def test_get_capture_detail_other_user(client, test_db, test_token, other_user_id):
+    """GET /api/v1/captures/{capture_id}: 他ユーザーの capture は 404"""
+    capture = create_test_capture(db, other_user_id)
+    response = client.get(
+        f"/api/v1/captures/{capture.id}",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 404
+
+def test_get_capture_items_success(client, test_db, test_token, test_user_id):
+    """GET /api/v1/captures/{capture_id}/items: 正常系"""
+    capture = create_test_capture(db, test_user_id)
+    response = client.get(
+        f"/api/v1/captures/{capture.id}/items",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert "items" in response.json()
+
+def test_export_capture_csv_success(client, test_db, test_token, test_user_id):
+    """POST /api/v1/captures/{capture_id}/export/csv: 正常系"""
+    capture = create_test_capture(db, test_user_id)
+    response = client.post(
+        f"/api/v1/captures/{capture.id}/export/csv",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "text/csv"
+
+def test_export_capture_csv_other_user(client, test_db, test_token, other_user_id):
+    """POST /api/v1/captures/{capture_id}/export/csv: 他ユーザーの capture は 404"""
+    capture = create_test_capture(db, other_user_id)
+    response = client.post(
+        f"/api/v1/captures/{capture.id}/export/csv",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 404
+
+def test_list_saved_items_success(client, test_db, test_token, test_user_id):
+    """GET /api/v1/saved-items: 正常系"""
+    response = client.get(
+        "/api/v1/saved-items",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert "items" in response.json()
+
+def test_list_saved_items_empty(client, test_db, test_token):
+    """GET /api/v1/saved-items: 空状態"""
+    response = client.get(
+        "/api/v1/saved-items",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert response.json()["items"] == []
+
+def test_get_saved_item_success(client, test_db, test_token, test_user_id):
+    """GET /api/v1/saved-items/{item_id}: 正常系"""
+    item = create_test_source_item(db, test_user_id)
+    response = client.get(
+        f"/api/v1/saved-items/{item.id}",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+
+def test_get_saved_item_other_user(client, test_db, test_token, other_user_id):
+    """GET /api/v1/saved-items/{item_id}: 他ユーザーのアイテムは 404"""
+    item = create_test_source_item(db, other_user_id)
+    response = client.get(
+        f"/api/v1/saved-items/{item.id}",
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 404
+
+def test_export_saved_items_csv_success(client, test_db, test_token, test_user_id):
+    """POST /api/v1/saved-items/export/csv: 正常系"""
+    item1 = create_test_source_item(db, test_user_id)
+    item2 = create_test_source_item(db, test_user_id)
+    response = client.post(
+        "/api/v1/saved-items/export/csv",
+        json={"item_ids": [str(item1.id), str(item2.id)]},
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 200
+    assert response.headers["content-type"] == "text/csv"
+
+def test_export_saved_items_csv_mixed_users(client, test_db, test_token, test_user_id, other_user_id):
+    """POST /api/v1/saved-items/export/csv: 他ユーザーのアイテム混在で 400"""
+    item1 = create_test_source_item(db, test_user_id)
+    item2 = create_test_source_item(db, other_user_id)
+    response = client.post(
+        "/api/v1/saved-items/export/csv",
+        json={"item_ids": [str(item1.id), str(item2.id)]},
+        headers={"Authorization": f"Bearer {test_token}"}
+    )
+    assert response.status_code == 400
+Copy
+成果物
+ GET /api/v1/captures 実装・テスト パス
+ GET /api/v1/captures/{capture_id} 実装・テスト パス
+ GET /api/v1/captures/{capture_id}/items 実装・テスト パス
+ POST /api/v1/captures/{capture_id}/export/csv 実装・テスト パス
+ GET /api/v1/saved-items 実装・テスト パス
+ GET /api/v1/saved-items/{item_id} 実装・テスト パス
+ POST /api/v1/saved-items/export/csv 実装・テスト パス
+ pytest 全ケース パス（未ログイン 401、他ユーザーアクセス 404、空状態、所有権チェック含む）
+ Rate Limit ヘッダー含む
+所要時間
+3-4 時間
+
+【P2-2-Frontend: Frontend ダッシュボード実装】
+ファイル
+margin-scout-ui/src/views/Dashboard/Home.vue（新規）
+margin-scout-ui/src/views/Dashboard/SavedItems.vue（新規）
+margin-scout-ui/src/views/Dashboard/Layout.vue（新規）
+margin-scout-ui/src/router/index.ts（修正）
+margin-scout-ui/src/services/api.ts（拡張）
+margin-scout-ui/src/App.vue（修正：sidebar メニュー追加）
+実施内容
+1. API クライアント拡張（src/services/api.ts）
+既存コードに以下を追加：
+
+Copyexport const capturesAPI = {
+  // ImportSession 一覧
+  getImportSessions: (limit: number = 20, offset: number = 0) =>
+    api.get(`/captures`, { params: { limit, offset } }),
+
+  // ImportSession 詳細
+  getImportSession: (sessionId: string) =>
+    api.get(`/captures/${sessionId}`),
+
+  // セッション内 SourceItem
+  getImportSessionItems: (sessionId: string, limit: number = 100, offset: number = 0) =>
+    api.get(`/captures/${sessionId}/items`, { params: { limit, offset } }),
+
+  // セッション CSV エクスポート
+  exportSessionCSV: (sessionId: string) =>
+    api.post(`/captures/${sessionId}/export/csv`, {}, { responseType: "blob" }),
+
+  // 保存済み SourceItem 一覧
+  getSavedItems: (limit: number = 100, offset: number = 0, source?: string, sort?: string) =>
+    api.get(`/saved-items`, { params: { limit, offset, source, sort } }),
+
+  // 保存済み SourceItem 詳細
+  getSavedItem: (itemId: string) =>
+    api.get(`/saved-items/${itemId}`),
+
+  // 複数 SourceItem CSV エクスポート
+  exportSavedItemsCSV: (itemIds: string[]) =>
+    api.post(`/saved-items/export/csv`, { item_ids: itemIds }, { responseType: "blob" }),
+}
+2. ダッシュボード共通レイアウト（src/views/Dashboard/Layout.vue）
+Copy<template>
+  <div class="dashboard-layout flex">
+    <!-- サイドバー -->
+    <div class="w-64 bg-gray-100 border-r min-h-screen">
+      <div class="p-4 border-b">
+        <h2 class="text-lg font-bold text-gray-800">ダッシュボード</h2>
+      </div>
+      <nav class="p-4 space-y-2">
+        <router-link to="/dashboard" class="block px-4 py-2 rounded hover:bg-gray-200" :class="{ 'bg-blue-600 text-white': $route.path === '/dashboard' }">
+          📊 概要
+        </router-link>
+        <router-link to="/dashboard/history" class="block px-4 py-2 rounded hover:bg-gray-200" :class="{ 'bg-blue-600 text-white': $route.path.includes('/dashboard/history') }">
+          📋 取得履歴
+        </router-link>
+        <router-link to="/dashboard/items" class="block px-4 py-2 rounded hover:bg-gray-200" :class="{ 'bg-blue-600 text-white': $route.path.includes('/dashboard/items') }">
+          💾 保存済み商品
+        </router-link>
+        <router-link to="/dashboard/settings" class="block px-4 py-2 rounded hover:bg-gray-200" :class="{ 'bg-blue-600 text-white': $route.path === '/dashboard/settings' }">
+          ⚙️ 設定
+        </router-link>
+      </nav>
+      <div class="p-4 border-t mt-auto">
+        <button @click="logout" class="w-full px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+          ログアウト
+        </button>
+      </div>
+    </div>
+
+    <!-- メインコンテンツ -->
+    <div class="flex-1 p-8 bg-gray-50 min-h-screen">
+      <router-view />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useRouter } from "vue-router"
+import { useAuthStore } from "~stores/auth"
+
+const router = useRouter()
+const auth = useAuthStore()
+
+const logout = () => {
+  auth.logout()
+  router.push("/auth/login")
+}
+</script>
+3. ホームページ（src/views/Dashboard/Home.vue）
+Copy<template>
+  <div class="dashboard-home">
+    <h1 class="text-3xl font-bold mb-6">ダッシュボード</h1>
+
+    <!-- KPI カード -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-600 text-sm font-semibold">月間取得件数</p>
+        <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.monthlyCount }}</p>
+        <p class="text-gray-500 text-xs mt-2">今月のインポート</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-600 text-sm font-semibold">マッチング成功率</p>
+        <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.matchSuccessRate }}%</p>
+        <p class="text-gray-500 text-xs mt-2">eBay 照合結果</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow">
+        <p class="text-gray-600 text-sm font-semibold">平均利益</p>
+        <p class="text-3xl font-bold text-orange-600 mt-2">¥{{ formatNumber(stats.avgProfit) }}</p>
+        <p class="text-gray-500 text-xs mt-2">直近 30 日</p>
+      </div>
+    </div>
+
+    <!-- 最近のセッション -->
+    <div class="bg-white p-6 rounded-lg shadow">
+      <h2 class="text-lg font-semibold mb-4">最近の取得セッション</h2>
+      <div v-if="recentSessions.length === 0" class="text-center py-8 text-gray-500">
+        取得セッションがありません
+      </div>
+      <table v-else class="w-full text-sm">
+        <thead class="border-b">
+          <tr>
+            <th class="text-left py-2 px-4">ソース</th>
+            <th class="text-left py-2 px-4">取得日</th>
+            <th class="text-right py-2 px-4">件数</th>
+            <th class="text-right py-2 px-4">マッチ</th>
+            <th class="text-right py-2 px-4">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="session in recentSessions" :key="session.id" class="border-b hover:bg-gray-50">
+            <td class="py-3 px-4">{{ sourceLabel(session.source) }}</td>
+            <td class="py-3 px-4">{{ formatDate(session.created_at) }}</td>
+            <td class="py-3 px-4 text-right">{{ session.item_count }}</td>
+            <td class="py-3 px-4 text-right font-semibold">{{ session.matched_count }}</td>
+            <td class="py-3 px-4 text-right">
+              <router-link :to="`/dashboard/history/${session.id}`" class="text-blue-600 hover:underline">
+                詳細
+              </router-link>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from "vue"
+import { capturesAPI } from "~services/api"
+
+interface ImportSession {
+  id: string
+  source: string
+  created_at: string
+  item_count: number
+  matched_count: number
+  error_count: number
+}
+
+const stats = ref({
+  monthlyCount: 0,
+  matchSuccessRate: 0,
+  avgProfit: 0,
+})
+
+const recentSessions = ref<ImportSession[]>([])
+
+const formatDate = (dateStr: string) => {
+  return new Date(dateStr).toLocaleDateString("ja-JP")
+}
+
+const formatNumber = (num: number) => num.toLocaleString()
+
+const sourceLabel = (source: string) => {
+  const labels: { [key: string]: string } = {
+    mercari: "Mercari",
+    yahoo_auction: "Yahoo Auction",
+    yahoo_flea: "Yahoo Flea",
+  }
+  return labels[source] || source
+}
+
+onMounted(async () => {
+  try {
+    const response = await capturesAPI.getImportSessions(10)
+    recentSessions.value = response.data.sessions
+
+    // KPI 計算（簡略版）
+    const totalItems = recentSessions.value.reduce((sum, s) => sum + s.item_count, 0)
+    const totalMatched = recentSessions.value.reduce((sum, s) => sum + s.matched_count, 0)
+
+    stats.value.monthlyCount = totalItems
+    stats.value.matchSuccessRate = totalItems > 0 ? Math.round((totalMatched / totalItems) * 100) : 0
+    stats.value.avgProfit = 0 // TODO: Backend から aggregated 値を取得
+  } catch (error) {
+    console.error("Failed to load dashboard:", error)
+  }
+})
+</script>
+4. 保存済み商品一覧（src/views/Dashboard/SavedItems.vue）
+Copy<template>
+  <div class="saved-items">
+    <h1 class="text-3xl font-bold mb-6">保存済み商品</h1>
+
+    <!-- フィルタ・操作バー -->
+    <div class="bg-white p-4 rounded-lg shadow mb-4 flex flex-wrap items-center gap-4">
+      <input
+        v-model="searchText"
+        type="text"
+        placeholder="商品名で検索"
+        class="flex-1 min-w-48 px-3 py-2 border rounded"
+      />
+      <select v-model="filterSource" class="px-3 py-2 border rounded">
+        <option value="">全てのソース</option>
+        <option value="mercari">Mercari</option>
+        <option value="yahoo_auction">Yahoo Auction</option>
+        <option value="yahoo_flea">Yahoo Flea</option>
+      </select>
+      <select v-model="sortBy" class="px-3 py-2 border rounded">
+        <option value="date_desc">最新順</option>
+        <option value="profit_desc">利益（多い順）</option>
+        <option value="margin_desc">利益率（高い順）</option>
+      </select>
+
+      <button
+        v-if="selectedItems.length > 0"
+        @click="exportCSV"
+        :disabled="isExporting"
+        class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+      >
+        {{ isExporting ? "出力中..." : `CSV (${selectedItems.length}件)` }}
+      </button>
+    </div>
+
+    <!-- 商品テーブル -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <div v-if="filteredItems.length === 0" class="text-center py-8 text-gray-500">
+        商品がありません
+      </div>
+      <table v-else class="w-full text-sm">
+        <thead class="bg-gray-100 border-b">
+          <tr>
+            <th class="px-4 py-3 text-left">
+              <input
+                type="checkbox"
+                :checked="allSelected"
+                @change="toggleSelectAll"
+              />
+            </th>
+            <th class="px-4 py-3 text-left">商品名</th>
+            <th class="px-4 py-3 text-left">ソース</th>
+            <th class="px-4 py-3 text-right">フリマ価格</th>
+            <th class="px-4 py-3 text-right">eBay価格</th>
+            <th class="px-4 py-3 text-right">利益</th>
+            <th class="px-4 py-3 text-right">利益率</th>
+            <th class="px-4 py-3 text-center">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="item in filteredItems"
+            :key="item.id"
+            class="border-b hover:bg-gray-50"
+          >
+            <td class="px-4 py-3">
+              <input
+                type="checkbox"
+                :checked="selectedItems.includes(item.id)"
+                @change="toggleSelect(item.id)"
+              />
+            </td>
+            <td class="px-4 py-3 font-semibold">
+              <a :href="item.url" target="_blank" class="text-blue-600 hover:underline">
+                {{ item.title }}
+              </a>
+            </td>
+            <td class="px-4 py-3 text-gray-600">{{ sourceLabel(item.source) }}</td>
+            <td class="px-4 py-3 text-right">¥{{ formatNumber(item.source_price_jpy) }}</td>
+            <td class="px-4 py-3 text-right">
+              {{ item.ebay_price_jpy ? `¥${formatNumber(item.ebay_price_jpy)}` : "-" }}
+            </td>
+            <td
+              class="px-4 py-3 text-right font-semibold"
+              :class="item.profit_jpy && item.profit_jpy > 0 ? 'text-green-600' : item.profit_jpy ? 'text-red-600' : 'text-gray-600'"
+            >
+              {{ item.profit_jpy ? `¥${formatNumber(item.profit_jpy)}` : "-" }}
+            </td>
+            <td class="px-4 py-3 text-right">
+              {{ item.profit_margin_pct ? `${item.profit_margin_pct.toFixed(1)}%` : "-" }}
+            </td>
+            <td class="px-4 py-3 text-center">
+              <router-link :to="`/dashboard/items/${item.id}`" class="text-blue-600 hover:underline text-xs">
+                詳細
+              </router-link>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ページング -->
+    <div class="mt-4 flex justify-center gap-2">
+      <button
+        v-if="offset > 0"
+        @click="offset -= limit"
+        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+      >
+        前へ
+      </button>
+      <span class="px-4 py-2 text-gray-600">
+        {{ offset + 1 }} - {{ Math.min(offset + limit, total) }} / {{ total }}
+      </span>
+      <button
+        v-if="offset + limit < total"
+        @click="offset += limit"
+        class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+      >
+        次へ
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from "vue"
+import { capturesAPI } from "~services/api"
+
+interface SourceItem {
+  id: string
+  title: string
+  source: string
+  source_price_jpy: number
+  url: string
+  ebay_price_jpy?: number
+  profit_jpy?: number
+  profit_margin_pct?: number
+  created_at: string
+}
+
+const items = ref<SourceItem[]>([])
+const selectedItems = ref<string[]>([])
+const searchText = ref("")
+const filterSource = ref("")
+const sortBy = ref("date_desc")
+const limit = ref(100)
+const offset = ref(0)
+const total = ref(0)
+const isLoading = ref(false)
+const isExporting = ref(false)
+
+const filteredItems = computed(() => {
+  let filtered = items.value.filter((item) => {
+    const matchesSearch = item.title.toLowerCase().includes(searchText.value.toLowerCase())
+    const matchesSource = !filterSource.value || item.source === filterSource.value
+    return matchesSearch && matchesSource
+  })
+
+  // ソート
+  filtered.sort((a, b) => {
+    switch (sortBy.value) {
+      case "profit_desc":
+        return (b.profit_jpy || 0) - (a.profit_jpy || 0)
+      case "margin_desc":
+        return (b.profit_margin_pct || 0) - (a.profit_margin_pct || 0)
+      case "date_desc":
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      default:
+        return 0
+    }
+  })
+
+  return filtered
+})
+
+const allSelected = computed(() => {
+  return items.value.length > 0 && selectedItems.value.length === items.value.length
+})
+
+const formatNumber = (num: number) => num.toLocaleString()
+
+const sourceLabel = (source: string) => {
+  const labels: { [key: string]: string } = {
+    mercari: "Mercari",
+    yahoo_auction: "Yahoo Auction",
+    yahoo_flea: "Yahoo Flea",
+  }
+  return labels[source] || source
+}
+
+const toggleSelect = (itemId: string) => {
+  const index = selectedItems.value.indexOf(itemId)
+  if (index > -1) {
+    selectedItems.value.splice(index, 1)
+  } else {
+    selectedItems.value.push(itemId)
+  }
+}
+
+const toggleSelectAll = () => {
+  if (allSelected.value) {
+    selectedItems.value = []
+  } else {
+    selectedItems.value = items.value.map((item) => item.id)
+  }
+}
+
+const exportCSV = async () => {
+  isExporting.value = true
+  try {
+    const response = await capturesAPI.exportSavedItemsCSV(selectedItems.value)
+    const url = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute("download", `margin-scout-items-${new Date().toISOString().split("T")[0]}.csv`)
+    document.body.appendChild(link)
+    link.click()
+    link.parentNode?.removeChild(link)
+    window.URL.revokeObjectURL(url)
+  } catch (error) {
+    console.error("Export failed:", error)
+  } finally {
+    isExporting.value = false
+  }
+}
+
+const loadItems = async () => {
+  isLoading.value = true
+  try {
+    const response = await capturesAPI.getSavedItems(
+      limit.value,
+      offset.value,
+      filterSource.value || undefined,
+      sortBy.value
+    )
+    items.value = response.data.items
+    total.value = response.data.total
+    selectedItems.value = []
+  } catch (error) {
+    console.error("Failed to load items:", error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+watch([offset, filterSource, sortBy], () => {
+  offset.value = 0
+  loadItems()
+})
+
+onMounted(loadItems)
+</script>
+5. ルーティング更新（src/router/index.ts）
+Copyimport DashboardLayout from "~views/Dashboard/Layout.vue"
+import DashboardHome from "~views/Dashboard/Home.vue"
+import SavedItems from "~views/Dashboard/SavedItems.vue"
+// 他のコンポーネント...
+
+const routes = [
+  {
+    path: "/auth",
+    component: AuthLayout,
+    children: [
+      { path: "login", component: Login },
+      { path: "register", component: Register },
+    ],
+  },
+  {
+    path: "/dashboard",
+    component: DashboardLayout,
+    meta: { requiresAuth: true },
+    children: [
+      { path: "", component: DashboardHome },
+      { path: "history", component: ImportHistory }, // TODO: 実装
+      { path: "history/:sessionId", component: ImportSessionDetail }, // TODO: 実装
+      { path: "items", component: SavedItems },
+      { path: "items/:itemId", component: ItemDetail }, // TODO: 実装
+      { path: "settings", component: Settings }, // TODO: 実装
+    ],
+  },
+  // 既存の research ルートは残す（P2-2 完了後削除判断）
+  {
+    path: "/research",
+    component: ResearchLayout,
+    meta: { requiresAuth: true },
+    children: [
+      // 既存の ResearchStart, Monitor, CandidateList など
+    ],
+  },
+]
+Copy
+6. Sidebar メニュー更新（src/App.vue）
+既存の navigation に以下を追加:
+
+Copy<nav class="space-y-2">
+  <!-- 新規: ダッシュボード -->
+  <router-link to="/dashboard" class="block px-4 py-2 rounded hover:bg-gray-100">
+    📊 ダッシュボード
+  </router-link>
+  
+  <!-- 既存: リサーチ（旧）-->
+  <router-link to="/research" class="block px-4 py-2 rounded hover:bg-gray-100 text-gray-600">
+    🔍 リサーチ（旧）
+  </router-link>
+</nav>
+テスト実装（Vue Testing Library）
+margin-scout-ui/tests/Dashboard.test.ts を作成:
+
+Copyimport { describe, it, expect, beforeEach, vi } from "vitest"
+import { mount } from "@vue/test-utils"
+import { createRouter, createWebHistory } from "vue-router"
+import SavedItems from "~views/Dashboard/SavedItems.vue"
+import * as api from "~services/api"
+
+vi.mock("~services/api")
+
+describe("SavedItems.vue", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it("displays saved items list", async () => {
+    const mockItems = [
+      {
+        id: "1",
+        title: "iPhone 14",
+        source: "mercari",
+        source_price_jpy: 95000,
+        url: "https://mercari.jp/item/m1",
+        profit_jpy: 50000,
+        profit_margin_pct: 52.6,
+        created_at: "2026-06-17T10:30:00Z",
+      },
+    ]
+
+    vi.spyOn(api.capturesAPI, "getSavedItems").mockResolvedValue({
+      data: { items: mockItems, total: 1 },
+    })
+
+    const wrapper = mount(SavedItems)
+    await wrapper.vm.$nextTick()
+
+    expect(wrapper.text()).toContain("iPhone 14")
+    expect(wrapper.text()).toContain("¥95,000")
+  })
+
+  it("exports selected items as CSV", async () => {
+    const mockBlob = new Blob(["商品名,ソース\niPhone,mercari\n"])
+    vi.spyOn(api.capturesAPI, "exportSavedItemsCSV").mockResolvedValue({
+      data: mockBlob,
+    })
+
+    const wrapper = mount(SavedItems)
+    wrapper.vm.selectedItems = ["1", "2"]
+    await wrapper.vm.exportCSV()
+
+    expect(api.capturesAPI.exportSavedItemsCSV).toHaveBeenCalledWith(["1", "2"])
+  })
+
+  it("filters items by source", async () => {
+    const wrapper = mount(SavedItems)
+    wrapper.vm.filterSource = "mercari"
+    await wrapper.vm.$nextTick()
+
+    // フィルタが適用されることを確認（API 呼び出し確認）
+    expect(api.capturesAPI.getSavedItems).toHaveBeenCalled()
+  })
+})
+Copy
+成果物
+ DashboardLayout.vue 実装（sidebar + メインコンテンツエリア）
+ Home.vue 実装（KPI カード + 最近のセッション表示）
+ SavedItems.vue 実装（商品テーブル + フィルタ・ソート + CSV 出力）
+ API クライアント拡張（7 つのメソッド）
+ ルーティング更新（/dashboard ルート追加）
+ Sidebar に両メニュー（「ダッシュボード」「リサーチ（旧）」）表示
+ ローカルでダッシュボード表示確認
+ テスト実装・パス
+所要時間
+4-5 時間
+
+【P2-2-Integration: 統合テスト】
+実施内容
+以下のシナリオを実行し、Extension → Backend → Frontend の全フロー検証を実施してください：
+
+シナリオ 1: 正常系フロー
+Extension を Chrome に読み込み
+https://mercari.jp/search?keyword=iPhone にアクセス
+「この画面から取得」ボタンをクリック → 3 商品を抽出
+Backend /api/v1/captures POST 成功
+DB に ImportSession・SourceItem・EbayMatch・ProfitSnapshot 作成確認
+Frontend ダッシュボード (/dashboard) を開く
+「取得履歴」に新セッション表示
+「保存済み商品」に 3 商品表示
+CSV エクスポート実行 → ブラウザダウンロード確認
+シナリオ 2: 未ログイン状態
+Extension を設定せずに「この画面から取得」クリック → エラー表示（トークンなし）
+設定ページで API endpoint・token 入力
+接続テスト実行 → 成功確認
+シナリオ 3: 他ユーザーデータアクセス防止
+User A でセッション作成（ImportSession_A）
+User B のトークンで /api/v1/c
+<truncated 2525 bytes>
+
+NOTE: The output was truncated because it was too long. Use a more targeted query or a smaller range to get the information you need.
