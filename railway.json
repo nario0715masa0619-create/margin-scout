@@ -1,7 +1,3 @@
 {
-  "projectRoot": "margin-scout-backend",
-  "build": {
-    "builder": "docker",
-    "dockerfilePath": "Dockerfile"
-  }
+  "projectRoot": "margin-scout-backend"
 }
