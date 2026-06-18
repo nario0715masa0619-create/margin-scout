@@ -34,7 +34,12 @@ def test_bg_task():
         res = httpx.get(f"https://ms-staging-backend-v2-a46e20443765.herokuapp.com/api/v1/research-jobs/{job_id}", headers=headers)
         status = res.json()["status"]
         print(f"Poll {i}: status is {status}")
-        if status in ["completed", "failed"]:
+        if status == "completed":
+            res_results = httpx.get(f"https://ms-staging-backend-v2-a46e20443765.herokuapp.com/api/v1/research-jobs/{job_id}/results", headers=headers)
+            print(f"Results HTTP Status: {res_results.status_code}")
+            print(f"Results JSON: {res_results.json()}")
+            break
+        elif status == "failed":
             break
 
 if __name__ == "__main__":

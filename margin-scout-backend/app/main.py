@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import auth, research_jobs
+from app.routers import auth, research_jobs, captures, saved_searches
 
 app = FastAPI(
     title="MarginScout SaaS API",
@@ -19,6 +19,18 @@ app.add_middleware(
 
 app.include_router(auth.router, prefix="/api/v1/auth", tags=["Auth"])
 app.include_router(research_jobs.router, prefix="/api/v1/research-jobs", tags=["Research Jobs"])
+app.include_router(captures.router, prefix="/api/v1/captures", tags=["Captures"])
+app.include_router(captures.saved_items_router, prefix="/api/v1/saved-items", tags=["Saved Items"])
+app.include_router(saved_searches.router)
+
+from app.routers import monitoring
+app.include_router(monitoring.router)
+
+@app.on_event("startup")
+async def startup():
+    from app.celery_app import celery_app
+    # Celery 初期化確認
+    pass
 
 @app.get("/health")
 async def health_check():

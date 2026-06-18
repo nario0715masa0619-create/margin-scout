@@ -7,6 +7,10 @@ from sqlalchemy.pool import StaticPool
 from app.main import app
 from app.db.base import Base
 from app.db.database import get_db
+from app.models.research import ImportSession, SourceItem, EbayMatch, ProfitSnapshot
+from app.models.user import User
+from app.models.subscription import Subscription
+from app.models.research_job import ResearchJob
 from app.security.jwt import JWTHandler
 
 SQLALCHEMY_DATABASE_URL = "sqlite:///:memory:"
@@ -16,6 +20,8 @@ engine = create_engine(
     connect_args={"check_same_thread": False},
     poolclass=StaticPool,
 )
+Base.metadata.create_all(bind=engine)
+print("Tables created:", Base.metadata.tables.keys())
 TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 @pytest.fixture(scope="function")
