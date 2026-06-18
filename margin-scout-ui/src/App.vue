@@ -6,7 +6,8 @@
         <router-link to="/">MarginScout v2.1</router-link>
       </div>
       <div class="navbar-menu">
-        <router-link to="/research" class="nav-link">リサーチ</router-link>
+        <router-link to="/dashboard" class="nav-link">ダッシュボード</router-link>
+        <router-link to="/research" class="nav-link">リサーチ（旧）</router-link>
       </div>
     </nav>
 

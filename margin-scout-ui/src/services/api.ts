@@ -108,5 +108,41 @@ export const researchAPI = {
 
 export default api
 
+// SavedSearch CRUD + 監視制御
+export const savedSearchAPI = {
+  list: (limit = 20, offset = 0) =>
+    api.get("/saved-searches", { params: { limit, offset } }),
+  
+  get: (id: string) =>
+    api.get(`/saved-searches/${id}`),
+  
+  create: (payload: {
+    name: string;
+    source: "mercari" | "yahoo_auction" | "yahoo_flea";
+    filters: Record<string, any>;
+    is_monitoring_enabled: boolean;
+    monitoring_interval_hours: number;
+  }) =>
+    api.post("/saved-searches", payload),
+  
+  update: (id: string, payload: Partial<any>) =>
+    api.put(`/saved-searches/${id}`, payload),
+  
+  delete: (id: string) =>
+    api.delete(`/saved-searches/${id}`),
+  
+  rerun: (id: string) =>
+    api.post(`/saved-searches/${id}/rerun`),
+  
+  disableMonitoring: (id: string) =>
+    api.post(`/saved-searches/${id}/disable-monitoring`),
+  
+  // 監視ジョブ手動実行
+  dispatchMonitoring: () =>
+    api.post("/monitoring/dispatch"),
+  
+  getTaskStatus: (taskId: string) =>
+    api.get(`/monitoring/task-status/${taskId}`),
+};
 
 // Trigger Heroku rebuild

@@ -1,0 +1,321 @@
+<template>
+  <div class="candidate-list-container">
+    <h1>📊 候補一覧</h1>
+
+    <!-- フィルター・ソートコントロール -->
+    <div class="controls">
+      <input
+        v-model="searchText"
+        type="text"
+        placeholder="🔍 商品名で検索"
+        class="search-input"
+      />
+      <select v-model="sortBy" class="sort-select">
+        <option value="profit_desc">利益が多い順</option>
+        <option value="profit_asc">利益が少ない順</option>
+        <option value="match_score">マッチスコア順</option>
+      </select>
+      <button @click="selectAll" class="btn btn-secondary">全選択</button>
+      <button @click="clearSelection" class="btn btn-secondary">選択解除</button>
+    </div>
+
+    <!-- 候補テーブル -->
+    <div v-if="filteredCandidates.length > 0" class="table-wrapper">
+      <table class="candidates-table">
+        <thead>
+          <tr>
+            <th width="40"><input v-model="selectAllCheckbox" type="checkbox" @change="toggleSelectAll" /></th>
+            <th>商品名</th>
+            <th>取得元</th>
+            <th>仕入価格</th>
+            <th>eBay価格</th>
+            <th>利益</th>
+            <th>利益率</th>
+            <th>スコア</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="candidate in filteredCandidates"
+            :key="candidate.candidateId"
+            :class="['candidate-row', candidate.profitJpy < 0 ? 'loss' : 'profit']"
+          >
+            <td>
+              <input
+                :checked="store.selectedCandidates.has(candidate.candidateId)"
+                @change="store.toggleSelectedCandidate(candidate.candidateId)"
+                type="checkbox"
+              />
+            </td>
+            <td>
+              <router-link
+                :to="{ name: 'CandidateDetail', params: { jobId: route.params.jobId, candidateId: candidate.candidateId } }"
+                class="product-link"
+              >
+                {{ candidate.productName }}
+              </router-link>
+            </td>
+            <td>{{ candidate.sourceChannel }}</td>
+            <td class="text-right">¥{{ formatNumber(candidate.sourcePrice) }}</td>
+            <td class="text-right">${{ candidate.ebayPrice.toFixed(2) }}</td>
+            <td :class="['text-right', candidate.profitJpy >= 0 ? 'profit-value' : 'loss-value']">
+              ¥{{ formatNumber(candidate.profitJpy) }}
+            </td>
+            <td :class="['text-right', candidate.profitMarginPct >= 0 ? 'profit-value' : 'loss-value']">
+              {{ candidate.profitMarginPct.toFixed(1) }}%
+            </td>
+            <td class="text-right">{{ candidate.matchScore.toFixed(3) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- データなし表示 -->
+    <div v-else class="empty-state">
+      <p>📭 該当する候補がありません</p>
+    </div>
+
+    <!-- CSV出力ボタン -->
+    <div class="footer-actions">
+      <button
+        @click="goToExport"
+        :disabled="store.selectedCandidates.size === 0"
+        class="btn btn-primary"
+      >
+        📥 選択候補をCSV出力 ({{ store.selectedCandidates.size }} 件)
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { useResearchStore } from '../stores/research'
+import { researchAPI } from '../services/api'
+import type { Candidate } from '../stores/research'
+
+const route = useRoute()
+const router = useRouter()
+const store = useResearchStore()
+
+const searchText = ref('')
+const sortBy = ref('profit_desc')
+const selectAllCheckbox = ref(false)
+const candidates = ref<Candidate[]>([])
+const isLoading = ref(false)
+
+const filteredCandidates = computed(() => {
+  let filtered = candidates.value.filter(c =>
+    c.productName.toLowerCase().includes(searchText.value.toLowerCase())
+  )
+
+  if (sortBy.value === 'profit_desc') {
+    filtered.sort((a, b) => b.profitJpy - a.profitJpy)
+  } else if (sortBy.value === 'profit_asc') {
+    filtered.sort((a, b) => a.profitJpy - b.profitJpy)
+  } else if (sortBy.value === 'match_score') {
+    filtered.sort((a, b) => b.matchScore - a.matchScore)
+  }
+
+  return filtered
+})
+
+const selectAll = () => {
+  filteredCandidates.value.forEach(c => {
+    if (!store.selectedCandidates.has(c.candidateId)) {
+      store.toggleSelectedCandidate(c.candidateId)
+    }
+  })
+}
+
+const clearSelection = () => {
+  store.clearSelection()
+}
+
+const toggleSelectAll = () => {
+  if (selectAllCheckbox.value) {
+    selectAll()
+  } else {
+    clearSelection()
+  }
+}
+
+const goToExport = () => {
+  router.push({ name: 'CsvExport', params: { jobId: route.params.jobId } })
+}
+
+const formatNumber = (num: number) => {
+  return num.toLocaleString('ja-JP')
+}
+
+const fetchCandidates = async () => {
+  try {
+    isLoading.value = true
+    const jobId = route.params.jobId as string
+    const data = await researchAPI.getCandidates(jobId, 100, 0)
+
+    candidates.value = data.items || []
+    store.setCandidatesList(candidates.value)
+  } catch (err: any) {
+    console.error('Failed to fetch candidates:', err)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchCandidates()
+})
+</script>
+
+<style scoped>
+.candidate-list-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+
+h1 {
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-input,
+.sort-select {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-input:focus,
+.sort-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #5a6268;
+  transform: translateY(-2px);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.candidates-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f5f5f5;
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 2px solid #ddd;
+  font-weight: 600;
+  color: #333;
+}
+
+td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.candidate-row:hover {
+  background: #f9f9f9;
+}
+
+.candidate-row.loss {
+  background: #fff5f5;
+}
+
+.candidate-row.profit {
+  background: white;
+}
+
+.product-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.product-link:hover {
+  text-decoration: underline;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.profit-value {
+  color: #28a745;
+  font-weight: 600;
+}
+
+.loss-value {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-size: 1.1rem;
+  background: white;
+  border-radius: 8px;
+}
+
+.footer-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+}
+
+.btn-primary:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+</style>

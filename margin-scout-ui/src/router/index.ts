@@ -12,9 +12,22 @@ import CandidateDetailView from '../views/S04_CandidateDetail.vue'
 import CsvExportView from '../views/S05_CsvExport.vue'
 
 const routes: Array<RouteRecordRaw> = [
-  { path: '/', redirect: '/research' },
+  { path: '/', redirect: '/dashboard' },
   { path: '/login', name: 'Login', component: LoginPage, meta: { public: true } },
   { path: '/register', name: 'Register', component: RegisterPage, meta: { public: true } },
+  
+  // 新規追加：Dashboard ルーティング
+  {
+    path: "/dashboard",
+    component: () => import("../views/Dashboard/Layout.vue"),
+    children: [
+      { path: "", name: 'DashboardHome', component: () => import("../views/Dashboard/Home.vue") },
+      { path: "items", name: 'SavedItems', component: () => import("../views/Dashboard/SavedItems.vue") },
+      { path: "saved-searches", name: 'SavedSearches', component: () => import("../components/SavedSearches.vue") },
+    ],
+  },
+
+  // 既存の research ルート
   { path: '/research', name: 'ResearchStart', component: ResearchStartView },
   { path: '/monitor/:jobId', name: 'ExecutionMonitor', component: ExecutionMonitorView },
   { path: '/candidates/:jobId', name: 'CandidateList', component: CandidateListView },
