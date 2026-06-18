@@ -1,0 +1,37 @@
+{
+  "name": "margin-scout-extension",
+  "displayName": "MarginScout Extension",
+  "version": "0.0.1",
+  "description": "A Plasmo extension.",
+  "author": "Antigravity",
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
+  },
+  "dependencies": {
+    "axios": "^1.6.8",
+    "plasmo": "0.89.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.269",
+    "@types/node": "20.11.24",
+    "@types/react": "18.2.61",
+    "@types/react-dom": "18.2.19",
+    "autoprefixer": "^10.5.0",
+    "jsdom": "^29.1.1",
+    "postcss": "^8.5.15",
+    "prettier": "3.2.5",
+    "tailwindcss": "^3.4.1",
+    "typescript": "5.3.3",
+    "vitest": "^4.1.9"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://*/*"
+    ]
+  }
+}
