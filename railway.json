@@ -1,3 +1,6 @@
 {
-  "projectRoot": "margin-scout-backend"
+  "projectRoot": "margin-scout-backend",
+  "build": {
+    "builder": "DOCKER"
+  }
 }
