@@ -9,7 +9,7 @@ export default function OptionsPage() {
   useEffect(() => {
     // 保存された設定を復元
     chrome.storage.local.get(["apiEndpoint", "token"], (result) => {
-      setApiEndpoint(result.apiEndpoint || "https://api.margin-scout.com/api/v1")
+      setApiEndpoint(result.apiEndpoint || "https://margin-scout-production.up.railway.app/api/v1")
       setToken(result.token || "")
     })
   }, [])
@@ -48,7 +48,7 @@ export default function OptionsPage() {
           value={apiEndpoint}
           onChange={(e) => setApiEndpoint(e.target.value)}
           className="w-full px-3 py-2 border rounded"
-          placeholder="https://api.margin-scout.com/api/v1"
+          placeholder="https://margin-scout-production.up.railway.app/api/v1"
         />
       </div>
 
