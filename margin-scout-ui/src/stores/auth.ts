@@ -4,11 +4,7 @@ import { ref, computed } from 'vue'
 import type { User, TokenResponse, RegisterRequest, LoginRequest } from '../types/auth'
 import axios from 'axios'
 
-let rawBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
-if (rawBaseUrl.startsWith('http://margin-scout-production')) {
-  rawBaseUrl = rawBaseUrl.replace('http://', 'https://')
-}
-const API_BASE_URL = rawBaseUrl
+const API_BASE_URL = 'https://margin-scout-production.up.railway.app/api/v1'
 const AUTH_API_URL = `${API_BASE_URL}/auth`
 
 export const useAuthStore = defineStore('auth', () => {
