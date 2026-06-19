@@ -146,3 +146,14 @@ export const savedSearchAPI = {
 };
 
 // Trigger Heroku rebuild
+
+export const capturesAPI = {
+  getImportSessions: (limit = 10) =>
+    api.get("/captures", { params: { limit } }),
+    
+  getSavedItems: (limit = 100, offset = 0, source?: string, sort_by?: string) =>
+    api.get("/captures/items", { params: { limit, offset, source, sort_by } }),
+    
+  exportSavedItemsCSV: (itemIds: string[]) =>
+    api.post("/captures/export", { item_ids: itemIds }, { responseType: 'blob' })
+};
