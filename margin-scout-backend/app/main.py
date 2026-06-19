@@ -28,6 +28,15 @@ app.include_router(monitoring.router)
 
 @app.on_event("startup")
 async def startup():
+    from app.db.database import engine
+    from app.db.base import Base
+    import app.models.user
+    import app.models.research
+    import app.models.saved_search
+    
+    # Auto-create tables if they don't exist
+    Base.metadata.create_all(bind=engine)
+    
     from app.celery_app import celery_app
     # Celery 初期化確認
     pass
