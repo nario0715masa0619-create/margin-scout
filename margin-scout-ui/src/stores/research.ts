@@ -21,6 +21,7 @@ export interface JobState {
   completedAt: string | null
   totalItems: number
   matchedItems: number
+  conditions: Record<string, any> | null
 }
 
 export interface Candidate {
@@ -60,6 +61,7 @@ export const useResearchStore = defineStore('research', () => {
     completedAt: null,
     totalItems: 0,
     matchedItems: 0,
+    conditions: null,
   })
 
   // State: 候補一覧 (S03)

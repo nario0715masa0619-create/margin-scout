@@ -17,11 +17,21 @@
         </div>
       </div>
 
+      <!-- 詳細なジョブ条件 -->
+      <div v-if="jobState.conditions" class="job-conditions">
+        <p><strong>プラットフォーム:</strong> {{ formatSources(jobState.conditions.sources) }}</p>
+        <p><strong>キーワード:</strong> {{ jobState.conditions.keywords?.join(', ') || '指定なし' }}</p>
+      </div>
+
       <!-- 統計情報 -->
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-label">取得件数</div>
-          <div class="stat-value">{{ jobState.totalItems }}</div>
+          <div class="stat-value">{{ jobState.totalItems }} <span class="stat-sub">/ {{ jobState.conditions?.maxItems || '∞' }}</span></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">経過時間</div>
+          <div class="stat-value">{{ elapsedTime }}</div>
         </div>
         <div class="stat-card">
           <div class="stat-label">マッチ件数</div>
@@ -83,7 +93,34 @@ const statusText = computed(() => {
   return statuses[jobState.value.status] || '不明'
 })
 
+const elapsedTime = ref('00:00')
+
+const formatSources = (sources: string[]) => {
+  if (!sources) return '不明'
+  const map: Record<string, string> = {
+    mercari: 'メルカリ',
+    yahoo_flea: 'PayPayフリマ',
+    yahoo_auction: 'ヤフオク',
+    hardoff: 'ハードオフ'
+  }
+  return sources.map(s => map[s] || s).join('、 ')
+}
+
+const updateElapsedTime = () => {
+  if (!jobState.value.startedAt) {
+    elapsedTime.value = '00:00'
+    return
+  }
+  const start = new Date(jobState.value.startedAt).getTime()
+  const now = jobState.value.completedAt ? new Date(jobState.value.completedAt).getTime() : new Date().getTime()
+  const diff = Math.max(0, Math.floor((now - start) / 1000))
+  const m = Math.floor(diff / 60).toString().padStart(2, '0')
+  const s = (diff % 60).toString().padStart(2, '0')
+  elapsedTime.value = `${m}:${s}`
+}
+
 let pollInterval: number | null = null
+let timerInterval: number | null = null
 
 const fetchJobStatus = async () => {
   try {
@@ -91,13 +128,14 @@ const fetchJobStatus = async () => {
     const data = await researchAPI.getJobStatus(jobId)
 
     store.setJobState({
-      jobId: data.job_id,
+      jobId: data.id,
       status: data.status,
       progress: data.progress || 0,
       totalItems: data.total_items || 0,
       matchedItems: data.matched_items || 0,
       startedAt: data.started_at,
-      completedAt: data.completed_at
+      completedAt: data.completed_at,
+      conditions: data.conditions
     })
 
     if (data.status === 'completed') {
@@ -141,11 +179,16 @@ const stopPolling = () => {
     clearInterval(pollInterval)
     pollInterval = null
   }
+  if (timerInterval) {
+    clearInterval(timerInterval)
+    timerInterval = null
+  }
 }
 
 onMounted(() => {
   fetchJobStatus()
   pollInterval = window.setInterval(fetchJobStatus, 2000)
+  timerInterval = window.setInterval(updateElapsedTime, 1000)
 })
 
 onUnmounted(() => {
@@ -191,6 +234,19 @@ h1 {
   border-radius: 2px;
   font-family: monospace;
   font-size: 0.85rem;
+}
+
+.job-conditions {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #007bff;
+}
+
+.job-conditions p {
+  margin: 0.5rem 0;
+  font-size: 0.95rem;
 }
 
 .status-badge {
@@ -266,6 +322,12 @@ h1 {
   font-size: 2rem;
   font-weight: bold;
   color: #007bff;
+}
+
+.stat-sub {
+  font-size: 1.2rem;
+  color: #888;
+  font-weight: normal;
 }
 
 .actions {
