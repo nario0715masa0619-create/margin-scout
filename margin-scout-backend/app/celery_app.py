@@ -1,10 +1,10 @@
 from celery import Celery
 from celery.schedules import crontab
-import os
+from app.config import settings
 import ssl
 
-broker_url = os.getenv("CELERY_BROKER_URL", "redis://localhost:6379/0")
-backend_url = os.getenv("CELERY_RESULT_BACKEND", "redis://localhost:6379/1")
+broker_url = settings.CELERY_BROKER_URL
+backend_url = settings.CELERY_RESULT_BACKEND
 
 celery_app = Celery(
     "margin_scout",
