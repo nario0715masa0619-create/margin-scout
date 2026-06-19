@@ -1,6 +1,7 @@
 # margin-scout-backend/app/config.py
 import os
 from pydantic_settings import BaseSettings
+from pydantic import field_validator
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MarginScout SaaS"
@@ -10,7 +11,17 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     DEBUG: bool = False
-    CORS_ORIGINS: list[str] = ["*"]
+    CORS_ORIGINS: str | list[str] = ["*"]
+    
+    @field_validator("CORS_ORIGINS", mode="before")
+    @classmethod
+    def assemble_cors_origins(cls, v):
+        if isinstance(v, str):
+            if v.startswith("["):
+                import json
+                return json.loads(v)
+            return [i.strip() for i in v.split(",") if i.strip()]
+        return v
     
     BROWSERLESS_API_KEY: str = "dummy_key"
     BROWSERLESS_API_URL: str = "https://api.browserless.io/v1"
