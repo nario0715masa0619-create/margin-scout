@@ -11,11 +11,11 @@ from app.models.research_job import JobStatus
 
 router = APIRouter()
 
-@router.get("/", response_model=List[JobResponse])
+@router.get("", response_model=List[JobResponse])
 def get_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user_id: str = Depends(get_current_user_id)):
     return ResearchJobService.get_user_jobs(db, user_id=current_user_id, skip=skip, limit=limit)
 
-@router.post("/", response_model=JobResponse, status_code=status.HTTP_201_CREATED)
+@router.post("", response_model=JobResponse, status_code=status.HTTP_201_CREATED)
 def create_job(req: JobRequest, db: Session = Depends(get_db), current_user_id: str = Depends(get_current_user_id)):
     job = ResearchJobService.create_job(db, user_id=current_user_id, req=req)
     run_research_job.delay(str(job.id))

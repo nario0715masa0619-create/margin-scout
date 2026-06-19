@@ -1,13 +1,24 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routers import auth, research_jobs, captures, saved_searches
+import traceback
 
 app = FastAPI(
     title="MarginScout SaaS API",
     description="日本国内ソース×eBay価格照合リサーチツール API",
     version="2.1.0"
 )
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(f"Unhandled error: {exc}")
+    traceback.print_exc()
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error", "error": str(exc)},
+    )
 
 app.add_middleware(
     CORSMiddleware,
