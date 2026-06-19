@@ -29,9 +29,27 @@ class Settings(BaseSettings):
     BROWSERLESS_MAX_RETRIES: int = 2
     BROWSERLESS_RATE_LIMIT_PER_HOUR: int = 100
     
+    REDIS_URL: str | None = None
     CELERY_BROKER_URL: str = "redis://localhost:6379/0"
     CELERY_RESULT_BACKEND: str = "redis://localhost:6379/1"
     CELERY_TIMEZONE: str = "UTC"
+    
+    @field_validator("CELERY_BROKER_URL", mode="before")
+    @classmethod
+    def assemble_broker_url(cls, v, info):
+        # Railway等でREDIS_URLが設定されている場合はそれを使う
+        redis_url = info.data.get("REDIS_URL")
+        if redis_url:
+            return redis_url
+        return v
+
+    @field_validator("CELERY_RESULT_BACKEND", mode="before")
+    @classmethod
+    def assemble_result_backend(cls, v, info):
+        redis_url = info.data.get("REDIS_URL")
+        if redis_url:
+            return redis_url
+        return v
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
