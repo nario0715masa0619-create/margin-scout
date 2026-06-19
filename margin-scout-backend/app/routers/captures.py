@@ -29,6 +29,13 @@ class MockEbayService:
             "match_score": 0.95
         }
 
+@router.get("/test")
+async def test_auth(current_user_id: str = Depends(get_current_user)):
+    """
+    Extension からの接続テスト用エンドポイント
+    """
+    return {"status": "ok", "user_id": current_user_id}
+
 @router.post("", response_model=CapturesResponse)
 async def create_capture(
     payload: CapturesRequest,
