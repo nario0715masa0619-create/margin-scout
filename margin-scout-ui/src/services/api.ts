@@ -5,7 +5,11 @@ import { useAuthStore } from '../stores/auth'
 import router from '../router'
 import type { ResearchStartPayload } from '../types/research'
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
+let rawBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/v1'
+if (rawBaseUrl.startsWith('http://margin-scout-production')) {
+  rawBaseUrl = rawBaseUrl.replace('http://', 'https://')
+}
+const API_BASE_URL = rawBaseUrl
 
 const api = axios.create({
   baseURL: API_BASE_URL,
