@@ -32,7 +32,6 @@ async def startup():
     from app.db.base import Base
     import app.models.user
     import app.models.research
-    import app.models.saved_search
     
     # Auto-create tables if they don't exist
     Base.metadata.create_all(bind=engine)
