@@ -26,11 +26,21 @@ def run_research_job(job_id: str):
         keywords = ", ".join(job.conditions.get("keywords", []))
         logger.info(f"Searching eBay for: {keywords}")
         
-        # eBay API 実装
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        ebay_items = loop.run_until_complete(ebay_service.search_items(keywords, limit=10))
-        loop.close()
+        # モックデータ生成（eBay APIの代わり）
+        import time
+        time.sleep(2)  # Simulate processing
+        
+        # Mock eBay search results (10 items)
+        ebay_items = [
+            {
+                "title": f"Mock Item {i+1} for {keywords}",
+                "price": {"value": str(100 + (i * 10)), "currency": "USD"},
+                "itemId": f"mock_{i+1}",
+                "itemWebUrl": f"https://ebay.com/itm/mock_{i+1}",
+                "image": {"imageUrl": "https://via.placeholder.com/150"}
+            }
+            for i in range(10)
+        ]
         
         job.status = JobStatus.completed
         job.progress = 100
