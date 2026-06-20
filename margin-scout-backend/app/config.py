@@ -50,6 +50,17 @@ class Settings(BaseSettings):
         if redis_url:
             return redis_url
         return v
+
+    # eBay API設定（OAuth 2.0）
+    EBAY_ENV: str = "live"
+    EBAY_CLIENT_ID: str | None = None
+    EBAY_CLIENT_SECRET: str | None = None
+    EBAY_REDIRECT_URI: str = "http://localhost:8080/callback"
+    EBAY_REFRESH_TOKEN: str | None = None
+    EBAY_REQUEST_TIMEOUT: int = 30
+    EBAY_MAX_RETRIES: int = 3
+    EBAY_RETRY_BACKOFF_FACTOR: float = 2.0
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
