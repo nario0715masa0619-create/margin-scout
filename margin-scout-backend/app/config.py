@@ -61,6 +61,10 @@ class Settings(BaseSettings):
     EBAY_MAX_RETRIES: int = 3
     EBAY_RETRY_BACKOFF_FACTOR: float = 2.0
 
+    # 国内スクレイパー API設定
+    SCRAPEDO_API_KEY: str | None = None
+    DIFFBOT_API_TOKEN: str | None = None
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
