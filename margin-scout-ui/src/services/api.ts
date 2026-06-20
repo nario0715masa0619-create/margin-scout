@@ -5,7 +5,7 @@ import { useAuthStore } from '../stores/auth'
 import router from '../router'
 import type { ResearchStartPayload } from '../types/research'
 
-const API_BASE_URL = 'https://spirited-flexibility.up.railway.app/api/v1'
+const API_BASE_URL = 'https://spirited-flexibility-production-b48b.up.railway.app/api/v1'
 
 const api = axios.create({
   baseURL: API_BASE_URL,
