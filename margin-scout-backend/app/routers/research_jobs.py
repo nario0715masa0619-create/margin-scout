@@ -91,3 +91,33 @@ async def get_research_results(
         "limit": limit,
         "offset": offset
     }
+
+@router.get("/{job_id}/results/{candidate_id}", response_model=dict)
+async def get_candidate_detail(
+    job_id: str,
+    candidate_id: str,
+    current_user_id: str = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+):
+    job = ResearchJobService.get_user_job(db, user_id=current_user_id, job_id=job_id)
+    if not job:
+        raise HTTPException(status_code=404, detail="Job not found")
+        
+    usd_to_jpy = await ExchangeRateService.get_usd_to_jpy_rate()
+    
+    # 候補詳細モックデータを返す
+    return {
+        "candidateId": candidate_id,
+        "productName": f"Sample Product ({candidate_id})",
+        "sourceChannel": "mercari",
+        "sourcePrice": 5000,
+        "sourceUrl": f"https://mercari.jp/items/12345",
+        "ebayTitle": f"Sample Product ({candidate_id}) on eBay",
+        "ebayPrice": 100.0,
+        "ebayPriceJpy": round(100.0 * usd_to_jpy),
+        "profitJpy": 10000,
+        "profitMarginPct": 30.5,
+        "matchScore": 0.95,
+        "status": "new",
+        "description": "これは候補詳細画面用のモックデータです。"
+    }
