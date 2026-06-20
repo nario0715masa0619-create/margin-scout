@@ -28,7 +28,10 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
+    allow_origins=[
+        "https://margin-scout.vercel.app",
+        "http://localhost:3000",  # ローカル開発用
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
