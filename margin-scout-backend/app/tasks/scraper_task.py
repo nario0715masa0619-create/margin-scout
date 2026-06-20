@@ -1,5 +1,5 @@
 import logging
-from celery import shared_task
+from app.celery_app import celery_app
 from sqlalchemy.orm import Session
 from app.db.database import SessionLocal
 from app.models.research_job import ResearchJob, JobStatus
@@ -7,7 +7,7 @@ from app.repositories.research_job_repository import research_job_repo
 
 logger = logging.getLogger(__name__)
 
-@shared_task(name="run_research_job")
+@celery_app.task(name="run_research_job")
 def run_research_job(job_id: str):
     logger.info(f"Starting research job: {job_id}")
     db: Session = SessionLocal()
