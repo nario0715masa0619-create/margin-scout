@@ -4,6 +4,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.routers import auth, research_jobs, captures, saved_searches
 import traceback
+import logging
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="MarginScout SaaS API",
@@ -59,6 +62,12 @@ async def startup():
     from app.celery_app import celery_app
     # Celery 初期化確認
     pass
+
+@app.on_event("startup")
+async def log_config():
+    logger.info(f"REDIS_URL: {settings.REDIS_URL}")
+    logger.info(f"CELERY_BROKER_URL: {settings.CELERY_BROKER_URL}")
+    logger.info(f"CELERY_RESULT_BACKEND: {settings.CELERY_RESULT_BACKEND}")
 
 @app.get("/health")
 async def health_check():
