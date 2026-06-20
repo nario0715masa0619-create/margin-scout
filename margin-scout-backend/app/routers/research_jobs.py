@@ -9,6 +9,9 @@ from app.services.exchange_rate_service import ExchangeRateService
 from app.tasks.scraper_task import run_research_job
 from app.models.research_job import JobStatus
 
+import logging
+logger = logging.getLogger(__name__)
+
 router = APIRouter()
 
 @router.get("", response_model=List[JobResponse])
@@ -17,9 +20,18 @@ def get_jobs(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), cur
 
 @router.post("", response_model=JobResponse, status_code=status.HTTP_201_CREATED)
 def create_job(req: JobRequest, db: Session = Depends(get_db), current_user_id: str = Depends(get_current_user_id)):
-    job = ResearchJobService.create_job(db, user_id=current_user_id, req=req)
-    run_research_job.delay(str(job.id))
-    return job
+    try:
+        logger.info(f"Creating job for user: {current_user_id}, keywords: {req.conditions.keywords}")
+        job = ResearchJobService.create_job(db, user_id=current_user_id, req=req)
+        logger.info(f"Job created: {job.id}, enqueueing task...")
+        
+        result = run_research_job.delay(str(job.id))
+        logger.info(f"Task enqueued: {result.id}")
+        
+        return job
+    except Exception as e:
+        logger.error(f"Failed to create job: {str(e)}", exc_info=True)
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/{job_id}", response_model=JobResponse)
 def get_job(job_id: str, db: Session = Depends(get_db), current_user_id: str = Depends(get_current_user_id)):
