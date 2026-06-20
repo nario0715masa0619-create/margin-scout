@@ -66,28 +66,38 @@ async def get_research_results(
     # ドル円レート取得
     usd_to_jpy = await ExchangeRateService.get_usd_to_jpy_rate()
 
-    # モック: 10 件の固定データを返す
-    mock_items = [
-        {
-            "candidateId": f"item-{i}",
-            "productName": f"iPhone {i+1}",
-            "sourceChannel": "mercari",
-            "sourcePrice": 5000 + (i * 100),
-            "sourceUrl": f"https://mercari.jp/items/{i}",
-            "ebayTitle": f"Apple iPhone {i+1} Unlocked",
-            "ebayPrice": 100.0 + (i * 10),
-            "ebayPriceJpy": round((100.0 + (i * 10)) * usd_to_jpy),
-            "profitJpy": 10000 + (i * 500),
-            "profitMarginPct": 30.5 + i,
-            "matchScore": 0.95 - (i * 0.01),
-            "status": "new"
-        }
-        for i in range(10)
-    ]
+    # DBから取得した本物のデータを整形
+    saved_items = job.result_summary.get("items", []) if job.result_summary else []
     
+    formatted_items = []
+    for i, item in enumerate(saved_items):
+        ebay_price_usd = item.get("price", 0.0)
+        ebay_price_jpy = round(ebay_price_usd * usd_to_jpy)
+        
+        # 仕入れ側はまだモックなので仮計算
+        source_price_jpy = 5000 + (i * 100)
+        profit_jpy = ebay_price_jpy - source_price_jpy
+        profit_margin = round((profit_jpy / ebay_price_jpy) * 100, 1) if ebay_price_jpy > 0 else 0
+        
+        formatted_items.append({
+            "candidateId": item.get("item_id", f"item-{i}"),
+            "productName": f"Source Product for {item.get('title', 'Unknown')[:20]}...",
+            "sourceChannel": "mercari",
+            "sourcePrice": source_price_jpy,
+            "sourceUrl": f"https://mercari.jp/search?keyword={item.get('title', '')[:10]}",
+            "ebayTitle": item.get("title", "Unknown"),
+            "ebayPrice": ebay_price_usd,
+            "ebayPriceJpy": ebay_price_jpy,
+            "profitJpy": profit_jpy,
+            "profitMarginPct": profit_margin,
+            "matchScore": 0.95 - (i * 0.01),
+            "status": "new",
+            "image": item.get("image")
+        })
+
     return {
-        "items": mock_items[offset:offset+limit],
-        "total": 10,
+        "items": formatted_items[offset:offset+limit],
+        "total": len(formatted_items),
         "limit": limit,
         "offset": offset
     }
@@ -105,19 +115,31 @@ async def get_candidate_detail(
         
     usd_to_jpy = await ExchangeRateService.get_usd_to_jpy_rate()
     
-    # 候補詳細モックデータを返す
+    saved_items = job.result_summary.get("items", []) if job.result_summary else []
+    target_item = next((item for item in saved_items if item.get("item_id") == candidate_id), None)
+    
+    if not target_item:
+        raise HTTPException(status_code=404, detail="Candidate not found")
+        
+    ebay_price_usd = target_item.get("price", 0.0)
+    ebay_price_jpy = round(ebay_price_usd * usd_to_jpy)
+    source_price_jpy = 5000
+    profit_jpy = ebay_price_jpy - source_price_jpy
+    profit_margin = round((profit_jpy / ebay_price_jpy) * 100, 1) if ebay_price_jpy > 0 else 0
+    
     return {
-        "candidateId": candidate_id,
-        "productName": f"Sample Product ({candidate_id})",
+        "candidateId": target_item.get("item_id"),
+        "productName": f"Source Product for {target_item.get('title', 'Unknown')[:20]}...",
         "sourceChannel": "mercari",
-        "sourcePrice": 5000,
-        "sourceUrl": f"https://mercari.jp/items/12345",
-        "ebayTitle": f"Sample Product ({candidate_id}) on eBay",
-        "ebayPrice": 100.0,
-        "ebayPriceJpy": round(100.0 * usd_to_jpy),
-        "profitJpy": 10000,
-        "profitMarginPct": 30.5,
+        "sourcePrice": source_price_jpy,
+        "sourceUrl": f"https://mercari.jp/search?keyword={target_item.get('title', '')[:10]}",
+        "ebayTitle": target_item.get("title", "Unknown"),
+        "ebayPrice": ebay_price_usd,
+        "ebayPriceJpy": ebay_price_jpy,
+        "profitJpy": profit_jpy,
+        "profitMarginPct": profit_margin,
         "matchScore": 0.95,
         "status": "new",
-        "description": "これは候補詳細画面用のモックデータです。"
+        "image": target_item.get("image"),
+        "description": "This is a real item fetched from eBay API."
     }

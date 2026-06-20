@@ -36,6 +36,7 @@ def run_research_job(job_id: str):
         job.progress = 100
         job.total_items = len(ebay_items)
         job.matched_items = len(ebay_items)
+        job.result_summary = {"items": ebay_items}
         db.commit()
         logger.info(f"Job completed: {len(ebay_items)} items")
         
