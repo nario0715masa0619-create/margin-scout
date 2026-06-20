@@ -64,7 +64,10 @@ async def startup():
     pass
 
 @app.on_event("startup")
-async def log_config():
+def log_config():
+    print(f"=== REDIS_URL: {settings.REDIS_URL} ===")
+    print(f"=== CELERY_BROKER_URL: {settings.CELERY_BROKER_URL} ===")
+    print(f"=== CELERY_RESULT_BACKEND: {settings.CELERY_RESULT_BACKEND} ===")
     logger.info(f"REDIS_URL: {settings.REDIS_URL}")
     logger.info(f"CELERY_BROKER_URL: {settings.CELERY_BROKER_URL}")
     logger.info(f"CELERY_RESULT_BACKEND: {settings.CELERY_RESULT_BACKEND}")
