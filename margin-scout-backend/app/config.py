@@ -5,8 +5,8 @@ from pydantic import field_validator
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MarginScout SaaS"
-    DATABASE_URL: str
-    JWT_SECRET_KEY: str
+    DATABASE_URL: str = "sqlite:///./test.db"
+    JWT_SECRET_KEY: str = "fallback_secret_key"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
