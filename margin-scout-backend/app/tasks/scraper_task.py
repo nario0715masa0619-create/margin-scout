@@ -1,9 +1,11 @@
 import logging
+import asyncio
 from app.celery_app import celery_app
 from sqlalchemy.orm import Session
 from app.db.database import SessionLocal
-from app.models.research_job import ResearchJob, JobStatus
+from app.models.research_job import JobStatus
 from app.repositories.research_job_repository import research_job_repo
+from app.services.ebay_service import ebay_service
 
 logger = logging.getLogger(__name__)
 
@@ -20,18 +22,22 @@ def run_research_job(job_id: str):
         
         job.status = JobStatus.running
         db.commit()
-        logger.info(f"Job status: running")
         
-        # 今はモック版に戻す（eBay API の非同期処理はスキップ）
-        import time
-        time.sleep(2)
+        keywords = ", ".join(job.conditions.get("keywords", []))
+        logger.info(f"Searching eBay for: {keywords}")
+        
+        # eBay API 実装
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        ebay_items = loop.run_until_complete(ebay_service.search_items(keywords, limit=10))
+        loop.close()
         
         job.status = JobStatus.completed
         job.progress = 100
-        job.total_items = 10
-        job.matched_items = 10
+        job.total_items = len(ebay_items)
+        job.matched_items = len(ebay_items)
         db.commit()
-        logger.info(f"Job completed")
+        logger.info(f"Job completed: {len(ebay_items)} items")
         
     except Exception as e:
         logger.error(f"Job failed: {e}", exc_info=True)
