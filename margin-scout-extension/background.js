@@ -91,37 +91,40 @@ async function scrapeWithContentScript(url, platform) {
         if (updatedTabId === tabId && changeInfo.status === 'complete') {
           chrome.tabs.onUpdated.removeListener(onUpdated);
           
-          // Content Script を実行して DOM を抽出
-          chrome.scripting.executeScript({
-            target: { tabId: tabId },
-            function: extractItems,
-            args: [platform]
-          }, (results) => {
-            // タブを閉じる (存在チェック後に安全に削除)
-            if (tabId) {
-              chrome.tabs.get(tabId, (tab) => {
-                if (chrome.runtime.lastError) {
-                  console.log(`Tab ${tabId} already closed`);
-                } else {
-                  chrome.tabs.remove(tabId, () => {
-                    const e = chrome.runtime.lastError; // エラーを握り潰す
-                  });
-                }
-              });
-            }
-            
-            if (results && results[0] && results[0].result) {
-              resolve(results[0].result);
-            } else {
-              resolve([]);
-            }
-          });
+          // SPAのDOM描画（React/Vueなど）を待つために4秒遅延させる
+          setTimeout(() => {
+            // Content Script を実行して DOM を抽出
+            chrome.scripting.executeScript({
+              target: { tabId: tabId },
+              function: extractItems,
+              args: [platform]
+            }, (results) => {
+              // タブを閉じる (存在チェック後に安全に削除)
+              if (tabId) {
+                chrome.tabs.get(tabId, (tab) => {
+                  if (chrome.runtime.lastError) {
+                    console.log(`Tab ${tabId} already closed`);
+                  } else {
+                    chrome.tabs.remove(tabId, () => {
+                      const e = chrome.runtime.lastError; // エラーを握り潰す
+                    });
+                  }
+                });
+              }
+              
+              if (results && results[0] && results[0].result) {
+                resolve(results[0].result);
+              } else {
+                resolve([]);
+              }
+            });
+          }, 4000); // 描画待機 4秒
         }
       };
       
       chrome.tabs.onUpdated.addListener(onUpdated);
       
-      // タイムアウト（60秒に延長）
+      // タイムアウト（120秒に変更）
       setTimeout(() => {
         chrome.tabs.onUpdated.removeListener(onUpdated);
         if (tabId) {
@@ -136,7 +139,7 @@ async function scrapeWithContentScript(url, platform) {
           });
         }
         reject(new Error(`Scrape timeout for ${platform}`));
-      }, 60000);
+      }, 120000);
     });
   });
 }
