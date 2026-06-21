@@ -11,7 +11,13 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     DEBUG: bool = False
-    CORS_ORIGINS: str | list[str] = ["*"]
+    CORS_ORIGINS: str | list[str] = [
+        "http://localhost:3000",
+        "http://localhost:5173",
+        "http://localhost:8000",
+        "https://margin-scout.vercel.app",
+        "chrome-extension://inhmapffmhjifmefkooadchmkdbahdhn",
+    ]
     
     @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
