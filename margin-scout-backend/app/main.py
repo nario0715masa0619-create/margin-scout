@@ -40,6 +40,7 @@ app.add_middleware(
     allow_origins=[
         "https://margin-scout.vercel.app",
         "http://localhost:3000",  # ローカル開発用
+        "chrome-extension://inhmapffmhjifmefkooadchmkdbahdhn", # 拡張機能
     ],
     allow_credentials=True,
     allow_methods=["*"],
