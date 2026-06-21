@@ -51,16 +51,26 @@ async function scrapeAllSites(keyword, jobId, sources, sendResponse) {
     
     const allItems = results.flat();
     
+    console.log(`[DEBUG] All items collected: ${allItems.length}`);
+    
     // バックエンド API に送信
-    await fetch(`${API_URL}/research-jobs/${jobId}/items`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: allItems })
-    });
+    if (allItems.length > 0) {
+      console.log(`[DEBUG] Sending POST to ${API_URL}/research-jobs/${jobId}/items`);
+      const response = await fetch(`${API_URL}/research-jobs/${jobId}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: allItems })
+      });
+      console.log(`[DEBUG] POST response status: ${response.status}`);
+      const data = await response.json();
+      console.log(`[DEBUG] POST response data:`, data);
+    } else {
+      console.log(`[DEBUG] No items to send (allItems.length = 0)`);
+    }
     
     sendResponse({ status: 'success', count: allItems.length });
   } catch (error) {
-    console.error('Scraping/API error:', error);
+    console.error(`[DEBUG] Error:`, error);
     sendResponse({ status: 'error', message: error.message });
   }
 }
@@ -91,7 +101,7 @@ async function scrapeWithContentScript(url, platform) {
         if (updatedTabId === tabId && changeInfo.status === 'complete') {
           chrome.tabs.onUpdated.removeListener(onUpdated);
           
-          // SPAのDOM描画（React/Vueなど）を待つために4秒遅延させる
+          // SPAのDOM描画（React/Vueなど）を待つために10秒遅延させる
           setTimeout(() => {
             // Content Script を実行して DOM を抽出
             chrome.scripting.executeScript({
@@ -113,12 +123,14 @@ async function scrapeWithContentScript(url, platform) {
               }
               
               if (results && results[0] && results[0].result) {
+                console.log(`[Extension Worker Log] Extracted ${results[0].result.length} items from ${platform}`);
                 resolve(results[0].result);
               } else {
+                console.log(`[Extension Worker Log] Extracted 0 items from ${platform}`);
                 resolve([]);
               }
             });
-          }, 4000); // 描画待機 4秒
+          }, 10000); // 描画待機 10秒
         }
       };
       
