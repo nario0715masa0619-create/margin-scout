@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "MarginScout Scraper",
+  "version": "1.0.0",
+  "description": "Automatically scrape Mercari, Rakuma, and Yahoo Fril for MarginScout",
+  "permissions": [
+    "scripting",
+    "activeTab",
+    "tabs",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://jp.mercari.com/*",
+    "https://item.rakuma.com/*",
+    "https://fril.jp/*",
+    "https://paypayfleamarket.yahoo.co.jp/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "MarginScout Scraper"
+  },
+  "externally_connectable": {
+    "matches": [
+      "http://localhost:3000/*",
+      "http://localhost:5173/*",
+      "https://margin-scout.vercel.app/*"
+    ]
+  }
+}

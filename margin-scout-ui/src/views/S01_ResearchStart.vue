@@ -132,7 +132,7 @@ const isLoading = ref(false)
 const availableSources = ['mercari', 'yahoo_flea', 'yahoo_auction', 'hardoff']
 
 // Chrome 拡張機能にメッセージを送る
-const sendToExtension = (keyword: string, jobId: string) => {
+const sendToExtension = (keyword: string, jobId: string, sources: string[]) => {
   try {
     // Chrome 拡張機能の background.js へメッセージを送信
     chrome.runtime.sendMessage(
@@ -140,7 +140,8 @@ const sendToExtension = (keyword: string, jobId: string) => {
       {
         action: 'scrape',
         keyword: keyword,
-        jobId: jobId
+        jobId: jobId,
+        sources: sources
       },
       (response: any) => {
         if (chrome.runtime.lastError) {
@@ -211,7 +212,7 @@ const startResearch = async () => {
 
     // 🔥 Chrome 拡張機能にメッセージを送信（各キーワードについて）
     keywordList.forEach(keyword => {
-      sendToExtension(keyword, jobId)
+      sendToExtension(keyword, jobId, selectedSources.value)
     })
 
     // モニター画面へ遷移
