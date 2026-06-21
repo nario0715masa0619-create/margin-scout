@@ -1,223 +1,218 @@
 """
 Domestic flea market scrapers (Mercari, Yahoo Fril, Rakuma)
-BeautifulSoup 直接解析版（API キー不要）
+Playwright (Browser Automation) 版
 """
 
 import logging
 import re
+import urllib.parse
 from typing import Dict, List
-from bs4 import BeautifulSoup
-import httpx
 
 logger = logging.getLogger(__name__)
 
 
 class MercariScraper:
-    """メルカリ スクレイパー（BeautifulSoup 直接解析）"""
+    """メルカリ スクレイパー（Playwright）"""
     
-    async def scrape(self, keyword: str, conditions: Dict = None) -> List[Dict]:
+    async def scrape(self, keyword: str, page) -> List[Dict]:
         """
         メルカリから商品を検索
         
         Args:
             keyword: 検索キーワード
-            conditions: フィルター条件
+            page: Playwright Page object
         
         Returns:
             商品リスト
         """
-        conditions = conditions or {}
-        search_url = f"https://jp.mercari.com/search?keyword={keyword}&order=NEWEST"
-        
         try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                # User-Agent を設定してブロック回避
-                headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-                resp = await client.get(search_url, headers=headers, follow_redirects=True)
-                
-                if resp.status_code != 200:
-                    logger.error(f"Mercari HTTP error: {resp.status_code}")
-                    return []
-                
-                html = resp.text
-                soup = BeautifulSoup(html, 'html.parser')
-                
-                items = []
-                # メルカリの商品カード要素を検索
-                cards = soup.find_all('a', {'data-testid': 'product-card-anchor'})
-                
-                for card in cards:
-                    try:
-                        # 商品 URL
-                        url = card.get('href', '')
-                        if not url.startswith('http'):
-                            url = f"https://jp.mercari.com{url}"
+            # EREのロジックを踏襲してクエリを作成
+            query = urllib.parse.quote(keyword, safe="")
+            url = f"https://jp.mercari.com/search?keyword={query}&status=on_sale&order=NEWEST"
+            
+            logger.info(f"Navigating to Mercari: {url}")
+            await page.goto(url, timeout=30000)
+            
+            # 商品要素がレンダリングされるまで待機（スケルトンから実際の商品カードに変わるまで）
+            try:
+                await page.wait_for_selector('a[href^="/item/m"]', timeout=10000)
+            except Exception as e:
+                logger.warning(f"Mercari: Timeout waiting for items for '{keyword}'. It might be 0 hits.")
+            
+            items_locator = await page.locator('a[href^="/item/m"]').all()
+            items = []
+            
+            for it in items_locator[:15]:
+                try:
+                    d = await it.evaluate("""el => {
+                        const imgDiv = el.querySelector('div[aria-label]');
+                        const img = el.querySelector('img');
+                        let rawTitle = imgDiv ? imgDiv.getAttribute('aria-label') : (img ? img.alt : "");
+                        let title = rawTitle.replace(/の(画像|サムネイル).*$/, "").replace(/¥\s?[\d,]+/, "").trim();
                         
-                        # タイトル
-                        title_elem = card.find('h2') or card.find('div', class_='product-name')
-                        title = title_elem.get_text(strip=True) if title_elem else ''
+                        let priceText = el.innerText;
                         
-                        # 価格
-                        price_elem = card.find('span', class_='product-price')
-                        price_text = price_elem.get_text(strip=True) if price_elem else '0'
-                        price = float(re.sub(r'[¥,]', '', price_text)) if price_text else 0
-                        
-                        if title and price > 0:
-                            items.append({
-                                'title': f'[MERCARI] {title}',
-                                'price': price,
-                                'url': url,
-                                'source': 'mercari'
-                            })
-                    except Exception as e:
-                        logger.debug(f"Failed to parse Mercari item: {e}")
+                        return {
+                            title: title,
+                            price: priceText,
+                            href: el.href,
+                            img: img ? img.src : ""
+                        }
+                    }""")
+                    
+                    # 価格の抽出 (¥ 1,234 -> 1234)
+                    price_val = 0
+                    m = re.search(r'¥\s*([\d,]+)', d['price'])
+                    if m:
+                        price_val = int(m.group(1).replace(',', ''))
+                    
+                    if not d['title']:
                         continue
-                
-                logger.info(f'✓ Mercari: {len(items)} items found for "{keyword}"')
-                return items
-        
+                        
+                    if price_val > 0:
+                        items.append({
+                            'title': f"[MERCARI] {d['title']}",
+                            'price': price_val,
+                            'url': d['href'],
+                            'image': d['img'],
+                            'source': 'mercari'
+                        })
+                except Exception as e:
+                    logger.debug(f"Failed to parse Mercari item: {e}")
+                    continue
+            
+            logger.info(f'✓ Mercari: {len(items)} items found for "{keyword}"')
+            return items
+            
         except Exception as e:
             logger.error(f"Mercari scrape error: {e}")
             return []
 
 
 class YahooFrilScraper:
-    """ヤフーフリマ スクレイパー（BeautifulSoup 直接解析）"""
+    """ヤフーフリマ スクレイパー（Playwright）"""
     
-    async def scrape(self, keyword: str, conditions: Dict = None) -> List[Dict]:
+    async def scrape(self, keyword: str, page) -> List[Dict]:
         """
         ヤフーフリマから商品を検索
-        
-        Args:
-            keyword: 検索キーワード
-            conditions: フィルター条件
-        
-        Returns:
-            商品リスト
         """
-        conditions = conditions or {}
-        search_url = f"https://fril.jp/search?keyword={keyword}&sort=recent"
-        
         try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-                resp = await client.get(search_url, headers=headers, follow_redirects=True)
-                
-                if resp.status_code != 200:
-                    logger.error(f"Yahoo Fril HTTP error: {resp.status_code}")
-                    return []
-                
-                html = resp.text
-                soup = BeautifulSoup(html, 'html.parser')
-                
-                items = []
-                # ヤフーフリマの商品セルを検索
-                cards = soup.find_all('a', class_='search-item-container')
-                
-                for card in cards:
-                    try:
-                        url = card.get('href', '')
-                        if not url.startswith('http'):
-                            url = f"https://fril.jp{url}"
-                        
-                        # タイトル
-                        title_elem = card.find('h3') or card.find('div', class_='item-title')
-                        title = title_elem.get_text(strip=True) if title_elem else ''
-                        
-                        # 価格
-                        price_elem = card.find('span', class_='item-price')
-                        price_text = price_elem.get_text(strip=True) if price_elem else '0'
-                        price = float(re.sub(r'[¥,]', '', price_text)) if price_text else 0
-                        
-                        if title and price > 0:
-                            items.append({
-                                'title': f'[YAHOO FRIL] {title}',
-                                'price': price,
-                                'url': url,
-                                'source': 'yahoo_fril'
-                            })
-                    except Exception as e:
-                        logger.debug(f"Failed to parse Yahoo Fril item: {e}")
-                        continue
-                
-                logger.info(f'✓ Yahoo Fril: {len(items)} items found for "{keyword}"')
-                return items
-        
+            query = urllib.parse.quote(keyword, safe="")
+            url = f"https://paypayfleamarket.yahoo.co.jp/search/{query}?open=1"
+            
+            logger.info(f"Navigating to Yahoo Fril: {url}")
+            await page.goto(url, timeout=30000)
+            
+            try:
+                await page.wait_for_selector('a[href*="/item/"]', timeout=10000)
+            except Exception:
+                logger.warning(f"Yahoo Fril: Timeout waiting for items for '{keyword}'.")
+            
+            items_locator = await page.locator('a[href*="/item/"]').all()
+            items = []
+            
+            for it in items_locator[:15]:
+                try:
+                    d = await it.evaluate("""el => {
+                        const img = el.querySelector('img');
+                        return {
+                            title: img ? img.alt : "ヤフーフリマ商品",
+                            allText: el.innerText,
+                            href: el.href,
+                            img: img ? img.src : ""
+                        }
+                    }""")
+                    
+                    price_val = 0
+                    price_match = re.search(r'([\d,]+)\s*円', d['allText'])
+                    if not price_match:
+                        price_match = re.search(r'¥\s*([\d,]+)', d['allText'])
+                    
+                    if price_match:
+                        price_val = int(price_match.group(1).replace(',', ''))
+                    else:
+                        m = re.search(r'.*円', d['allText'])
+                        if m:
+                            price_val = int(re.sub(r'[^\d]', '', m.group(0)))
+                    
+                    if price_val > 0:
+                        items.append({
+                            'title': f"[YAHOO FRIL] {d['title']}",
+                            'price': price_val,
+                            'url': d['href'],
+                            'image': d['img'],
+                            'source': 'yahoo_fril'
+                        })
+                except Exception as e:
+                    logger.debug(f"Failed to parse Yahoo item: {e}")
+                    continue
+            
+            logger.info(f'✓ Yahoo Fril: {len(items)} items found for "{keyword}"')
+            return items
+            
         except Exception as e:
             logger.error(f"Yahoo Fril scrape error: {e}")
             return []
 
 
 class RakumaScraper:
-    """ラクマ スクレイパー（BeautifulSoup 直接解析）"""
+    """ラクマ スクレイパー（Playwright）"""
     
-    async def scrape(self, keyword: str, conditions: Dict = None) -> List[Dict]:
+    async def scrape(self, keyword: str, page) -> List[Dict]:
         """
         ラクマから商品を検索
-        
-        Args:
-            keyword: 検索キーワード
-            conditions: フィルター条件
-        
-        Returns:
-            商品リスト
         """
-        conditions = conditions or {}
-        search_url = f"https://item.rakuma.com/search?keyword={keyword}&sort=recently_updated"
-        
         try:
-            async with httpx.AsyncClient(timeout=30.0) as client:
-                headers = {
-                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                }
-                resp = await client.get(search_url, headers=headers, follow_redirects=True)
-                
-                if resp.status_code != 200:
-                    logger.error(f"Rakuma HTTP error: {resp.status_code}")
-                    return []
-                
-                html = resp.text
-                soup = BeautifulSoup(html, 'html.parser')
-                
-                items = []
-                # ラクマの商品カード要素を検索
-                cards = soup.find_all('div', class_='item-card')
-                
-                for card in cards:
-                    try:
-                        # リンク要素
-                        link_elem = card.find('a')
-                        url = link_elem.get('href', '') if link_elem else ''
-                        if not url.startswith('http'):
-                            url = f"https://item.rakuma.com{url}"
+            query = urllib.parse.quote(keyword, safe="")
+            url = f"https://item.rakuma.com/search?keyword={query}&sort=recently_updated"
+            
+            logger.info(f"Navigating to Rakuma: {url}")
+            await page.goto(url, timeout=30000)
+            
+            # Rakuma はCloudflare検知後、商品要素が表示されるのを待つ
+            try:
+                await page.wait_for_selector('div.item-card', timeout=15000)
+            except Exception:
+                logger.warning(f"Rakuma: Timeout waiting for items for '{keyword}'. Possible Cloudflare block.")
+            
+            items_locator = await page.locator('div.item-card').all()
+            items = []
+            
+            for it in items_locator[:15]:
+                try:
+                    d = await it.evaluate("""el => {
+                        const linkElem = el.querySelector('a');
+                        const titleElem = el.querySelector('a.item-title') || el.querySelector('h3');
+                        const priceElem = el.querySelector('span.item-price') || el.querySelector('span.price');
+                        const imgElem = el.querySelector('img');
                         
-                        # タイトル
-                        title_elem = card.find('a', class_='item-title')
-                        title = title_elem.get_text(strip=True) if title_elem else ''
+                        return {
+                            href: linkElem ? linkElem.href : "",
+                            title: titleElem ? titleElem.innerText.trim() : "",
+                            priceText: priceElem ? priceElem.innerText.trim() : "0",
+                            img: imgElem ? imgElem.src : ""
+                        }
+                    }""")
+                    
+                    price_val = 0
+                    if d['priceText']:
+                        price_val = float(re.sub(r'[¥,]', '', d['priceText']))
                         
-                        # 価格
-                        price_elem = card.find('span', class_='item-price')
-                        price_text = price_elem.get_text(strip=True) if price_elem else '0'
-                        price = float(re.sub(r'[¥,]', '', price_text)) if price_text else 0
-                        
-                        if title and price > 0:
-                            items.append({
-                                'title': f'[RAKUMA] {title}',
-                                'price': price,
-                                'url': url,
-                                'source': 'rakuma'
-                            })
-                    except Exception as e:
-                        logger.debug(f"Failed to parse Rakuma item: {e}")
-                        continue
-                
-                logger.info(f'✓ Rakuma: {len(items)} items found for "{keyword}"')
-                return items
-        
+                    if d['title'] and price_val > 0:
+                        items.append({
+                            'title': f"[RAKUMA] {d['title']}",
+                            'price': price_val,
+                            'url': d['href'],
+                            'image': d['img'],
+                            'source': 'rakuma'
+                        })
+                except Exception as e:
+                    logger.debug(f"Failed to parse Rakuma item: {e}")
+                    continue
+            
+            logger.info(f'✓ Rakuma: {len(items)} items found for "{keyword}"')
+            return items
+            
         except Exception as e:
             logger.error(f"Rakuma scrape error: {e}")
             return []
@@ -228,13 +223,6 @@ class DomesticScraperFactory:
     
     @staticmethod
     def get_scraper(platform: str):
-        """
-        Args:
-            platform: 'mercari', 'yahoo_fril', 'rakuma'
-        
-        Returns:
-            対応するスクレイパーインスタンス
-        """
         if platform == 'mercari':
             return MercariScraper()
         elif platform == 'yahoo_fril':

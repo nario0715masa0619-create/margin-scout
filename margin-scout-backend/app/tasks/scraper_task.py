@@ -10,7 +10,8 @@ from app.services.domestic_scraper import DomesticScraperFactory
 logger = logging.getLogger(__name__)
 
 async def _run_all_scrapers(keyword: str):
-    """eBayモックと国内ソースを並行してスクレイピング"""
+    """eBayモックと国内ソース（Playwright）を並行してスクレイピング"""
+    from playwright.async_api import async_playwright
     import time
     
     # Mock eBay search results
@@ -31,13 +32,31 @@ async def _run_all_scrapers(keyword: str):
     yahoo_fril = DomesticScraperFactory.get_scraper('yahoo_fril')
     rakuma = DomesticScraperFactory.get_scraper('rakuma')
     
-    # 並行してスクレイピング実行
-    results = await asyncio.gather(
-        mercari.scrape(keyword),
-        yahoo_fril.scrape(keyword),
-        rakuma.scrape(keyword),
-        return_exceptions=True
-    )
+    # Playwrightのブラウザを起動して各スクレイパーにページ（タブ）を割り当て
+    async with async_playwright() as p:
+        logger.info("Launching Playwright Chromium browser...")
+        browser = await p.chromium.launch(
+            headless=True,
+            args=['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        )
+        context = await browser.new_context(
+            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        )
+        
+        page_m = await context.new_page()
+        page_y = await context.new_page()
+        page_r = await context.new_page()
+        
+        # 並行してスクレイピング実行
+        logger.info(f"Starting parallel domestic scraping for '{keyword}'...")
+        results = await asyncio.gather(
+            mercari.scrape(keyword, page_m),
+            yahoo_fril.scrape(keyword, page_y),
+            rakuma.scrape(keyword, page_r),
+            return_exceptions=True
+        )
+        
+        await browser.close()
     
     mercari_items = results[0] if not isinstance(results[0], Exception) else []
     yahoo_items = results[1] if not isinstance(results[1], Exception) else []
