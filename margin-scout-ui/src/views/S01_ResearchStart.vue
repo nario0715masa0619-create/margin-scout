@@ -112,11 +112,13 @@ import { useRouter } from 'vue-router'
 import { useResearchStore } from '../stores/research'
 import { researchAPI } from '../services/api'
 
-// TypeScript エラーを防ぐため chrome を declare しておく
-declare const chrome: any;
+declare const chrome: any
 
 const router = useRouter()
 const store = useResearchStore()
+
+// Chrome 拡張機能 ID（ユーザーの環境に合わせて更新）
+const EXTENSION_ID = 'inhmapffmhjifmefkooadchmkdbahdhn'
 
 const keywords = ref('')
 const selectedSources = ref(['mercari', 'yahoo_flea', 'yahoo_auction', 'hardoff'])
@@ -132,33 +134,22 @@ const availableSources = ['mercari', 'yahoo_flea', 'yahoo_auction', 'hardoff']
 // Chrome 拡張機能にメッセージを送る
 const sendToExtension = (keyword: string, jobId: string) => {
   try {
-    // Chromeオブジェクトが存在するかチェック（普通のWebブラウザ上で ReferenceError でクラッシュしないように）
-    if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.sendMessage) {
-      chrome.runtime.sendMessage(
-        // ※注意: Webページから直接拡張機能へ送るには、拡張機能のIDを指定するか、externally_connectableが必要です。
-        {
-          action: 'scrape',
-          keyword: keyword,
-          jobId: jobId
-        },
-        (response: any) => {
-          if (chrome.runtime.lastError) {
-            console.warn('Extension message error:', chrome.runtime.lastError)
-          } else {
-            console.log('Extension response:', response)
-          }
-        }
-      )
-    } else {
-      // Content Script が注入されている場合は window.postMessage の方が確実です
-      window.postMessage({
-        type: 'MARGINSCOUT_SCRAPE_REQUEST',
+    // Chrome 拡張機能の background.js へメッセージを送信
+    chrome.runtime.sendMessage(
+      EXTENSION_ID,
+      {
         action: 'scrape',
         keyword: keyword,
         jobId: jobId
-      }, '*')
-      console.warn('chrome.runtime is not available on standard web pages. Sent via postMessage fallback.')
-    }
+      },
+      (response: any) => {
+        if (chrome.runtime.lastError) {
+          console.warn('Extension message error:', chrome.runtime.lastError)
+        } else {
+          console.log('Extension response:', response)
+        }
+      }
+    )
   } catch (err) {
     console.warn('Could not communicate with extension:', err)
     // 拡張機能がない場合は無視（eBay モックデータだけで続行）
