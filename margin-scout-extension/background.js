@@ -149,13 +149,21 @@ function extractItems(platform) {
   const items = [];
   
   if (platform === 'mercari') {
-    document.querySelectorAll('a[data-testid="product-card-anchor"]').forEach(card => {
+    document.querySelectorAll('a[href^="/item/m"]').forEach(card => {
       try {
-        const title = card.querySelector('h2')?.textContent?.trim() || '';
-        const priceText = card.querySelector('span')?.textContent?.match(/[\d,]+/)?.[0] || '0';
-        const price = parseFloat(priceText.replace(/,/g, ''));
         const href = card.getAttribute('href') || '';
         const url = href.startsWith('http') ? href : `https://jp.mercari.com${href}`;
+        
+        // aria-label から タイトルと価格を抽出
+        const img = card.querySelector('img[alt], div[aria-label]');
+        const ariaLabel = img?.getAttribute('aria-label') || img?.getAttribute('alt') || '';
+        
+        // "タイトル 説明 価格" 形式から抽出
+        const parts = ariaLabel.split('\n');
+        const title = parts[0]?.trim() || 'Unknown';
+        const priceMatch = ariaLabel.match(/[\d,]+円/);
+        const priceText = priceMatch ? priceMatch[0].replace(/[^\d]/g, '') : '0';
+        const price = parseFloat(priceText);
         
         if (title && price > 0) {
           items.push({
