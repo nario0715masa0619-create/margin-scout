@@ -10,8 +10,7 @@ from app.services.domestic_scraper import DomesticScraperFactory
 logger = logging.getLogger(__name__)
 
 async def _run_all_scrapers(keyword: str):
-    """eBayモックと国内ソース（Playwright）を並行してスクレイピング"""
-    from playwright.async_api import async_playwright
+    """eBayモックデータを取得（国内データは拡張機能側から非同期で送られてくる）"""
     import time
     
     # Mock eBay search results
@@ -27,51 +26,12 @@ async def _run_all_scrapers(keyword: str):
         for i in range(10)
     ]
     
-    # 国内スクレイパーの初期化
-    mercari = DomesticScraperFactory.get_scraper('mercari')
-    yahoo_fril = DomesticScraperFactory.get_scraper('yahoo_fril')
-    rakuma = DomesticScraperFactory.get_scraper('rakuma')
-    
-    # Playwrightのブラウザを起動して各スクレイパーにページ（タブ）を割り当て
-    async with async_playwright() as p:
-        logger.info("Launching Playwright Chromium browser...")
-        browser = await p.chromium.launch(
-            headless=True,
-            args=['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-        )
-        context = await browser.new_context(
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        )
-        
-        page_m = await context.new_page()
-        page_y = await context.new_page()
-        page_r = await context.new_page()
-        
-        # 並行してスクレイピング実行
-        logger.info(f"Starting parallel domestic scraping for '{keyword}'...")
-        results = await asyncio.gather(
-            mercari.scrape(keyword, page_m),
-            yahoo_fril.scrape(keyword, page_y),
-            rakuma.scrape(keyword, page_r),
-            return_exceptions=True
-        )
-        
-        await browser.close()
-    
-    mercari_items = results[0] if not isinstance(results[0], Exception) else []
-    yahoo_items = results[1] if not isinstance(results[1], Exception) else []
-    rakuma_items = results[2] if not isinstance(results[2], Exception) else []
-    
-    if isinstance(results[0], Exception): logger.error(f"Mercari Task Error: {results[0]}")
-    if isinstance(results[1], Exception): logger.error(f"Yahoo Fril Task Error: {results[1]}")
-    if isinstance(results[2], Exception): logger.error(f"Rakuma Task Error: {results[2]}")
-    
     return {
         "ebay": ebay_items,
-        "mercari": mercari_items,
-        "yahoo_fril": yahoo_items,
-        "rakuma": rakuma_items,
-        "all_domestic": mercari_items + yahoo_items + rakuma_items
+        "mercari": [],
+        "yahoo_fril": [],
+        "rakuma": [],
+        "all_domestic": []
     }
 
 @celery_app.task(name="run_research_job")
