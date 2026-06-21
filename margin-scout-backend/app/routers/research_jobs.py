@@ -12,6 +12,20 @@ from app.models.research_job import JobStatus
 import logging
 logger = logging.getLogger(__name__)
 
+def _parse_price(price_data):
+    """price が dict または float のどちらでも対応"""
+    if isinstance(price_data, dict):
+        # {"value": "100.50", "currency": "USD"} の場合
+        return float(price_data.get("value", 0))
+    elif isinstance(price_data, (int, float)):
+        # 直接数値の場合
+        return float(price_data)
+    elif isinstance(price_data, str) and price_data.replace('.', '', 1).isdigit():
+        # 文字列の数値の場合
+        return float(price_data)
+    else:
+        return 0.0
+
 router = APIRouter()
 
 @router.get("", response_model=List[JobResponse])
@@ -71,7 +85,7 @@ async def get_research_results(
     
     formatted_items = []
     for i, item in enumerate(saved_items):
-        ebay_price_usd = item.get("price", 0.0)
+        ebay_price_usd = _parse_price(item.get("price", 0.0))
         ebay_price_jpy = round(ebay_price_usd * usd_to_jpy)
         
         # 仕入れ側はまだモックなので仮計算
@@ -121,7 +135,7 @@ async def get_candidate_detail(
     if not target_item:
         raise HTTPException(status_code=404, detail="Candidate not found")
         
-    ebay_price_usd = target_item.get("price", 0.0)
+    ebay_price_usd = _parse_price(target_item.get("price", 0.0))
     ebay_price_jpy = round(ebay_price_usd * usd_to_jpy)
     source_price_jpy = 5000
     profit_jpy = ebay_price_jpy - source_price_jpy
