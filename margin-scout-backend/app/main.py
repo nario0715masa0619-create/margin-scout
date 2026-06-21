@@ -52,6 +52,9 @@ app.include_router(captures.router, prefix="/api/v1/captures", tags=["Captures"]
 app.include_router(captures.saved_items_router, prefix="/api/v1/saved-items", tags=["Saved Items"])
 app.include_router(saved_searches.router)
 
+from app.routers import extension_routes
+app.include_router(extension_routes.router)
+
 from app.routers import monitoring
 app.include_router(monitoring.router)
 
