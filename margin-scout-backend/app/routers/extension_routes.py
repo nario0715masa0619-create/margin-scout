@@ -35,11 +35,9 @@ def receive_extension_items(job_id: str, request: ExtensionItemsRequest, db: Ses
         if not job:
             raise HTTPException(status_code=404, detail="Job not found")
         
-        # 既存の items を取得し、拡張機能からの結果を結合する
-        # （拡張機能からは国内フリマのデータのみ送られてくると想定）
-        existing_items = []
-        if job.result_summary and "items" in job.result_summary:
-            existing_items = job.result_summary["items"]
+        # 既存の mercari_items を取得し、拡張機能からの結果を結合する
+        current_summary = job.result_summary or {}
+        existing_mercari = current_summary.get("mercari_items", [])
             
         new_items = []
         for item in request.items:
@@ -52,10 +50,16 @@ def receive_extension_items(job_id: str, request: ExtensionItemsRequest, db: Ses
                 "source": item.source
             })
             
-        all_items = existing_items + new_items
+        all_mercari_items = existing_mercari + new_items
         
         # ジョブを更新
-        job.result_summary = {"items": all_items}
+        current_summary["mercari_items"] = all_mercari_items
+        job.result_summary = current_summary
+        
+        # JSONカラムの更新を検知させる
+        from sqlalchemy.orm.attributes import flag_modified
+        flag_modified(job, "result_summary")
+        
         job.matched_items = (job.matched_items or 0) + len(request.items)
         job.progress = 90  # 拡張機能からのデータ受け取り中
         

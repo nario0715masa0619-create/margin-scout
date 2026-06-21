@@ -80,33 +80,51 @@ async def get_research_results(
     # ドル円レート取得
     usd_to_jpy = await ExchangeRateService.get_usd_to_jpy_rate()
 
-    # DBから取得した本物のデータを整形
-    saved_items = job.result_summary.get("items", []) if job.result_summary else []
+    current_summary = job.result_summary or {}
+    ebay_items = current_summary.get("items", [])
+    mercari_items = current_summary.get("mercari_items", [])
     
     formatted_items = []
-    for i, item in enumerate(saved_items):
-        ebay_price_usd = _parse_price(item.get("price", 0.0))
-        ebay_price_jpy = round(ebay_price_usd * usd_to_jpy)
+    max_len = max(len(ebay_items), len(mercari_items))
+    
+    for i in range(max_len):
+        ebay = ebay_items[i] if i < len(ebay_items) else {}
+        mercari = mercari_items[i] if i < len(mercari_items) else {}
         
-        # 仕入れ側はまだモックなので仮計算
-        source_price_jpy = 5000 + (i * 100)
+        # Parse eBay
+        ebay_price_usd = _parse_price(ebay.get("price", 0.0))
+        ebay_price_jpy = round(ebay_price_usd * usd_to_jpy)
+        ebay_title = ebay.get("title", "Unknown eBay Item")
+        ebay_image = ebay.get("image")
+        
+        # Parse Mercari
+        mercari_price_str = mercari.get("price", {}).get("value", "0") if isinstance(mercari.get("price"), dict) else "0"
+        try:
+            source_price_jpy = float(mercari_price_str)
+        except:
+            source_price_jpy = 0.0
+            
+        source_title = mercari.get("title", "Unknown Source Item")
+        source_url = mercari.get("itemWebUrl", "")
+        source_channel = mercari.get("source", "mercari")
+        
         profit_jpy = ebay_price_jpy - source_price_jpy
         profit_margin = round((profit_jpy / ebay_price_jpy) * 100, 1) if ebay_price_jpy > 0 else 0
         
         formatted_items.append({
-            "candidateId": item.get("item_id", f"item-{i}"),
-            "productName": f"Source Product for {item.get('title', 'Unknown')[:20]}...",
-            "sourceChannel": "mercari",
+            "candidateId": f"match-{i}",
+            "productName": source_title,
+            "sourceChannel": source_channel,
             "sourcePrice": source_price_jpy,
-            "sourceUrl": f"https://mercari.jp/search?keyword={item.get('title', '')[:10]}",
-            "ebayTitle": item.get("title", "Unknown"),
+            "sourceUrl": source_url,
+            "ebayTitle": ebay_title,
             "ebayPrice": ebay_price_usd,
             "ebayPriceJpy": ebay_price_jpy,
             "profitJpy": profit_jpy,
             "profitMarginPct": profit_margin,
-            "matchScore": 0.95 - (i * 0.01),
+            "matchScore": 0.95 - (i * 0.01) if i < 95 else 0.1,
             "status": "new",
-            "image": item.get("image")
+            "image": ebay_image or mercari.get("image")
         })
 
     return {
