@@ -10,44 +10,25 @@ from app.services.domestic_scraper import DomesticScraperFactory
 logger = logging.getLogger(__name__)
 
 async def _run_all_scrapers(keyword: str):
-    """eBay Browse API から実データを取得（国内データは拡張機能側から非同期で送られてくる）"""
+    """
+    eBay: モック（eBay API トークン問題のため一時的に無効化）
+    国内フリマ: 拡張機能から送信されたデータを使用
+    """
     
-    ebay_items = []
+    # eBay: モックデータ（eBay サポート返信待機中）
+    ebay_items = [
+        {
+            "title": f"[eBay Mock] Item {i+1} for {keyword}",
+            "price": {"value": str(100 + (i * 10)), "currency": "USD"},
+            "itemId": f"ebay_mock_{i+1}",
+            "itemWebUrl": f"https://ebay.com/itm/mock_{i+1}",
+            "image": {"imageUrl": "https://via.placeholder.com/150"},
+            "source": "ebay"
+        }
+        for i in range(5)
+    ]
     
-    try:
-        from app.services.ebay_browse_client import EbayBrowseClient
-        client = EbayBrowseClient()
-        ebay_items = await client.search(keyword, limit=50)
-        
-        # Browse API の戻り値を統一フォーマットに変換
-        ebay_items = [
-            {
-                "title": item.get("title"),
-                "price": {"value": str(item.get("price", 0)), "currency": "USD"},
-                "itemId": item.get("item_id"),
-                "itemWebUrl": item.get("url"),
-                "image": {"imageUrl": item.get("image", {}).get("imageUrl") if isinstance(item.get("image"), dict) else item.get("image")},
-                "source": "ebay"
-            }
-            for item in ebay_items
-        ]
-        
-        logger.info(f"✓ eBay API: {len(ebay_items)} items retrieved")
-        
-    except Exception as e:
-        logger.error(f"eBay API error: {e}, falling back to mock data")
-        # API エラー時はモックデータにフォールバック
-        ebay_items = [
-            {
-                "title": f"[Mock] Item {i+1} for {keyword}",
-                "price": {"value": str(100 + (i * 10)), "currency": "USD"},
-                "itemId": f"ebay_mock_{i+1}",
-                "itemWebUrl": f"https://ebay.com/itm/mock_{i+1}",
-                "image": {"imageUrl": "https://via.placeholder.com/150"},
-                "source": "ebay"
-            }
-            for i in range(5)
-        ]
+    logger.info(f"✓ eBay: {len(ebay_items)} mock items (API disabled - awaiting eBay support)")
     
     return {
         "ebay": ebay_items,
