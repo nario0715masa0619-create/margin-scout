@@ -55,8 +55,8 @@ async function scrapeAllSites(keyword, jobId, sources, sendResponse) {
     
     // バックエンド API に送信
     if (allItems.length > 0) {
-      console.log(`[DEBUG] Sending POST to ${API_URL}/research-jobs/${jobId}/items`);
-      const response = await fetch(`${API_URL}/research-jobs/${jobId}/items`, {
+      console.log(`[DEBUG] Sending POST to ${API_URL}/extension/research-jobs/${jobId}/items`);
+      const response = await fetch(`${API_URL}/extension/research-jobs/${jobId}/items`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: allItems })
