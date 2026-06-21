@@ -147,16 +147,22 @@ async function scrapeWithContentScript(url, platform) {
 // Content Script で実行される関数（ページ内のDOMを直接読み取る）
 function extractItems(platform) {
   const items = [];
+  console.log(`[DEBUG] extractItems called for platform: ${platform}`);
   
   if (platform === 'mercari') {
-    document.querySelectorAll('a[href^="/item/m"]').forEach(card => {
+    const links = document.querySelectorAll('a[href^="/item/m"]');
+    console.log(`[DEBUG] Total links found: ${links.length}`);
+    links.forEach((card, index) => {
       try {
         const href = card.getAttribute('href') || '';
+        console.log(`[DEBUG] Card ${index}: href=${href}`);
+        
         const url = href.startsWith('http') ? href : `https://jp.mercari.com${href}`;
         
         // aria-label から タイトルと価格を抽出
         const img = card.querySelector('img[alt], div[aria-label]');
         const ariaLabel = img?.getAttribute('aria-label') || img?.getAttribute('alt') || '';
+        console.log(`[DEBUG] Card ${index}: ariaLabel=${ariaLabel}`);
         
         // "タイトル 説明 価格" 形式から抽出
         const parts = ariaLabel.split('\n');
@@ -165,6 +171,8 @@ function extractItems(platform) {
         const priceText = priceMatch ? priceMatch[0].replace(/[^\d]/g, '') : '0';
         const price = parseFloat(priceText);
         
+        console.log(`[DEBUG] Card ${index}: title=${title}, price=${price}`);
+        
         if (title && price > 0) {
           items.push({
             title: `[MERCARI] ${title}`,
@@ -172,11 +180,13 @@ function extractItems(platform) {
             url: url,
             source: 'mercari'
           });
+          console.log(`[DEBUG] ✅ Item added: ${title}`);
         }
       } catch (e) {
-        console.debug('Mercari parse error:', e);
+        console.error(`[DEBUG] Error at card ${index}:`, e);
       }
     });
+    console.log(`[DEBUG] Total Mercari items extracted: ${items.length}`);
   } else if (platform === 'rakuma') {
     document.querySelectorAll('div.item-card, a.item-cell').forEach(card => {
       try {
